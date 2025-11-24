@@ -1,0 +1,295 @@
+---
+---
+
+<nav class="main-navigation">
+  <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Menu">
+    <span class="menu-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+  <div class="menu-overlay" id="menu-overlay"></div>
+  <div class="menu-drawer" id="menu-drawer">
+    <div class="menu-header">
+      <h2 class="menu-title">Menu</h2>
+      <button class="menu-close" id="menu-close" type="button" aria-label="Fechar menu">✕</button>
+    </div>
+    <ul class="menu-list">
+      <li class="menu-item">
+        <a href="/sistema" class="menu-link" data-page="sistema">
+          <span class="menu-link-icon">◊</span>
+          <span class="menu-link-text">Sistema</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="/" class="menu-link" data-page="personagem">
+          <span class="menu-link-icon">◉</span>
+          <span class="menu-link-text">Ficha de personagem</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="/definicoes" class="menu-link" data-page="definicoes">
+          <span class="menu-link-icon">◈</span>
+          <span class="menu-link-text">Definições</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="/monstro" class="menu-link" data-page="monstro">
+          <span class="menu-link-icon">◊</span>
+          <span class="menu-link-text">Ficha de monstro</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script type="module">
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuDrawer = document.getElementById('menu-drawer');
+  const menuOverlay = document.getElementById('menu-overlay');
+  const menuClose = document.getElementById('menu-close');
+
+  function openMenu() {
+    menuDrawer.classList.add('active');
+    menuOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    menuDrawer.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (menuToggle) {
+    menuToggle.addEventListener('click', openMenu);
+  }
+
+  if (menuClose) {
+    menuClose.addEventListener('click', closeMenu);
+  }
+
+  if (menuOverlay) {
+    menuOverlay.addEventListener('click', closeMenu);
+  }
+
+  // Fechar menu ao pressionar ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuDrawer.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+
+  // Marcar item ativo baseado na URL atual
+  const currentPath = window.location.pathname;
+  const menuLinks = document.querySelectorAll('.menu-link[data-page]');
+  menuLinks.forEach(link => {
+    const page = link.getAttribute('data-page');
+    if ((page === 'personagem' && currentPath === '/') || 
+        (page === 'sistema' && currentPath === '/sistema') ||
+        (page === 'definicoes' && currentPath === '/definicoes') ||
+        (page === 'monstro' && currentPath === '/monstro')) {
+      link.classList.add('active');
+    }
+    
+    // Fechar menu ao clicar em link interno
+    if (link.hasAttribute('data-page')) {
+      link.addEventListener('click', () => {
+        // Fechar menu imediatamente
+        requestAnimationFrame(closeMenu);
+      });
+    }
+  });
+</script>
+
+<style is:global>
+  .main-navigation {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10000;
+  }
+
+  .menu-toggle {
+    width: 50px;
+    height: 50px;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10001;
+  }
+
+  .menu-toggle:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    box-shadow: 0 0 15px rgba(139, 76, 141, 0.3);
+  }
+
+  .menu-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 24px;
+    height: 18px;
+  }
+
+  .menu-icon span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: var(--color-text-accent);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .menu-toggle:hover .menu-icon span {
+    background: var(--color-accent-primary);
+  }
+
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9998;
+  }
+
+  .menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .menu-drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    max-width: 90vw;
+    height: 100vh;
+    background: var(--color-bg-secondary);
+    border-left: 2px solid var(--color-border);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .menu-drawer.active {
+    right: 0;
+  }
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+  }
+
+  .menu-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin: 0;
+  }
+
+  .menu-close {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .menu-close:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    color: var(--color-text-accent);
+  }
+
+  .menu-list {
+    list-style: none;
+    padding: 1rem 0;
+    margin: 0;
+  }
+
+  .menu-item {
+    margin: 0;
+  }
+
+  .menu-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 2rem;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    font-family: var(--font-body);
+    font-size: 1rem;
+  }
+
+  .menu-link:hover {
+    background: rgba(139, 76, 141, 0.1);
+    border-left-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+  }
+
+  .menu-link.active {
+    background: rgba(139, 76, 141, 0.15);
+    border-left-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+    font-weight: 600;
+  }
+
+  .menu-link-icon {
+    font-size: 1.5rem;
+    width: 30px;
+    text-align: center;
+  }
+
+  .menu-link-text {
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    .main-navigation {
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .menu-toggle {
+      width: 44px;
+      height: 44px;
+    }
+
+    .menu-drawer {
+      width: 100vw;
+      max-width: 100vw;
+    }
+  }
+</style>
+

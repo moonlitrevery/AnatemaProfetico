@@ -1,0 +1,422 @@
+---
+---
+
+<div class="basic-info-wrapper">
+  <section class="sheet-section basic-info">
+    <h2 class="section-title">
+      <span class="section-title-text">Informações gerais</span>
+      <span class="section-title-decoration"></span>
+    </h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="player-name">Nome do Jogador</label>
+        <input type="text" id="player-name" name="player-name" placeholder="Nome do jogador" />
+      </div>
+      <div class="form-group">
+        <label for="character-name">Nome</label>
+        <input type="text" id="character-name" name="character-name" placeholder="Nome do personagem" />
+      </div>
+      <div class="form-group">
+        <label for="character-age">Idade</label>
+        <input type="number" id="character-age" name="character-age" placeholder="Idade" min="0" />
+      </div>
+      <div class="form-group">
+        <label for="character-profession">Profissão</label>
+        <input type="text" id="character-profession" name="character-profession" placeholder="Profissão" />
+      </div>
+      <div class="form-group">
+        <label>Pronomes</label>
+        <div class="pronouns-container">
+          <div class="pronouns-options">
+            <label class="pronoun-option">
+              <input type="checkbox" class="pronoun-checkbox" value="ele/dele" />
+              <span>Ele/Dele</span>
+            </label>
+            <label class="pronoun-option">
+              <input type="checkbox" class="pronoun-checkbox" value="ela/dela" />
+              <span>Ela/Dela</span>
+            </label>
+            <label class="pronoun-option">
+              <input type="checkbox" class="pronoun-checkbox" value="elu/delu" />
+              <span>Elu/Delu</span>
+            </label>
+            <label class="pronoun-option">
+              <input type="checkbox" class="pronoun-checkbox" value="todos" />
+              <span>Todos</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <div class="character-image-section">
+    <div class="character-image-wrapper">
+      <img id="character-image" src="" alt="Foto do personagem" class="character-image" style="display: none;" />
+      <div class="character-image-placeholder" id="character-image-placeholder">
+        <span>◉</span>
+      </div>
+    </div>
+    <input type="url" id="character-image-url" name="character-image-url" class="character-image-url" placeholder="URL da imagem..." />
+  </div>
+</div>
+
+<script type="module">
+  const imageUrlInput = document.getElementById('character-image-url');
+  const characterImage = document.getElementById('character-image');
+  const imagePlaceholder = document.getElementById('character-image-placeholder');
+  
+  function updateCharacterImage() {
+    const url = imageUrlInput?.value?.trim() || '';
+    
+    if (url && (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.gif') || url.endsWith('.webp'))) {
+      if (characterImage) {
+        characterImage.src = url;
+        characterImage.style.display = 'block';
+        if (imagePlaceholder) {
+          imagePlaceholder.style.display = 'none';
+        }
+        characterImage.onerror = () => {
+          if (characterImage) characterImage.style.display = 'none';
+          if (imagePlaceholder) imagePlaceholder.style.display = 'flex';
+        };
+      }
+    } else {
+      if (characterImage) characterImage.style.display = 'none';
+      if (imagePlaceholder) imagePlaceholder.style.display = 'flex';
+    }
+  }
+  
+  if (imageUrlInput) {
+    imageUrlInput.addEventListener('input', updateCharacterImage);
+    imageUrlInput.addEventListener('change', updateCharacterImage);
+    
+    // Carregar imagem inicial se houver URL salva
+    requestAnimationFrame(updateCharacterImage);
+  }
+
+  // Gerenciar seleção múltipla de pronomes
+  const pronounCheckboxes = document.querySelectorAll('.pronoun-checkbox');
+  
+  function updatePronounsDisplay() {
+    // Função mantida para compatibilidade com SaveLoad
+  }
+
+  pronounCheckboxes.forEach(cb => {
+    cb.addEventListener('change', updatePronounsDisplay);
+  });
+  
+  window.updatePronounsDisplay = updatePronounsDisplay;
+</script>
+
+<style>
+  .sheet-section {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sheet-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-primary),
+      transparent
+    );
+    opacity: 0.5;
+  }
+
+  .sheet-section:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    padding: 1rem 0;
+  }
+
+  .section-title-text {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-text-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-shadow: 
+      0 0 20px rgba(139, 76, 141, 0.5),
+      0 2px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title-decoration {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-primary) 20%,
+      var(--color-accent-primary) 80%,
+      transparent
+    );
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      0 0 20px rgba(139, 76, 141, 0.4);
+    opacity: 0.8;
+    transform: scaleX(0.8);
+  }
+
+  .section-title-decoration::before,
+  .section-title-decoration::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 50%;
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      inset 0 0 10px rgba(139, 76, 141, 0.3);
+  }
+
+  .section-title-decoration::before {
+    left: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  .section-title-decoration::after {
+    right: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  .basic-info-wrapper {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .character-image-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .character-image-wrapper {
+    width: 250px;
+    height: 250px;
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--color-bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .character-image-url {
+    width: 250px;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .character-image-url:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 8px rgba(139, 76, 141, 0.3);
+  }
+
+  .character-image-url::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.6;
+  }
+
+  .character-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .character-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    font-size: 3rem;
+    opacity: 0.3;
+  }
+
+  @media (max-width: 768px) {
+    .basic-info-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .character-image-section {
+      align-items: center;
+    }
+
+    .character-image-wrapper {
+      width: 200px;
+      height: 200px;
+    }
+
+    .character-image-url {
+      width: 200px;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  input {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  input::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+  }
+
+  .pronouns-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pronouns-options {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+
+  .pronoun-option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 170px;
+    flex: 1;
+  }
+
+  .pronoun-option:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+  }
+
+  .pronoun-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-accent-primary);
+    flex-shrink: 0;
+  }
+
+  .pronoun-option span {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 0.85rem;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    .sheet-section {
+      padding: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pronouns-options {
+      flex-wrap: wrap;
+    }
+  }
+</style>

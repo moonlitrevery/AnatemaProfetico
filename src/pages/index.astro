@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SaveLoad from '../components/SaveLoad.astro';
+import Logo from '../components/Logo.astro';
+import Header from '../components/Header.astro';
+import BasicInfo from '../components/BasicInfo.astro';
+import Attributes from '../components/Attributes.astro';
+import Skills from '../components/Skills.astro';
+import Equipment from '../components/Equipment.astro';
+import Abilities from '../components/Abilities.astro';
+import Notes from '../components/Notes.astro';
+import DiceRoller from '../components/DiceRoller.astro';
+---
+
+<Layout title="[AP] - Ficha de Personagem">
+  <div class="container" data-page="personagem">
+    <SaveLoad />
+    
+    <Logo />
+    
+    <BasicInfo />
+    
+    <Header />
+    
+    <div class="attributes-skills-grid">
+      <Attributes />
+      <Skills />
+    </div>
+    
+    <Equipment />
+    
+    <Abilities />
+    
+    <Notes />
+    
+    <DiceRoller />
+
+    <footer class="footer">
+      <p>© 2025 Anátema Profético - Sistema de RPG criado por João Vitor Gozzo Bruschi</p>
+    </footer>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 3rem;
+  }
+
+  .attributes-skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .sheet-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex: 1;
+  }
+
+  .footer {
+    margin-top: auto;
+    padding: 2rem 0;
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 1024px) {
+    .attributes-skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+
+    .attributes-skills-grid {
+      gap: 1.5rem;
+    }
+  }
+</style>

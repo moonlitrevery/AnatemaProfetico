@@ -1,0 +1,517 @@
+---
+---
+
+<div id="dice-roll-popups-container" class="dice-roll-popups-container"></div>
+
+<button id="custom-dice-button" class="custom-dice-button" type="button" title="Rolar Dados">
+  <span class="dice-icon">◉</span>
+</button>
+
+<div id="custom-dice-menu" class="custom-dice-menu">
+  <div class="dice-menu-header">
+    <h3>Rolar Dados</h3>
+    <button class="close-menu-btn" id="close-dice-menu">×</button>
+  </div>
+  <div class="dice-menu-content">
+    <div class="dice-options">
+      <button class="dice-option-btn" data-dice="d4">d4</button>
+      <button class="dice-option-btn" data-dice="d6">d6</button>
+      <button class="dice-option-btn" data-dice="d8">d8</button>
+      <button class="dice-option-btn" data-dice="d10">d10</button>
+      <button class="dice-option-btn" data-dice="d12">d12</button>
+      <button class="dice-option-btn" data-dice="d20">d20</button>
+      <button class="dice-option-btn" data-dice="d100">d100</button>
+    </div>
+    <div id="selected-dice-display" class="selected-dice-display"></div>
+    <button id="roll-all-dice-btn" class="roll-all-dice-btn" type="button">Rodar Dados</button>
+  </div>
+</div>
+
+<script type="module">
+  const popupsContainer = document.getElementById('dice-roll-popups-container');
+  let popupStack = [];
+  let popupIdCounter = 0;
+  let selectedDice = [];
+
+  function createDicePopup(roll, label, diceType = 'd20') {
+    const popupId = `dice-popup-${popupIdCounter++}`;
+    const popup = document.createElement('div');
+    popup.id = popupId;
+    popup.className = 'dice-roll-popup-cascade';
+    popup.dataset.popupId = popupId;
+    
+    let rollText = `<div class="roll-label">${label}</div>`;
+    rollText += `<div class="roll-details">`;
+    rollText += `<span class="roll-die">${diceType}: ${roll.result}</span>`;
+    if (roll.modifier !== 0) {
+      const modSign = roll.modifier >= 0 ? '+' : '';
+      rollText += ` <span class="roll-modifier">${modSign}${roll.modifier}</span>`;
+    }
+    rollText += ` = <span class="roll-total">${roll.total}</span>`;
+    rollText += `</div>`;
+    
+    if (roll.critical) {
+      rollText += `<div class="roll-status critical">CRÍTICO!</div>`;
+    } else if (roll.fumble) {
+      rollText += `<div class="roll-status fumble">FALHA CRÍTICA!</div>`;
+    }
+    
+    popup.innerHTML = rollText;
+    
+    popupsContainer.appendChild(popup);
+    popupStack.push({ id: popupId, element: popup });
+    
+    setTimeout(() => {
+      popup.classList.add('show');
+    }, 10);
+    
+    const autoRemoveTimeout = setTimeout(() => {
+      removePopup(popupId);
+    }, 30000);
+    popup.dataset.autoRemoveTimeout = autoRemoveTimeout.toString();
+    
+    popup.addEventListener('click', (e) => {
+      e.stopPropagation();
+      removePopup(popupId);
+    });
+    
+    reorganizePopups();
+    
+    return popupId;
+  }
+
+  function removePopup(popupId) {
+    const index = popupStack.findIndex(p => p.id === popupId);
+    if (index === -1) return;
+    
+    const popup = popupStack[index].element;
+    const timeoutId = popup.dataset.autoRemoveTimeout;
+    if (timeoutId) {
+      clearTimeout(parseInt(timeoutId, 10));
+    }
+    
+    popup.classList.remove('show');
+    setTimeout(() => {
+      popup.remove();
+      popupStack.splice(index, 1);
+      reorganizePopups();
+    }, 300);
+  }
+
+  function reorganizePopups() {
+    // Popups são organizados automaticamente pelo flexbox column-reverse
+    // Não precisa mais calcular offsets manualmente
+  }
+
+  window.showDiceRollPopup = function(roll, label, diceType = 'd20') {
+    createDicePopup(roll, label, diceType);
+  };
+
+  const diceButton = document.getElementById('custom-dice-button');
+  const diceMenu = document.getElementById('custom-dice-menu');
+  const closeMenuBtn = document.getElementById('close-dice-menu');
+  const selectedDiceDisplay = document.getElementById('selected-dice-display');
+  const rollAllBtn = document.getElementById('roll-all-dice-btn');
+
+  function rollDice(sides) {
+    return Math.floor(Math.random() * sides) + 1;
+  }
+
+  function updateSelectedDiceDisplay() {
+    if (!selectedDiceDisplay) return;
+    
+    if (selectedDice.length === 0) {
+      selectedDiceDisplay.innerHTML = '<p class="no-dice-selected">Nenhum dado selecionado</p>';
+      if (rollAllBtn) rollAllBtn.disabled = true;
+    } else {
+      const diceCounts = {};
+      selectedDice.forEach(d => {
+        diceCounts[d] = (diceCounts[d] || 0) + 1;
+      });
+      
+      const displayItems = Object.entries(diceCounts).map(([dice, count]) => {
+        return `<span class="selected-dice-item">${count}${dice}</span>`;
+      }).join('');
+      
+      selectedDiceDisplay.innerHTML = `<div class="selected-dice-list">${displayItems}</div>`;
+      if (rollAllBtn) rollAllBtn.disabled = false;
+    }
+  }
+
+  function openDiceMenu() {
+    if (diceMenu) {
+      diceMenu.classList.add('show');
+      selectedDice = [];
+      updateSelectedDiceDisplay();
+    }
+  }
+
+  function closeDiceMenu() {
+    if (diceMenu) {
+      diceMenu.classList.remove('show');
+      selectedDice = [];
+      updateSelectedDiceDisplay();
+    }
+  }
+
+  if (diceButton) {
+    diceButton.addEventListener('click', () => {
+      if (diceMenu && diceMenu.classList.contains('show')) {
+        closeDiceMenu();
+      } else {
+        openDiceMenu();
+      }
+    });
+  }
+
+  if (closeMenuBtn) {
+    closeMenuBtn.addEventListener('click', closeDiceMenu);
+  }
+
+  document.addEventListener('click', (e) => {
+    if (diceMenu && diceMenu.classList.contains('show') && 
+        !diceMenu.contains(e.target) && 
+        diceButton && !diceButton.contains(e.target)) {
+      closeDiceMenu();
+    }
+  });
+
+  document.querySelectorAll('.dice-option-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const diceType = btn.dataset.dice;
+      selectedDice.push(diceType);
+      updateSelectedDiceDisplay();
+    });
+  });
+
+  if (rollAllBtn) {
+    rollAllBtn.addEventListener('click', () => {
+      if (selectedDice.length === 0) return;
+      
+      const diceCounts = {};
+      selectedDice.forEach(d => {
+        diceCounts[d] = (diceCounts[d] || 0) + 1;
+      });
+      
+      let total = 0;
+      const rollDetails = [];
+      
+      Object.entries(diceCounts).forEach(([diceType, count]) => {
+        const sides = parseInt(diceType.substring(1), 10);
+        let diceTotal = 0;
+        const rolls = [];
+        
+        for (let i = 0; i < count; i++) {
+          const roll = rollDice(sides);
+          rolls.push(roll);
+          diceTotal += roll;
+        }
+        
+        total += diceTotal;
+        rollDetails.push(`${count}${diceType}: [${rolls.join(', ')}] = ${diceTotal}`);
+      });
+      
+      const combinedRoll = {
+        result: total,
+        modifier: 0,
+        total: total,
+        critical: false,
+        fumble: false,
+      };
+      
+      createDicePopup(combinedRoll, `Total (${rollDetails.join(' + ')})`, 'Total');
+      
+      selectedDice = [];
+      updateSelectedDiceDisplay();
+      closeDiceMenu();
+    });
+  }
+</script>
+
+<style is:global>
+  .dice-roll-popups-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 99998;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    align-items: flex-start;
+    max-width: 350px;
+  }
+
+  .dice-roll-popup-cascade {
+    position: relative;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.3);
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(100px) scale(0.8);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: auto;
+    min-width: 250px;
+    max-width: 350px;
+    width: 100%;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .dice-roll-popup-cascade.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .dice-roll-popup-cascade:hover {
+    border-color: var(--color-accent-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(139, 76, 141, 0.5);
+  }
+
+  .custom-dice-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-glow));
+    border: 2px solid var(--color-accent-primary);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.5);
+    z-index: 99997;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .custom-dice-button:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 
+      0 6px 25px rgba(0, 0, 0, 0.5),
+      0 0 30px rgba(139, 76, 141, 0.7);
+  }
+
+  .custom-dice-button:active {
+    transform: scale(0.95);
+  }
+
+  .custom-dice-menu {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.3);
+    z-index: 99998;
+    min-width: 250px;
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .custom-dice-menu.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .dice-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .dice-menu-header h3 {
+    font-family: var(--font-heading);
+    color: var(--color-text-accent);
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  .close-menu-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .close-menu-btn:hover {
+    background: rgba(139, 76, 141, 0.2);
+    color: var(--color-text-accent);
+  }
+
+  .dice-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .dice-option-btn {
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .dice-option-btn:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    color: var(--color-text-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 76, 141, 0.2);
+  }
+
+  .dice-option-btn:active {
+    transform: translateY(0);
+  }
+
+  .selected-dice-display {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    min-height: 50px;
+  }
+
+  .no-dice-selected {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .selected-dice-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .selected-dice-item {
+    padding: 0.4rem 0.75rem;
+    background: var(--color-accent-primary);
+    color: var(--color-text-primary);
+    border-radius: 6px;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .roll-all-dice-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-glow));
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 8px;
+    color: white;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .roll-all-dice-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 76, 141, 0.4);
+  }
+
+  .roll-all-dice-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .roll-label {
+    font-family: var(--font-heading);
+    color: var(--color-text-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .roll-details {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .roll-die {
+    color: var(--color-text-primary);
+  }
+
+  .roll-modifier {
+    color: var(--color-text-secondary);
+  }
+
+  .roll-total {
+    font-weight: 700;
+    color: var(--color-text-accent);
+    font-size: 1.3rem;
+  }
+
+  .roll-status {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .roll-status.critical {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.4);
+  }
+
+  .roll-status.fumble {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.4);
+  }
+</style>

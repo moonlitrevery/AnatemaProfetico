@@ -1,0 +1,645 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title="[AP] - Sistema">
+  <div class="container">
+    <Logo />
+    
+    <div class="logo-subtitle-custom">
+      <h2>Sistema de Regras</h2>
+    </div>
+
+    <section class="system-section">
+      <div class="system-hero">
+        <blockquote class="hero-quote">
+          <p class="quote-text">"Fale e será caçado; cale-se e talvez sobreviva: esse é o preço do <strong>poder</strong>."</p>
+        </blockquote>
+      </div>
+
+      <div class="system-content">
+        <div class="system-intro">
+          <p class="system-intro-text">
+            <strong>Anátema profético</strong> é um sistema de RPG de mesa criado por <strong>Nyx (João/Luna)</strong> em 2025, 
+            como um sistema oficial para seu universo <strong>"Ordem Carmesim"</strong>. O sistema tem como foco 
+            <strong>Mistério/Terror</strong> e <strong>Sobrenatural</strong>, onde o universo se passa no nosso mundo, 
+            com fontes místicas inspiradas em <strong>Lord of Mysteries</strong>, <strong>Omniscient Reader Viewpoint</strong> 
+            e <strong>Shadow Slave</strong>.
+          </p>
+        </div>
+
+        <div class="system-block quote-block">
+          <blockquote class="impact-quote">
+            <p>"Em um universo onde o sobrenatural é algo dito como sussurro e uma maldição pode ser dada a você a força e mudará sua vida eternamente, o que você faria?"</p>
+          </blockquote>
+        </div>
+
+        <div class="system-block">
+          <div class="system-block-content">
+            <p>
+              O sistema se inspira na maneira que <strong>Shadow Slave</strong> entrega os poderes aos personagens na obra, 
+              poderes que são inspirados nos caminhos de <strong>Lord of Mysteries</strong> e que são controlados por entidades 
+              como as de <strong>Omniscient Reader Viewpoint</strong>. 
+              <em class="mystery-text">(Para fins de mistério em canon não deixarei explícito o que quis dizer com isso)</em>
+            </p>
+          </div>
+        </div>
+
+        <div class="warning-box">
+          <div class="warning-icon">⚠</div>
+          <div class="warning-content">
+            <p><strong>O sistema ainda está em desenvolvimento</strong>, todas as informações nessa página e nas subsequentes 
+            poderão mudar a qualquer momento sem aviso prévio.</p>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-icon">💡</div>
+          <div class="info-content">
+            <p>Caso queira contribuir para o sistema, se sinta bem-vinde! Só mande uma mensagem para Nyx no Discord e 
+            conversaremos sobre as melhorias e as alterações que você acha pertinente fazer! :)</p>
+          </div>
+        </div>
+
+        <div class="system-divider">
+          <span class="divider-symbol">◊</span>
+        </div>
+
+        <div class="system-block universe-block">
+          <h3 class="system-block-title">O Universo</h3>
+          <div class="system-block-content">
+            <blockquote class="universe-quote">
+              <p>"Das ruínas da humanidade surgiram as singularidades. Nem salvação, nem condenação: apenas o inevitável."</p>
+            </blockquote>
+            
+            <p>
+              O mundo já não é mais o mesmo: uma reincidência de uma doença — que pra muitos seria considerada uma maldição — 
+              abala o alicerce da nossa sociedade.
+            </p>
+            
+            <p>
+              A partir de <strong>11/03/2020</strong>, começaram a surgir relatos de aparições de criaturas sobrenaturais. 
+              Suas ações irracionais espalharam o terror do hemisfério norte ao sul, até os polos; a monstruosidade das mortes 
+              derrubou estruturas inteiras: ninguém sabia quem fora o paciente zero daquela maldição, nem se ele ainda caminhava 
+              entre nós.
+            </p>
+            
+            <p>
+              Anos de pesquisa levaram cientistas alemães a uma hipótese perturbadora no início de 2022: a "doença" seria, 
+              na verdade, uma mutação genética que surgia de forma abrupta. Os infectados descreviam fraqueza, dores pelo corpo 
+              e uma sonolência inexorável. O mais desconcertante, porém, era o sono que vinha depois da infecção: um sono profundo, 
+              que podia durar dias. Durante esse período, seus sinais vitais alcançavam patamares que a humanidade jamais registrara. 
+              E, passado algum tempo, o corpo se desfazia por dentro: tecidos rasgados, órgãos rompidos, uma devastação sangrenta, 
+              como se algo crescesse no interior e procurasse moldar-se ao receptáculo. Depois disso, a carne já não pertencia ao 
+              homem de antes; havia nascido outra coisa: as criaturas que povoavam os relatos.
+            </p>
+            
+            <p>
+              Contudo, alguns pacientes, sem padrão aparente entre si, retornavam à consciência e exibiam capacidades que ultrapassavam 
+              o natural; habilidades que nem as narrativas mais fantasiosas ousariam descrever. Esses indivíduos, chamados de "mutados", 
+              eram conduzidos a laboratórios e submetidos a pesquisas na tentativa de que a sociedade encontrasse uma cura para a maldição 
+              — sem êxito.
+            </p>
+            
+            <p>
+              O primeiro caso identificado remonta a outubro de 2022: apelidado de "Visionário" após a demonstração de seus poderes, 
+              seu corpo foi encontrado junto a um laboratório governamental sigiloso na Tailândia, com sinais de tortura e membros faltantes. 
+              As investigações apontaram responsabilidade aos cientistas do local que, segundo relatos, teriam descartado o paciente depois 
+              de fracassarem em extrair o cerne de seus poderes. Testemunhas das imediações relataram que, semanas depois, uma criatura 
+              corpulenta sobrepôs-se à silhueta do rapaz estendido no chão, devorando o que restara de suas entranhas. O caso chegou à ONU 
+              e ao governo tailandês, mas foi arquivado por falta de provas.
+            </p>
+            
+            <p>
+              Esses mutados sempre foram raros; nisso nada mudou até o presente. Poucos conseguem escapar dos laboratórios estatais, 
+              e ainda mais escassos são os que sobrevivem depois de expor seus poderes a um grande público. Os poucos que o fazem costumam 
+              ser rapidamente sequestrados: ora por justiceiros e vigilantes que juram livrar a sociedade dessas "aberrações", ora por 
+              entidades científicas ávidas por dissecar a origem de seus dons. Uma sequência que quase sempre termina em fracasso e na 
+              morte do paciente.
+            </p>
+            
+            <p>
+              Em agosto de 2023, por convenção, decidiu-se abandonar o termo "mutado" e adotar <strong>"singularidade"</strong>, por respeito 
+              à humanidade desses indivíduos. A mudança provocou reações e foi contestada por diversas nações, com destaque para 
+              <strong>Carmelo de Berelo Soares</strong>, então presidente de Portugal, que declarou em entrevista: 
+              <em>"[...] (Eu) não acredito que essas pessoas precisem se lembrar da sua humanidade, afinal de contas eles precisam serem 
+              só máquinas na nossa luta contra elas (as criaturas). [...]"</em>
+            </p>
+            
+            <p>
+              Apesar da resistência internacional, a convenção foi mantida. Hoje, <strong>"singularidade"</strong> é o termo oficial para 
+              designar um humano que acordou após a maldição e despertou capacidades sobre-humanas.
+            </p>
+            
+            <p>
+              As singularidades, portanto, ocultam seus poderes sempre que possível, mantendo-os em reclusão. Muitas levam uma vida 
+              aparentemente comum, revelando suas habilidades apenas em situações extremas: por sobrevivência ou para enfrentar as criaturas 
+              que assombram seu cotidiano. Outras acabam se integrando a sociedades secretas, cada uma com seus próprios propósitos.
+            </p>
+          </div>
+        </div>
+
+        <div class="system-block societies-block">
+          <h3 class="system-block-title">Sociedades Secretas</h3>
+          <div class="system-block-content">
+            <div class="society-type">
+              <h4 class="society-title">Sociedades Secretas de Apoio</h4>
+              <p>Grupos dedicados a acolher singularidades, permitindo que encontrem outras como elas e aliviem o peso de carregar um poder que jamais escolheram possuir.</p>
+            </div>
+            
+            <div class="society-type">
+              <h4 class="society-title">Sociedades Secretas de Informação</h4>
+              <p>Células anônimas que compartilham dados sobre o "mundo singular": raptos recentes, zonas infestadas por criaturas, relatos de novas manifestações de poder e qualquer descoberta relevante.</p>
+            </div>
+            
+            <div class="society-type">
+              <h4 class="society-title">Sociedades Secretas de Máscaras</h4>
+              <p>
+                A mais enigmática das três. Poucas organizações se autodenominam sociedades de máscaras e, muitas vezes, são rejeitadas 
+                pelas demais por vistas como "impuras". Reúnem singularidades com um único propósito: proteger a sociedade. Seus membros 
+                são chamados de "Máscaras", em alusão à máscara metafórica que toda singularidade usa para parecer "normal" no convívio social.
+              </p>
+              <p class="mystery-text">
+                Aqueles que passaram por uma SSM relatam uma experiência intensa e transformadora; poucos saem com as mesmas capacidades 
+                com que entraram. São conhecidas por estimular seus membros a expandirem seus poderes, explorarem seus limites e trocarem 
+                informações sobre a maldição que os marcou: mas tudo tem seu preço.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="system-divider">
+          <span class="divider-symbol">◊</span>
+        </div>
+
+        <div class="system-block paths-block">
+          <h3 class="system-block-title">Caminhos</h3>
+          <div class="system-block-content">
+            <p>
+              Um <strong>Caminho</strong> (ou via Divina/Amaldiçoada) corresponde a recompensa dada aqueles que sobrevivem a uma provação, 
+              e que conferem acesso a poderes místicos e sobrenaturais. Quem consegue superar seus limites e começa a seguir um caminho 
+              torna-se um <strong>Caminhante</strong> daquela Via: marcado, ligado e capaz de manipular o que a trilha oferece. No fim de 
+              cada Caminho, apenas um Caminhante pode ascender por completo: alcançar a divindade e tornar-se o <strong>Verdadeiro</strong> 
+              desse Caminho.
+            </p>
+            
+            <p>
+              No mundo, existem <strong>22 Caminhos Padrão</strong>, cada qual estruturado em 10 níveis de Sequência, do mais baixo 
+              (Sequência 9) ao mais alto (Sequência 0). Cada nível traz consigo um conjunto próprio de habilidades, e cada Caminho guarda 
+              seus domínios e prerrogativas. À medida que o Caminhante avança na Sequência, as aptidões do Caminho se ampliam em escopo 
+              e intensidade: aquilo que começa como uma habilidade utilitária pode, nos níveis superiores, transformar-se em um poder devastador.
+            </p>
+            
+            <p>
+              Os efeitos variam muito entre as vias: algumas oferecem ferramentas do conhecimento, como percepção acrescida, adivinhação 
+              ou a arte de forjar artefatos; outras concedem forças de maior escala, como o controle de tempestades, a manipulação de espíritos 
+              ou a alteração da própria matéria. Na nossa história, quando uma singularidade desperta, ela não apenas ganha poder: entra num 
+              caminho com regras, rivalidades e um destino possível demais para ignorar.
+            </p>
+            
+            <div class="warning-box">
+              <div class="warning-icon">⚠</div>
+              <div class="warning-content">
+                <p>
+                  <strong>Uma singularidade pode avançar em sua própria potência ao aprofundar o uso de suas habilidades: mas esse processo 
+                  é sempre arriscado.</strong> Cada singularidade carrega dentro de si ecos psíquicos das criaturas que nasceram da maldição, 
+                  além de fragmentos da própria anomalia original. Por isso, quanto mais intensamente uma singularidade utiliza seus poderes, 
+                  maior a chance de que esses ecos despertem e tentem assumir o controle.
+                </p>
+                <p>
+                  Perder-se nesse processo é relativamente comum: a singularidade pode ser tomada por surtos, delírios, estados de ruptura 
+                  identitária ou, em casos extremos, pode transformar-se numa criatura semelhante às que a humanidade tanto teme. Embora seja 
+                  possível que uma singularidade alcance níveis mais altos de poder rapidamente ao forçar seus limites, poucos sobrevivem a 
+                  essa ascensão acelerada: e menos ainda permanecem íntegros.
+                </p>
+              </div>
+            </div>
+            
+            <p>
+              A cada nível que a singularidade upa, ele pode escolher <strong>uma habilidade de sua sequência equivalente ou inferior</strong>, 
+              ou pode escolher receber <strong>+1 em uma perícia de sua escolha</strong>.
+            </p>
+
+            <div class="paths-preview">
+              <p class="paths-intro">Os caminhos são:</p>
+              <ul class="paths-list">
+                <li>Caminho do Enforcado</li>
+                <li>Caminho da Escuridão</li>
+                <li>Caminho da Morte</li>
+                <li>Caminho do Gigante do Crepúsculo</li>
+                <li>Caminho da Daemônia</li>
+                <li>Caminho do Sacerdote Carmesim</li>
+                <li>Caminho do Eremita</li>
+                <li>Caminho do Exemplar</li>
+                <li>Caminho do Tolo</li>
+                <li>Caminho da Anomalia</li>
+                <li>Caminho da Porta</li>
+                <li>Caminho do Visionário</li>
+                <li>Caminho do Sol</li>
+                <li>Caminho do Tirano</li>
+                <li>Caminho da Torre Pálida</li>
+                <li class="mystery-text">... e mais 7 caminhos para descobrir</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="system-divider">
+          <span class="divider-symbol">◊</span>
+        </div>
+
+        <div class="system-block documentation-block">
+          <h3 class="system-block-title">Documentação Completa</h3>
+          <div class="system-block-content">
+            <p>
+              Para informações detalhadas sobre cada Caminho, suas habilidades, regras completas do sistema, bestiário, 
+              mecânicas avançadas e todo o conteúdo técnico, consulte a documentação completa no Notion:
+            </p>
+            <div class="system-link-box">
+              <a href="https://www.notion.so/An-tema-prof-tico-29921ffb951280608f9cd40392390abf?source=copy_link" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 class="system-link">
+                <span class="system-link-icon">◊</span>
+                <span class="system-link-text">Acessar Documentação Completa</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .logo-subtitle-custom {
+    text-align: center;
+    margin: -1rem 0 2rem 0;
+  }
+
+  .logo-subtitle-custom h2 {
+    font-family: var(--font-accent);
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  .system-section {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 3rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .system-hero {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .hero-quote {
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: center;
+  }
+
+  .quote-text {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--color-text-accent);
+    line-height: 1.6;
+    font-style: italic;
+    text-shadow: 
+      0 0 20px rgba(139, 76, 141, 0.5),
+      0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .quote-text strong {
+    color: var(--color-accent-glow);
+    font-weight: 700;
+  }
+
+  .system-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .system-intro {
+    text-align: center;
+    padding: 2rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .system-intro-text {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .system-block {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .system-block:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .quote-block {
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.1), rgba(107, 60, 109, 0.1));
+    border-color: var(--color-accent-primary);
+  }
+
+  .impact-quote {
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: center;
+  }
+
+  .impact-quote p {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--color-text-accent);
+    line-height: 1.6;
+    font-style: italic;
+    text-shadow: 0 0 15px rgba(139, 76, 141, 0.4);
+  }
+
+  .mystery-text {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  .warning-box,
+  .info-box {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-accent-primary);
+    border-radius: 8px;
+    margin: 1.5rem 0;
+  }
+
+  .warning-box {
+    border-left-color: #f44336;
+  }
+
+  .info-box {
+    border-left-color: #4caf50;
+  }
+
+  .warning-icon,
+  .info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .warning-content,
+  .info-content {
+    flex: 1;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+  }
+
+  .system-divider {
+    text-align: center;
+    padding: 2rem 0;
+    position: relative;
+  }
+
+  .divider-symbol {
+    font-size: 2rem;
+    color: var(--color-accent-primary);
+    opacity: 0.6;
+    position: relative;
+    display: inline-block;
+  }
+
+  .divider-symbol::before,
+  .divider-symbol::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-accent-primary), transparent);
+  }
+
+  .divider-symbol::before {
+    right: 120%;
+  }
+
+  .divider-symbol::after {
+    left: 120%;
+  }
+
+  .system-block-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .system-block-content {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.8;
+  }
+
+  .system-block-content p {
+    margin-bottom: 1.25rem;
+  }
+
+  .universe-quote {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: var(--color-bg-primary);
+    border-left: 4px solid var(--color-accent-primary);
+    border-radius: 6px;
+    font-style: italic;
+  }
+
+  .universe-quote p {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--color-text-accent);
+    margin: 0;
+    text-shadow: 0 0 10px rgba(139, 76, 141, 0.3);
+  }
+
+  .society-type {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+
+  .society-type:last-child {
+    margin-bottom: 0;
+  }
+
+  .society-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--color-text-accent);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .society-type p {
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .paths-preview {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .paths-intro {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .paths-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .paths-list li {
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    text-align: center;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    transition: all 0.3s ease;
+  }
+
+  .paths-list li:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .paths-list li.mystery-text {
+    grid-column: 1 / -1;
+    font-style: italic;
+    opacity: 0.7;
+    border-style: dashed;
+  }
+
+  .system-link-box {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .system-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 2.5rem;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-glow));
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 15px rgba(139, 76, 141, 0.3);
+  }
+
+  .system-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(139, 76, 141, 0.5);
+    border-color: var(--color-accent-glow);
+  }
+
+  .system-link-icon {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .system-section {
+      padding: 1.5rem;
+    }
+
+    .system-block {
+      padding: 1.5rem;
+    }
+
+    .quote-text {
+      font-size: 1.4rem;
+    }
+
+    .impact-quote p {
+      font-size: 1.2rem;
+    }
+
+    .system-block-title {
+      font-size: 1.5rem;
+    }
+
+    .paths-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

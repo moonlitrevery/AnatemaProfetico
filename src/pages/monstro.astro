@@ -1,0 +1,734 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title="[AP] - Ficha de Monstro">
+  <div class="container">
+    <Logo />
+    
+    <div class="logo-subtitle-custom">
+      <h2>Ficha de Monstro</h2>
+    </div>
+
+    <section class="sheet-section monster-sheet">
+      <h2 class="section-title">
+        <span class="section-title-text">Ficha de Monstro</span>
+        <span class="section-title-decoration"></span>
+      </h2>
+      
+      <div class="monster-header">
+        <div class="monster-name-section">
+          <label for="monster-name">Nome do Monstro</label>
+          <input type="text" id="monster-name" class="monster-name-input" placeholder="Ex: Criatura da Maldição" />
+        </div>
+        
+        <div class="monster-basic-info">
+          <div class="monster-info-item">
+            <label for="monster-type">Tipo</label>
+            <select id="monster-type" class="monster-select">
+              <option value="">Selecione...</option>
+              <option value="criatura">Criatura</option>
+              <option value="singularidade-corrompida">Singularidade Corrompida</option>
+              <option value="entidade">Entidade</option>
+              <option value="espirito">Espírito</option>
+              <option value="aberração">Aberração</option>
+            </select>
+          </div>
+          
+          <div class="monster-info-item">
+            <label for="monster-size">Tamanho</label>
+            <select id="monster-size" class="monster-select">
+              <option value="">Selecione...</option>
+              <option value="minúsculo">Minúsculo</option>
+              <option value="pequeno">Pequeno</option>
+              <option value="médio">Médio</option>
+              <option value="grande">Grande</option>
+              <option value="enorme">Enorme</option>
+              <option value="gigante">Gigante</option>
+            </select>
+          </div>
+          
+          <div class="monster-info-item">
+            <label for="monster-alignment">Alinhamento</label>
+            <select id="monster-alignment" class="monster-select">
+              <option value="">Selecione...</option>
+              <option value="caótico-maligno">Caótico Maligno</option>
+              <option value="caótico-neutro">Caótico Neutro</option>
+              <option value="caótico-bom">Caótico Bom</option>
+              <option value="neutro-maligno">Neutro Maligno</option>
+              <option value="neutro">Neutro</option>
+              <option value="neutro-bom">Neutro Bom</option>
+              <option value="leal-maligno">Leal Maligno</option>
+              <option value="leal-neutro">Leal Neutro</option>
+              <option value="leal-bom">Leal Bom</option>
+              <option value="sem-alinhamento">Sem Alinhamento</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="monster-stats-grid">
+        <div class="monster-stat-block">
+          <h3 class="stat-block-title">Atributos</h3>
+          <div class="attributes-grid">
+            <div class="attribute-item">
+              <label for="monster-brutalidade">Brutalidade</label>
+              <input type="number" id="monster-brutalidade" class="stat-input" value="10" min="0" max="30" />
+              <span class="modifier" id="monster-brut-mod">+0</span>
+            </div>
+            <div class="attribute-item">
+              <label for="monster-destreza">Destreza</label>
+              <input type="number" id="monster-destreza" class="stat-input" value="10" min="0" max="30" />
+              <span class="modifier" id="monster-dex-mod">+0</span>
+            </div>
+            <div class="attribute-item">
+              <label for="monster-compleicao">Compleição</label>
+              <input type="number" id="monster-compleicao" class="stat-input" value="10" min="0" max="30" />
+              <span class="modifier" id="monster-con-mod">+0</span>
+            </div>
+            <div class="attribute-item">
+              <label for="monster-mente">Mente</label>
+              <input type="number" id="monster-mente" class="stat-input" value="10" min="0" max="30" />
+              <span class="modifier" id="monster-men-mod">+0</span>
+            </div>
+            <div class="attribute-item">
+              <label for="monster-sobrenatural">Sobrenatural</label>
+              <input type="number" id="monster-sobrenatural" class="stat-input" value="10" min="0" max="30" />
+              <span class="modifier" id="monster-pod-mod">+0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="monster-stat-block">
+          <h3 class="stat-block-title">Estatísticas de Combate</h3>
+          <div class="combat-stats">
+            <div class="combat-stat-item">
+              <label for="monster-vida">Pontos de Vida</label>
+              <input type="number" id="monster-vida" class="stat-input" value="0" min="0" />
+            </div>
+            <div class="combat-stat-item">
+              <label for="monster-vida-max">Vida Máxima</label>
+              <input type="number" id="monster-vida-max" class="stat-input" value="0" min="0" readonly />
+            </div>
+            <div class="combat-stat-item">
+              <label for="monster-armor">Armadura (CA)</label>
+              <input type="number" id="monster-armor" class="stat-input" value="10" min="0" />
+            </div>
+            <div class="combat-stat-item">
+              <label for="monster-speed">Velocidade</label>
+              <input type="text" id="monster-speed" class="stat-input" placeholder="Ex: 9m, 6m escalando" />
+            </div>
+            <div class="combat-stat-item">
+              <label for="monster-resistances">Resistências</label>
+              <input type="text" id="monster-resistances" class="stat-input" placeholder="Ex: Fogo, Frio" />
+            </div>
+            <div class="combat-stat-item">
+              <label for="monster-immunities">Imunidades</label>
+              <input type="text" id="monster-immunities" class="stat-input" placeholder="Ex: Veneno, Medo" />
+            </div>
+            <div class="combat-stat-item">
+              <label for="monster-vulnerabilities">Vulnerabilidades</label>
+              <input type="text" id="monster-vulnerabilities" class="stat-input" placeholder="Ex: Fogo" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="monster-abilities-section">
+        <h3 class="section-subtitle">
+          <span class="section-subtitle-text">Ataques e Habilidades</span>
+        </h3>
+        <div id="monster-abilities-container" class="abilities-container">
+          <!-- Abilities will be added here -->
+        </div>
+        <button type="button" id="add-ability-btn" class="add-btn">+ Adicionar Ataque/Habilidade</button>
+      </div>
+
+      <div class="monster-traits-section">
+        <h3 class="section-subtitle">
+          <span class="section-subtitle-text">Traços e Características</span>
+        </h3>
+        <div class="traits-grid">
+          <div class="trait-item">
+            <label for="monster-senses">Sentidos</label>
+            <textarea id="monster-senses" class="trait-textarea" placeholder="Ex: Visão no escuro 18m, Percepção passiva 14"></textarea>
+          </div>
+          <div class="trait-item">
+            <label for="monster-languages">Idiomas</label>
+            <input type="text" id="monster-languages" class="trait-input" placeholder="Ex: Comum, Abissal" />
+          </div>
+          <div class="trait-item full-width">
+            <label for="monster-description">Descrição</label>
+            <textarea id="monster-description" class="trait-textarea large" placeholder="Descreva a aparência, comportamento e características do monstro..."></textarea>
+          </div>
+          <div class="trait-item full-width">
+            <label for="monster-actions">Ações Lendárias (se houver)</label>
+            <textarea id="monster-actions" class="trait-textarea large" placeholder="Descreva ações especiais que o monstro pode realizar..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="monster-notes-section">
+        <h3 class="section-subtitle">
+          <span class="section-subtitle-text">Anotações</span>
+        </h3>
+        <textarea id="monster-notes" class="notes-textarea" placeholder="Anotações adicionais sobre o monstro, encontros, táticas, etc..."></textarea>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script type="module">
+  // Calcular modificadores de atributos
+  function calculateModifier(value) {
+    return Math.floor((value - 10) / 2);
+  }
+
+  function updateModifiers() {
+    const attributes = ['brutalidade', 'destreza', 'compleicao', 'mente', 'sobrenatural'];
+    attributes.forEach(attr => {
+      const input = document.getElementById(`monster-${attr}`);
+      const modSpan = document.getElementById(`monster-${attr.replace('compleicao', 'con').replace('sobrenatural', 'pod')}-mod`);
+      if (input && modSpan) {
+        const v = parseInt(input.value, 10);
+        const value = Number.isNaN(v) ? 0 : v;
+        const mod = calculateModifier(value);
+        modSpan.textContent = mod >= 0 ? `+${mod}` : `${mod}`;
+      }
+    });
+  }
+
+  // Atualizar vida máxima baseada em atributos
+  function updateMonsterHP() {
+    const brutalidadeInput = document.getElementById('monster-brutalidade');
+    const compleicaoInput = document.getElementById('monster-compleicao');
+    const vidaMaxInput = document.getElementById('monster-vida-max');
+    
+    if (brutalidadeInput && compleicaoInput && vidaMaxInput) {
+      const bv = parseInt(brutalidadeInput.value, 10);
+      const cv = parseInt(compleicaoInput.value, 10);
+      const brutalidade = Number.isNaN(bv) ? 10 : bv;
+      const compleicao = Number.isNaN(cv) ? 10 : cv;
+      vidaMaxInput.value = String(brutalidade + compleicao);
+    }
+  }
+
+  // Adicionar habilidade/ataque
+  function createAbilityRow() {
+    const container = document.getElementById('monster-abilities-container');
+    if (!container) return;
+
+    const row = document.createElement('div');
+    row.className = 'ability-row';
+    row.innerHTML = `
+      <div class="ability-name">
+        <input type="text" class="ability-name-input" placeholder="Nome do ataque/habilidade" />
+      </div>
+      <div class="ability-type">
+        <select class="ability-type-select">
+          <option value="ataque">Ataque</option>
+          <option value="habilidade">Habilidade</option>
+          <option value="trait">Traço</option>
+        </select>
+      </div>
+      <div class="ability-damage">
+        <input type="text" class="ability-damage-input" placeholder="Dano/efeito" />
+      </div>
+      <div class="ability-description">
+        <textarea class="ability-description-textarea" placeholder="Descrição..."></textarea>
+      </div>
+      <div class="ability-remove">
+        <button type="button" class="remove-btn">×</button>
+      </div>
+    `;
+
+    const removeBtn = row.querySelector('.remove-btn');
+    removeBtn.addEventListener('click', () => {
+      row.remove();
+    });
+
+    container.appendChild(row);
+  }
+
+  // Event listeners
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeMonsterSheet, { once: true });
+  } else {
+    requestAnimationFrame(initializeMonsterSheet);
+  }
+
+  function initializeMonsterSheet() {
+    // Atualizar modificadores quando atributos mudarem
+    ['monster-brutalidade', 'monster-destreza', 'monster-compleicao', 'monster-mente', 'monster-sobrenatural'].forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.addEventListener('input', () => {
+          requestAnimationFrame(() => {
+            updateModifiers();
+            if (id === 'monster-brutalidade' || id === 'monster-compleicao') {
+              updateMonsterHP();
+            }
+          });
+        }, { passive: true });
+      }
+    });
+
+    // Botão adicionar habilidade
+    const addAbilityBtn = document.getElementById('add-ability-btn');
+    if (addAbilityBtn) {
+      addAbilityBtn.addEventListener('click', createAbilityRow, { passive: true });
+    }
+
+    // Inicializar
+    requestAnimationFrame(() => {
+      updateModifiers();
+      updateMonsterHP();
+    });
+  }
+</script>
+
+<style>
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 3rem;
+  }
+
+  .logo-subtitle-custom {
+    text-align: center;
+    margin: -1rem 0 2rem 0;
+  }
+
+  .logo-subtitle-custom h2 {
+    font-family: var(--font-accent);
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  .monster-header {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .monster-name-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .monster-name-section label {
+    display: block;
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .monster-name-input {
+    width: 100%;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .monster-name-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 15px rgba(139, 76, 141, 0.3);
+  }
+
+  .monster-basic-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .monster-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .monster-info-item label {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .monster-select {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .monster-select:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .monster-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .monster-stat-block {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .monster-stat-block:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .stat-block-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+
+  .attribute-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .attribute-item:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .attribute-item label {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-input {
+    width: 100%;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .stat-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .modifier {
+    font-family: var(--font-heading);
+    color: var(--color-text-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .combat-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .combat-stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .combat-stat-item label {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .section-subtitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding: 1rem 0;
+  }
+
+  .section-subtitle-text {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--color-text-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-shadow: 
+      0 0 20px rgba(139, 76, 141, 0.5),
+      0 2px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-subtitle::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-primary),
+      transparent
+    );
+    opacity: 0.5;
+  }
+
+  .abilities-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .ability-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr 3fr auto;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    align-items: start;
+  }
+
+  .ability-name-input,
+  .ability-damage-input,
+  .ability-type-select {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+  }
+
+  .ability-description-textarea {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .remove-btn {
+    width: 32px;
+    height: 32px;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .remove-btn:hover {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: #f44336;
+    color: #f44336;
+  }
+
+  .add-btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--color-bg-tertiary);
+    border: 2px dashed var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .add-btn:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    color: var(--color-text-accent);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .traits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .trait-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .trait-item.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .trait-item label {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .trait-input,
+  .trait-textarea {
+    width: 100%;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .trait-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .trait-textarea.large {
+    min-height: 150px;
+  }
+
+  .trait-input:focus,
+  .trait-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .monster-notes-section {
+    margin-top: 2rem;
+  }
+
+  .notes-textarea {
+    width: 100%;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 150px;
+    transition: all 0.3s ease;
+  }
+
+  .notes-textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  @media (max-width: 1024px) {
+    .monster-stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ability-row {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .monster-sheet {
+      padding: 1.5rem;
+    }
+
+    .monster-basic-info {
+      grid-template-columns: 1fr;
+    }
+
+    .traits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

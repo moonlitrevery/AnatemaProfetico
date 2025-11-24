@@ -1,0 +1,712 @@
+---
+---
+
+<section class="save-load-section">
+  <div class="save-load-container">
+    <div class="save-load-header">
+      <h2 class="save-load-title">Gerenciamento da Ficha</h2>
+    </div>
+    <div class="save-load-buttons">
+      <button id="save-btn" class="action-btn save-btn" type="button">
+        <span class="btn-icon">💾</span>
+        Salvar Localmente
+      </button>
+      <button id="export-btn" class="action-btn export-btn" type="button">
+        <span class="btn-icon">📥</span>
+        Exportar JSON
+      </button>
+      <label for="import-input" class="action-btn import-btn">
+        <span class="btn-icon">📤</span>
+        Importar JSON
+      </label>
+      <input type="file" id="import-input" accept=".json" style="display: none;" />
+      <button id="clear-btn" class="action-btn clear-btn" type="button">
+        <span class="btn-icon">🗑️</span>
+        Limpar Ficha
+      </button>
+    </div>
+    <div id="save-message" class="save-message"></div>
+  </div>
+</section>
+
+<script type="module">
+  function getAllCharacterData() {
+    const basicInfo = {
+      playerName: document.getElementById('player-name')?.value || '',
+      characterName: document.getElementById('character-name')?.value || '',
+      age: document.getElementById('character-age')?.value || '',
+      profession: document.getElementById('character-profession')?.value || '',
+      pronouns: Array.from(document.querySelectorAll('.pronoun-checkbox:checked')).map(cb => cb.value),
+      imageUrl: document.getElementById('character-image-url')?.value || '',
+    };
+
+    const prestigioSelect = document.getElementById('prestigio');
+    const header = {
+      caminho: document.getElementById('caminho')?.value || '',
+      sequencia: document.getElementById('nivel-caminho')?.value || '',
+      nivel: document.getElementById('nivel')?.value || '',
+      prestigio: prestigioSelect?.value || 'muito-baixo',
+      vidaCurrent: document.getElementById('vida-current')?.value || '',
+      vidaTemp: document.getElementById('vida-temp')?.value || '',
+      manaCurrent: document.getElementById('mana-current')?.value || '',
+      manaTemp: document.getElementById('mana-temp')?.value || '',
+      sanidadeCurrent: document.getElementById('sanidade-current')?.value || '',
+      sanidadeTemp: document.getElementById('sanidade-temp')?.value || '',
+      movimentoExtra: document.getElementById('movimento-extra')?.value || '',
+    };
+
+    const attributes = {};
+    const attributeIds = ['brutalidade', 'destreza', 'compleicao', 'mente', 'sobrenatural'];
+    attributeIds.forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        const v = parseInt(input.value, 10);
+        attributes[id] = Number.isNaN(v) ? 0 : v;
+      }
+    });
+
+    const skills = [];
+    document.querySelectorAll('.skill-row').forEach((row) => {
+      const nameInput = row.querySelector('.skill-name');
+      const nameStatic = row.querySelector('.skill-name-static');
+      const valueInput = row.querySelector('.skill-value');
+      const attrSelect = row.querySelector('.skill-attribute');
+      const trainingSelect = row.querySelector('.skill-training');
+      const skillId = row.getAttribute('data-skill-id');
+      if (valueInput && attrSelect && skillId) {
+        const name = nameInput?.value || nameStatic?.textContent || '';
+        const isEditable = !!nameInput;
+        const vv = parseInt(valueInput.value, 10);
+        skills.push({
+          name: name,
+          attribute: attrSelect.value,
+          value: Number.isNaN(vv) ? 0 : vv,
+          training: trainingSelect?.value || 'none',
+          editable: isEditable,
+          id: skillId,
+        });
+      }
+    });
+
+    const equipment = {
+      weapons: [],
+      items: [],
+    };
+
+    document.querySelectorAll('#weapons-list .equipment-row').forEach((row) => {
+      const nameInput = row.querySelector('.equipment-name-input-field');
+      const typeSelect = row.querySelector('.equipment-type');
+      const damageInput = row.querySelector('.equipment-damage-input-field');
+      const descInput = row.querySelector('.equipment-description-field');
+      if (nameInput && typeSelect && damageInput && descInput) {
+        equipment.weapons.push({
+          name: nameInput.value || '',
+          type: typeSelect.value || 'branca',
+          damage: damageInput.value || '',
+          description: descInput.value || '',
+        });
+      }
+    });
+
+    document.querySelectorAll('#items-list .equipment-row').forEach((row) => {
+      const nameInput = row.querySelector('.equipment-name-input-field');
+      const descInput = row.querySelector('.equipment-description-field');
+      const weightSelect = row.querySelector('.item-weight');
+      if (nameInput && descInput && weightSelect) {
+        const w = parseInt(weightSelect.value, 10);
+        equipment.items.push({
+          name: nameInput.value || '',
+          description: descInput.value || '',
+          weight: Number.isNaN(w) ? 1 : w,
+        });
+      }
+    });
+
+    const abilities = [];
+    document.querySelectorAll('.ability-row').forEach((row) => {
+      const nameInput = row.querySelector('.ability-name-field');
+      const manaInput = row.querySelector('.ability-mana-field');
+      const descInput = row.querySelector('.ability-description-field');
+      const sequenciaSelect = row.querySelector('.ability-sequencia');
+      const passiveCheckbox = row.querySelector('.ability-is-passive');
+      const abilityId = row.getAttribute('data-ability-id');
+      if (nameInput && manaInput && descInput && abilityId) {
+        abilities.push({
+          name: nameInput.value || '',
+          isPassive: passiveCheckbox ? passiveCheckbox.checked : false,
+          manaCost: passiveCheckbox && passiveCheckbox.checked ? '-' : (manaInput.value || '0'),
+          sequencia: sequenciaSelect ? sequenciaSelect.value || '' : '',
+          description: descInput.value || '',
+          id: abilityId,
+        });
+      }
+    });
+
+    const notes = {
+      sobre: document.getElementById('notes-sobre')?.value || '',
+      sessoes: document.getElementById('notes-sessoes')?.value || '',
+      aliados: document.getElementById('notes-aliados')?.value || '',
+      inimigos: document.getElementById('notes-inimigos')?.value || '',
+      extras: document.getElementById('notes-extras')?.value || '',
+    };
+
+    const status = {
+      machucado: document.getElementById('status-machucado-check')?.checked || false,
+      morrendo: document.getElementById('status-morrendo-check')?.checked || false,
+      insano: document.getElementById('status-insano-check')?.checked || false,
+      deathSaves: {
+        successes: Array.from(document.querySelectorAll('.death-save-checkbox[data-type="success"]')).map(cb => cb.checked),
+        failures: Array.from(document.querySelectorAll('.death-save-checkbox[data-type="failure"]')).map(cb => cb.checked),
+      },
+    };
+
+    return {
+      basicInfo,
+      header,
+      attributes,
+      skills,
+      equipment,
+      abilities,
+      notes,
+      status,
+    };
+  }
+
+  function loadCharacterData(data) {
+    const playerNameInput = document.getElementById('player-name');
+    const charNameInput = document.getElementById('character-name');
+    const ageInput = document.getElementById('character-age');
+    const professionInput = document.getElementById('character-profession');
+    const imageUrlInput = document.getElementById('character-image-url');
+
+    if (playerNameInput) playerNameInput.value = data.basicInfo?.playerName || '';
+    if (charNameInput) charNameInput.value = data.basicInfo?.characterName || '';
+    if (ageInput) ageInput.value = data.basicInfo?.age || '';
+    if (professionInput) professionInput.value = data.basicInfo?.profession || '';
+    if (data.basicInfo?.pronouns) {
+      const pronouns = Array.isArray(data.basicInfo.pronouns) ? data.basicInfo.pronouns : (data.basicInfo.pronouns ? [data.basicInfo.pronouns] : []);
+      document.querySelectorAll('.pronoun-checkbox').forEach(cb => {
+        cb.checked = pronouns.includes(cb.value);
+      });
+      if (window.updatePronounsDisplay) {
+        window.updatePronounsDisplay();
+      }
+    }
+    if (imageUrlInput) {
+      imageUrlInput.value = data.basicInfo?.imageUrl || '';
+      imageUrlInput.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    if (data.header) {
+      const caminhoInput = document.getElementById('caminho');
+      const sequenciaInput = document.getElementById('nivel-caminho');
+      const nivelInput = document.getElementById('nivel');
+      const prestigioSelect = document.getElementById('prestigio');
+
+      if (caminhoInput) caminhoInput.value = data.header.caminho || '';
+      if (sequenciaInput) sequenciaInput.value = data.header.sequencia || data.header.nivelCaminho || '';
+      if (nivelInput) {
+        nivelInput.value = data.header.nivel || '0';
+        nivelInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      if (prestigioSelect) prestigioSelect.value = data.header.prestigio || 'muito-baixo';
+
+      const vidaCurrentInput = document.getElementById('vida-current');
+      const vidaTempInput = document.getElementById('vida-temp');
+      const manaCurrentInput = document.getElementById('mana-current');
+      const manaTempInput = document.getElementById('mana-temp');
+      const sanidadeCurrentInput = document.getElementById('sanidade-current');
+      const sanidadeTempInput = document.getElementById('sanidade-temp');
+      const movimentoExtraInput = document.getElementById('movimento-extra');
+
+      if (vidaCurrentInput) vidaCurrentInput.value = data.header.vidaCurrent || '';
+      if (vidaTempInput) vidaTempInput.value = data.header.vidaTemp || '';
+      if (manaCurrentInput) manaCurrentInput.value = data.header.manaCurrent || '';
+      if (manaTempInput) manaTempInput.value = data.header.manaTemp || '';
+      if (sanidadeCurrentInput) sanidadeCurrentInput.value = data.header.sanidadeCurrent || '';
+      if (sanidadeTempInput) sanidadeTempInput.value = data.header.sanidadeTemp || '';
+      if (movimentoExtraInput) movimentoExtraInput.value = data.header.movimentoExtra || '';
+    }
+
+    Object.entries(data.attributes || {}).forEach(([id, value]) => {
+      const input = document.getElementById(id);
+      if (input) {
+        input.value = String(value);
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+
+    if (data.skills && data.skills.length > 0) {
+      data.skills.forEach((skill) => {
+        const row = document.querySelector(`[data-skill-id="${skill.id}"]`);
+        if (row) {
+          const nameInput = row.querySelector('.skill-name');
+          const valueInput = row.querySelector('.skill-value');
+          const attrSelect = row.querySelector('.skill-attribute');
+          const trainingSelect = row.querySelector('.skill-training');
+          if (nameInput && skill.editable) {
+            nameInput.value = skill.name;
+          }
+          if (valueInput) valueInput.value = String(skill.value);
+          if (attrSelect) {
+            if (!attrSelect.disabled || skill.editable) {
+              attrSelect.value = skill.attribute;
+              attrSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          }
+          if (trainingSelect && skill.training) {
+            trainingSelect.value = skill.training;
+            trainingSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      });
+    }
+
+    const weaponsList = document.getElementById('weapons-list');
+    const itemsList = document.getElementById('items-list');
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    if (weaponsList && data.equipment?.weapons) {
+      weaponsList.innerHTML = '';
+      data.equipment.weapons.forEach((weapon) => {
+        const weaponDiv = document.createElement('div');
+        weaponDiv.className = 'equipment-row';
+        const weaponTypesList = [
+          { value: 'branca', label: 'Arma branca' },
+          { value: 'fogo', label: 'Arma de Fogo' },
+          { value: 'magica', label: 'Arma mágica' },
+        ];
+        weaponDiv.innerHTML = `
+          <div class="equipment-name-input">
+            <input type="text" placeholder="Nome da arma" class="equipment-name-input-field" value="${escapeHtml(weapon.name || '')}" />
+          </div>
+          <div class="equipment-type-select">
+            <select class="equipment-type">
+              ${weaponTypesList.map(type => `<option value="${type.value}" ${weapon.type === type.value ? 'selected' : ''}>${escapeHtml(type.label)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="equipment-damage-input">
+            <input type="text" placeholder="Dano" class="equipment-damage-input-field" value="${escapeHtml(weapon.damage || '')}" />
+          </div>
+          <div class="equipment-description-input">
+            <textarea placeholder="Descrição" rows="2" class="equipment-description-field">${escapeHtml(weapon.description || '')}</textarea>
+          </div>
+          <button class="btn-remove" type="button" title="Remover arma">✕</button>
+        `;
+        const removeBtn = weaponDiv.querySelector('.btn-remove');
+        if (removeBtn) {
+          removeBtn.addEventListener('click', () => weaponDiv.remove());
+        }
+        weaponsList.appendChild(weaponDiv);
+      });
+    }
+
+    if (itemsList && data.equipment?.items) {
+      itemsList.innerHTML = '';
+      data.equipment.items.forEach((item) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'equipment-row';
+        const weightOptions = Array.from({ length: 9 }, (_, i) => i + 1);
+        itemDiv.innerHTML = `
+          <div class="equipment-name-input">
+            <input type="text" placeholder="Nome do item" class="equipment-name-input-field" value="${escapeHtml(item.name || '')}" />
+          </div>
+          <div class="equipment-description-input">
+            <textarea placeholder="Descrição" rows="2" class="equipment-description-field">${escapeHtml(item.description || '')}</textarea>
+          </div>
+          <div class="equipment-weight-select">
+            <select class="item-weight">
+              ${weightOptions.map(weight => `<option value="${weight}" ${item.weight === weight ? 'selected' : ''}>${weight}</option>`).join('')}
+            </select>
+          </div>
+          <button class="btn-remove" type="button" title="Remover item">✕</button>
+        `;
+        const removeBtn = itemDiv.querySelector('.btn-remove');
+        const weightSelect = itemDiv.querySelector('.item-weight');
+        if (removeBtn) {
+          removeBtn.addEventListener('click', () => {
+            itemDiv.remove();
+            if (window.updateWeightDisplay) window.updateWeightDisplay();
+          });
+        }
+        if (weightSelect) {
+          weightSelect.addEventListener('change', () => {
+            if (window.updateWeightDisplay) window.updateWeightDisplay();
+          });
+        }
+        itemsList.appendChild(itemDiv);
+      });
+      setTimeout(() => {
+        if (window.updateWeightDisplay) window.updateWeightDisplay();
+      }, 200);
+    }
+
+    if (data.abilities && data.abilities.length > 0) {
+      const abilitiesContainer = document.getElementById('abilities-container');
+      if (abilitiesContainer) {
+        abilitiesContainer.innerHTML = '';
+        data.abilities.forEach((ability) => {
+          const row = window.createAbility ? window.createAbility() : document.createElement('div');
+          if (row.className === 'ability-row') {
+            const nameInput = row.querySelector('.ability-name-field');
+            const manaInput = row.querySelector('.ability-mana-field');
+            const descInput = row.querySelector('.ability-description-field');
+            const sequenciaSelect = row.querySelector('.ability-sequencia');
+            const passiveCheckbox = row.querySelector('.ability-is-passive');
+            
+            if (nameInput) nameInput.value = ability.name || '';
+            if (descInput) descInput.value = ability.description || '';
+            if (sequenciaSelect && ability.sequencia) {
+              sequenciaSelect.value = ability.sequencia;
+            }
+            if (passiveCheckbox) {
+              passiveCheckbox.checked = !!ability.isPassive;
+              passiveCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            if (manaInput && !ability.isPassive && ability.manaCost !== '-') {
+              const m = parseInt(ability.manaCost, 10);
+              manaInput.value = Number.isNaN(m) ? '0' : String(m);
+            }
+            
+            abilitiesContainer.appendChild(row);
+          }
+        });
+      }
+    }
+
+    if (data.notes) {
+      const sobreInput = document.getElementById('notes-sobre');
+      const sessoesInput = document.getElementById('notes-sessoes');
+      const aliadosInput = document.getElementById('notes-aliados');
+      const inimigosInput = document.getElementById('notes-inimigos');
+      const extrasInput = document.getElementById('notes-extras');
+      
+      if (sobreInput) sobreInput.value = data.notes.sobre || '';
+      if (sessoesInput) sessoesInput.value = data.notes.sessoes || '';
+      if (aliadosInput) aliadosInput.value = data.notes.aliados || '';
+      if (inimigosInput) inimigosInput.value = data.notes.inimigos || '';
+      if (extrasInput) extrasInput.value = data.notes.extras || '';
+    }
+    
+    // Compatibilidade com formato antigo (notes como string)
+    if (typeof data.notes === 'string') {
+      const sobreInput = document.getElementById('notes-sobre');
+      if (sobreInput) sobreInput.value = data.notes || '';
+    }
+
+    if (data.status) {
+      if (data.status.deathSaves) {
+        const successCheckboxes = document.querySelectorAll('.death-save-checkbox[data-type="success"]');
+        const failureCheckboxes = document.querySelectorAll('.death-save-checkbox[data-type="failure"]');
+
+        if (data.status.deathSaves.successes) {
+          successCheckboxes.forEach((cb, index) => {
+            cb.checked = !!data.status.deathSaves.successes[index];
+          });
+        }
+
+        if (data.status.deathSaves.failures) {
+          failureCheckboxes.forEach((cb, index) => {
+            cb.checked = !!data.status.deathSaves.failures[index];
+          });
+        }
+      }
+    }
+
+    document.dispatchEvent(new Event('characterDataChanged', { bubbles: true }));
+
+    setTimeout(() => {
+      if (window.updateHeaderValues) window.updateHeaderValues();
+      if (window.updateInlineStatus) window.updateInlineStatus();
+    }, 300);
+  }
+
+  function showMessage(message, type = 'success') {
+    const messageDiv = document.getElementById('save-message');
+    if (messageDiv) {
+      messageDiv.textContent = message;
+      messageDiv.className = `save-message ${type}`;
+      messageDiv.style.display = 'block';
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 3000);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const saveBtn = document.getElementById('save-btn');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        try {
+          const data = getAllCharacterData();
+          localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
+          showMessage('Ficha salva localmente com sucesso!', 'success');
+        } catch (error) {
+          console.error(error);
+          showMessage('Erro ao salvar a ficha.', 'error');
+        }
+      });
+    }
+
+    const exportBtn = document.getElementById('export-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => {
+        try {
+          const data = getAllCharacterData();
+          const json = JSON.stringify(data, null, 2);
+          const blob = new Blob([json], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `ficha-${data.basicInfo.characterName || 'personagem'}-${new Date().toISOString().split('T')[0]}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showMessage('Ficha exportada com sucesso!', 'success');
+        } catch (error) {
+          console.error(error);
+          showMessage('Erro ao exportar a ficha.', 'error');
+        }
+      });
+    }
+
+    const importInput = document.getElementById('import-input');
+    if (importInput) {
+      importInput.addEventListener('change', (e) => {
+        const file = e.target?.files?.[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            try {
+              const json = event.target.result;
+              const data = JSON.parse(json);
+              loadCharacterData(data);
+              showMessage('Ficha importada com sucesso!', 'success');
+            } catch (error) {
+              console.error(error);
+              showMessage('Erro ao importar a ficha. Verifique se o arquivo é válido.', 'error');
+            }
+          };
+          reader.readAsText(file);
+        }
+      });
+    }
+
+    const clearBtn = document.getElementById('clear-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Tem certeza que deseja limpar toda a ficha? Esta ação não pode ser desfeita.')) {
+          document.querySelectorAll('input, textarea').forEach((input) => {
+            if (input) {
+              if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = false;
+              } else if (input.type !== 'file') {
+                input.value = '';
+              }
+            }
+          });
+
+          const weaponsList = document.getElementById('weapons-list');
+          const itemsList = document.getElementById('items-list');
+          if (weaponsList) weaponsList.innerHTML = '';
+          if (itemsList) itemsList.innerHTML = '';
+
+          localStorage.removeItem('anatema-profetico-character');
+          showMessage('Ficha limpa com sucesso!', 'success');
+        }
+      });
+    }
+
+    function loadSavedData() {
+      try {
+        const savedData = localStorage.getItem('anatema-profetico-character');
+        if (savedData) {
+          const data = JSON.parse(savedData);
+          setTimeout(() => {
+            loadCharacterData(data);
+          }, 100);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados salvos:', error);
+      }
+    }
+
+    // carregar agora
+    loadSavedData();
+
+    window.addEventListener('focus', () => {
+      if (document.querySelector('[data-page="personagem"]')) {
+        setTimeout(loadSavedData, 100);
+      }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && document.querySelector('[data-page="personagem"]')) {
+        setTimeout(loadSavedData, 100);
+      }
+    });
+
+    let autoSaveInterval = null;
+    function setupAutoSave() {
+      if (autoSaveInterval) clearInterval(autoSaveInterval);
+      autoSaveInterval = setInterval(() => {
+        if (document.querySelector('[data-page="personagem"]')) {
+          try {
+            const data = getAllCharacterData();
+            localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
+          } catch (error) {
+            console.error('Erro no auto-save:', error);
+          }
+        }
+      }, 30000);
+    }
+
+    setupAutoSave();
+
+    let autoSaveTimeout = null;
+    function triggerAutoSave() {
+      if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
+      autoSaveTimeout = setTimeout(() => {
+        if (document.querySelector('[data-page="personagem"]')) {
+          try {
+            const data = getAllCharacterData();
+            localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
+          } catch (error) {
+            console.error('Erro no auto-save:', error);
+          }
+        }
+      }, 2000);
+    }
+
+    document.addEventListener('input', triggerAutoSave, { passive: true });
+    document.addEventListener('change', triggerAutoSave, { passive: true });
+  });
+</script>
+
+
+<style>
+  .save-load-section {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 
+      0 2px 10px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(139, 76, 141, 0.05);
+    opacity: 0.85;
+  }
+
+  .save-load-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .save-load-header {
+    display: none;
+  }
+
+  .save-load-title {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .save-load-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .action-btn:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    color: var(--color-text-primary);
+    transform: translateY(-1px);
+  }
+
+  .action-btn:active {
+    transform: translateY(0);
+  }
+
+  .save-btn {
+    border-color: var(--color-accent-primary);
+  }
+
+  .export-btn {
+    border-color: #4c8b7d;
+  }
+
+  .import-btn {
+    border-color: #8b7d4c;
+  }
+
+  .clear-btn {
+    border-color: #8b4c4c;
+  }
+
+  .btn-icon {
+    font-size: 0.9rem;
+  }
+
+  .save-message {
+    display: none;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .save-message.success {
+    background: rgba(76, 139, 125, 0.2);
+    border: 1px solid #4c8b7d;
+    color: #7dccb5;
+  }
+
+  .save-message.error {
+    background: rgba(139, 76, 76, 0.2);
+    border: 1px solid #8b4c4c;
+    color: #cc7d7d;
+  }
+
+  @media (max-width: 768px) {
+    .save-load-buttons {
+      flex-direction: column;
+    }
+
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+

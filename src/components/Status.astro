@@ -1,0 +1,339 @@
+---
+---
+
+<section class="sheet-section status-section">
+  <h2 class="section-title">Status</h2>
+  <div class="status-grid">
+    <div class="status-item" id="status-machucado">
+      <label class="status-checkbox-label">
+        <input type="checkbox" id="status-machucado-check" class="status-checkbox" />
+        <span class="status-name">Machucado</span>
+      </label>
+    </div>
+    <div class="status-item" id="status-morrendo">
+      <label class="status-checkbox-label">
+        <input type="checkbox" id="status-morrendo-check" class="status-checkbox" />
+        <span class="status-name">Morrendo</span>
+      </label>
+    </div>
+    <div class="status-item" id="status-insano">
+      <label class="status-checkbox-label">
+        <input type="checkbox" id="status-insano-check" class="status-checkbox" />
+        <span class="status-name">Insano</span>
+      </label>
+    </div>
+  </div>
+  
+  <div class="death-saves-container" id="death-saves-container" style="display: none;">
+    <h3 class="death-saves-title">Testes de Salvamento</h3>
+    <div class="death-saves-grid">
+      <div class="death-saves-group">
+        <label class="death-saves-label">Sucessos</label>
+        <div class="death-saves-checkboxes">
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="success" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="success" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="success" />
+          </label>
+        </div>
+      </div>
+      <div class="death-saves-group">
+        <label class="death-saves-label">Fracassos</label>
+        <div class="death-saves-checkboxes">
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="failure" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="failure" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="failure" />
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  function updateStatus() {
+    const vidaCurrentInput = document.getElementById('vida-current');
+    const vidaMaxInput = document.getElementById('vida-max');
+    const sanidadeCurrentInput = document.getElementById('sanidade-current');
+    const sanidadeMaxInput = document.getElementById('sanidade-max');
+    
+    const machucadoCheck = document.getElementById('status-machucado-check');
+    const morrendoCheck = document.getElementById('status-morrendo-check');
+    const insanoCheck = document.getElementById('status-insano-check');
+    const deathSavesContainer = document.getElementById('death-saves-container');
+    const movimentoInput = document.getElementById('movimento');
+    
+    if (!vidaCurrentInput || !vidaMaxInput || !sanidadeCurrentInput || !sanidadeMaxInput) {
+      return;
+    }
+    
+    const vidaCurrent = parseInt(vidaCurrentInput.value) || 0;
+    const vidaMax = parseInt(vidaMaxInput.value) || 0;
+    const sanidadeCurrent = parseInt(sanidadeCurrentInput.value) || 0;
+    const sanidadeMax = parseInt(sanidadeMaxInput.value) || 0;
+    
+    // Machucado: vida atual < metade da máxima
+    if (machucadoCheck) {
+      const isMachucado = vidaMax > 0 && vidaCurrent < vidaMax / 2 && vidaCurrent > 0;
+      machucadoCheck.checked = isMachucado;
+      const statusItem = document.getElementById('status-machucado');
+      if (statusItem) {
+        if (isMachucado) {
+          statusItem.classList.add('active');
+        } else {
+          statusItem.classList.remove('active');
+        }
+      }
+    }
+    
+    // Morrendo: vida atual = 0
+    if (morrendoCheck) {
+      const isMorrendo = vidaCurrent === 0;
+      morrendoCheck.checked = isMorrendo;
+      const statusItem = document.getElementById('status-morrendo');
+      if (statusItem) {
+        if (isMorrendo) {
+          statusItem.classList.add('active');
+        } else {
+          statusItem.classList.remove('active');
+        }
+      }
+      
+      // Mostrar/ocultar testes de salvamento
+      if (deathSavesContainer) {
+        if (isMorrendo) {
+          deathSavesContainer.style.display = 'block';
+        } else {
+          deathSavesContainer.style.display = 'none';
+          // Limpar checkboxes quando não está morrendo
+          document.querySelectorAll('.death-save-checkbox').forEach(cb => {
+            cb.checked = false;
+          });
+        }
+      }
+      
+      // O movimento já é calculado como zero no Header quando morrendo
+      // Não precisamos fazer nada aqui, apenas garantir que o Header seja atualizado
+    }
+    
+    // Insano: sanidade atual < metade da máxima
+    if (insanoCheck) {
+      const isInsano = sanidadeMax > 0 && sanidadeCurrent < sanidadeMax / 2;
+      insanoCheck.checked = isInsano;
+      const statusItem = document.getElementById('status-insano');
+      if (statusItem) {
+        if (isInsano) {
+          statusItem.classList.add('active');
+        } else {
+          statusItem.classList.remove('active');
+        }
+      }
+    }
+    
+    // Atualizar movimento no Header (ele já verifica machucado e morrendo)
+    if (window.updateHeaderValues) {
+      window.updateHeaderValues();
+    } else {
+      document.dispatchEvent(new CustomEvent('statusChanged'));
+    }
+  }
+  
+  // Escutar mudanças em vida e sanidade
+  const vidaCurrentInput = document.getElementById('vida-current');
+  const vidaMaxInput = document.getElementById('vida-max');
+  const sanidadeCurrentInput = document.getElementById('sanidade-current');
+  const sanidadeMaxInput = document.getElementById('sanidade-max');
+  
+  if (vidaCurrentInput) {
+    vidaCurrentInput.addEventListener('input', updateStatus);
+    vidaCurrentInput.addEventListener('change', updateStatus);
+  }
+  
+  if (vidaMaxInput) {
+    vidaMaxInput.addEventListener('input', updateStatus);
+    vidaMaxInput.addEventListener('change', updateStatus);
+  }
+  
+  if (sanidadeCurrentInput) {
+    sanidadeCurrentInput.addEventListener('input', updateStatus);
+    sanidadeCurrentInput.addEventListener('change', updateStatus);
+  }
+  
+  if (sanidadeMaxInput) {
+    sanidadeMaxInput.addEventListener('input', updateStatus);
+    sanidadeMaxInput.addEventListener('change', updateStatus);
+  }
+  
+  // Escutar eventos de mudança de atributos para atualizar status
+  document.addEventListener('characterDataChanged', updateStatus, { passive: true });
+  
+  // Atualizar status inicial
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(updateStatus, 100);
+    });
+  } else {
+    setTimeout(updateStatus, 100);
+  }
+  
+  // Expor função globalmente
+  window.updateStatus = updateStatus;
+</script>
+
+<style is:global>
+  .status-section {
+    margin-top: 1rem;
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .status-item {
+    background: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .status-item.active {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.15);
+    box-shadow: 0 0 15px rgba(139, 76, 141, 0.3);
+  }
+
+  .status-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+  }
+
+  .status-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .status-name {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  .status-item.active .status-name {
+    color: var(--color-text-accent);
+  }
+
+  .status-description {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin-left: 2rem;
+  }
+
+  .death-saves-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .death-saves-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .death-saves-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .death-saves-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .death-saves-label {
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .death-saves-checkboxes {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .death-save-checkbox-label {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--color-bg-tertiary);
+  }
+
+  .death-save-checkbox-label:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+  }
+
+  .death-save-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .death-save-checkbox[data-type="success"]:checked + *,
+  .death-save-checkbox-label:has(.death-save-checkbox[data-type="success"]:checked) {
+    border-color: #4c8b7d;
+    background: rgba(76, 139, 125, 0.2);
+  }
+
+  .death-save-checkbox[data-type="failure"]:checked + *,
+  .death-save-checkbox-label:has(.death-save-checkbox[data-type="failure"]:checked) {
+    border-color: #8b4c4c;
+    background: rgba(139, 76, 76, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .status-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .death-saves-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>
+

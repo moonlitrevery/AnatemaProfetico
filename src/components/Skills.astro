@@ -1,0 +1,723 @@
+---
+---
+
+<section class="sheet-section skills">
+  <h2 class="section-title">
+    <span class="section-title-text">Perícias</span>
+    <span class="section-title-decoration"></span>
+  </h2>
+  <div class="skills-header">
+    <span class="skills-header-label" title="Nome da perícia">Nome da perícia</span>
+    <span class="skills-header-label" title="Atributo base">Atributo base</span>
+    <span class="skills-header-label" title="Treinamento">Treinamento</span>
+    <span class="skills-header-label" title="Extra">Extra</span>
+    <span class="skills-header-label" title="Modificador">Modificador</span>
+  </div>
+  <div class="skills-container-wrapper">
+    <div class="skills-container" id="skills-container">
+      <!-- Skills serão adicionadas via JavaScript -->
+    </div>
+    <div class="skills-scroll-indicator" id="skills-scroll-indicator"></div>
+  </div>
+</section>
+
+<script type="module">
+  // Opções de treinamento
+  const trainingOptions = [
+    { value: 'none', label: 'Nenhum', bonus: 0, symbol: '' },
+    { value: 'basico', label: 'Básico', bonus: 2, symbol: '★' },
+    { value: 'medio', label: 'Médio', bonus: 4, symbol: '★★' },
+    { value: 'avancado', label: 'Avançado', bonus: 6, symbol: '★★★' },
+    { value: 'expert', label: 'Expert', bonus: 8, symbol: '★★★★' },
+    { value: 'aterrorizante', label: 'Aterrorizante', bonus: 10, symbol: '★★★★★' },
+  ];
+
+  // Lista de perícias com seus atributos base conforme a imagem
+  const defaultSkills = [
+    { name: 'Acrobacia', attribute: 'destreza', value: 0, training: 'none', editable: false },
+    { name: 'Atletismo', attribute: 'brutalidade', value: 0, training: 'none', editable: false },
+    { name: 'Charme', attribute: 'mente', value: 0, training: 'none', editable: false },
+    { name: 'Conjuração', attribute: 'sobrenatural', value: 0, training: 'none', editable: false },
+    { name: 'Convencimento', attribute: 'mente', value: 0, training: 'none', editable: false },
+    { name: 'Escutar', attribute: 'compleicao', value: 0, training: 'none', editable: false },
+    { name: 'Esquiva', attribute: 'destreza', value: 0, training: 'none', editable: false },
+    { name: 'Furtividade', attribute: 'destreza', value: 0, training: 'none', editable: false },
+    { name: 'Intimidação', attribute: 'mente', value: 0, training: 'none', editable: false },
+    { name: 'Investigação', attribute: 'mente', value: 0, training: 'none', editable: false },
+    { name: 'Luta', attribute: 'brutalidade', value: 0, training: 'none', editable: false },
+    { name: 'Mitos', attribute: 'sobrenatural', value: 0, training: 'none', editable: false },
+    { name: 'Percepção', attribute: 'mente', value: 0, training: 'none', editable: false },
+    { name: 'Profissão', attribute: 'none', value: 0, training: 'none', editable: false },
+    { name: 'Psicoanalisar', attribute: 'mente', value: 0, training: 'none', editable: false },
+    { name: 'Refletir', attribute: 'mente', value: 0, training: 'none', editable: false },
+    { name: 'Tiro', attribute: 'destreza', value: 0, training: 'none', editable: false },
+    { name: 'Ext.1', attribute: 'none', value: 0, training: 'none', editable: true },
+    { name: 'Ext.2', attribute: 'none', value: 0, training: 'none', editable: true },
+    { name: 'Ext.3', attribute: 'none', value: 0, training: 'none', editable: true },
+  ];
+
+  const attributeMap = {
+    'brutalidade': 'brutalidade',
+    'destreza': 'destreza',
+    'compleicao': 'compleicao',
+    'mente': 'mente',
+    'sobrenatural': 'sobrenatural',
+    'none': 'none',
+  };
+
+  const attributeNames = {
+    'brutalidade': 'Brutalidade',
+    'destreza': 'Destreza',
+    'compleicao': 'Compleição',
+    'mente': 'Mente',
+    'sobrenatural': 'Sobrenatural',
+    'none': 'Nenhum',
+  };
+
+  let skillIdCounter = 0;
+
+  // Função para calcular modificador de atributo (JS puro)
+  function getAttributeModifier(attributeValue) {
+    return Math.floor((attributeValue - 10) / 2);
+  }
+
+  // Função para obter valor de atributo
+  function getAttributeValue(attributeId) {
+    if (attributeId === 'none') return 0;
+    const input = document.getElementById(attributeId);
+    return parseInt(input?.value || '0');
+  }
+
+  // Função para rolar d20
+  function rollD20(modifier = 0) {
+    const result = Math.floor(Math.random() * 20) + 1;
+    return {
+      result,
+      modifier,
+      total: result + modifier,
+      rolls: [result],
+      critical: result === 20,
+      fumble: result === 1,
+    };
+  }
+
+  // Função para mostrar popup de rolagem (usa o sistema global de popups)
+  function showDiceRollPopup(roll, label) {
+    // Usar o sistema global de popups se disponível, senão criar um simples
+    if (window.showDiceRollPopup) {
+      window.showDiceRollPopup(roll, label, 'd20');
+    } else {
+      // Fallback simples caso o DiceRoller ainda não esteja carregado
+      console.log(`Roll: ${label}`, roll);
+    }
+  }
+
+  function createSkillRow(skill) {
+    const id = skill.id || `skill-${skillIdCounter++}`;
+    const row = document.createElement('div');
+    row.className = 'skill-row';
+    row.setAttribute('data-skill-id', id);
+    
+    const isNoneAttribute = skill.attribute === 'none';
+    const nameInputType = skill.editable ? 'input' : 'span';
+    const nameContent = skill.editable 
+      ? `<input type="text" class="skill-name" placeholder="Nome da perícia" value="${skill.name || ''}" />`
+      : `<span class="skill-name-static">${skill.name}</span>`;
+    
+    const selectedTraining = trainingOptions.find(t => t.value === (skill.training || 'none')) || trainingOptions[0];
+    
+    row.innerHTML = `
+      <div class="skill-name-container">${nameContent}</div>
+      <div class="skill-attribute-select">
+        <select class="skill-attribute">
+          ${Object.entries(attributeNames).filter(([key]) => key !== 'none').map(([key, name]) => 
+            `<option value="${key}" ${skill.attribute === key ? 'selected' : ''}>${name}</option>`
+          ).join('')}
+          <option value="none" ${skill.attribute === 'none' ? 'selected' : ''}>Nenhum</option>
+        </select>
+      </div>
+      <div class="skill-training-select">
+        <select class="skill-training">
+          ${trainingOptions.map(t => 
+            `<option value="${t.value}" ${(skill.training || 'none') === t.value ? 'selected' : ''}>
+              ${t.label}${t.symbol ? ' ' + t.symbol : ''}
+            </option>`
+          ).join('')}
+        </select>
+      </div>
+      <div class="skill-value-input">
+        <input 
+          type="number" 
+          class="skill-value" 
+          value="${skill.value || 0}" 
+          min="0" 
+          max="20"
+        />
+      </div>
+      <div class="skill-modifier">
+        <span class="skill-modifier-text">+0</span>
+      </div>
+      <button class="skill-roll-btn" type="button" title="Rolar d20">
+        Rolar
+      </button>
+    `;
+
+    const valueInput = row.querySelector('.skill-value');
+    const attrSelect = row.querySelector('.skill-attribute');
+    const trainingSelect = row.querySelector('.skill-training');
+    const modifierText = row.querySelector('.skill-modifier-text');
+    const rollBtn = row.querySelector('.skill-roll-btn');
+    const nameInput = row.querySelector('.skill-name');
+
+    function updateModifier() {
+      const attributeId = attrSelect.value;
+      
+      // Pegar valor do atributo e calcular modificador
+      let attrMod = 0;
+      if (attributeId !== 'none') {
+        const attrValue = getAttributeValue(attributeId);
+        attrMod = getAttributeModifier(attrValue);
+        // Dividir por 2 e arredondar para baixo (Math.floor de um número positivo ou negativo)
+        attrMod = Math.floor(attrMod / 2);
+      }
+      
+      // Pegar bônus do treinamento
+      const trainingValue = trainingSelect.value;
+      const training = trainingOptions.find(t => t.value === trainingValue) || trainingOptions[0];
+      const trainingBonus = training.bonus || 0;
+      
+      // Pegar valor extra (skill value)
+      const skillValue = parseInt(valueInput.value) || 0;
+      
+      // Total = (modificador do atributo / 2) + treinamento + extra
+      const totalMod = attrMod + trainingBonus + skillValue;
+      modifierText.textContent = totalMod >= 0 ? `+${totalMod}` : `${totalMod}`;
+    }
+
+    let lastSkillValue = skill.value || 0;
+    let lastAttribute = skill.attribute;
+    let lastTraining = skill.training || 'none';
+    let skillUpdateTimeout = null;
+
+    // Atualizar modificador quando atributo mudar
+    attrSelect.addEventListener('change', () => {
+      if (attrSelect.value !== lastAttribute) {
+        lastAttribute = attrSelect.value;
+        updateModifier();
+      }
+    });
+
+    // Atualizar modificador quando treinamento mudar
+    trainingSelect.addEventListener('change', () => {
+      if (trainingSelect.value !== lastTraining) {
+        lastTraining = trainingSelect.value;
+        updateModifier();
+      }
+    });
+    
+    valueInput.addEventListener('change', () => {
+      const currentValue = parseInt(valueInput.value) || 0;
+      if (currentValue !== lastSkillValue) {
+        lastSkillValue = currentValue;
+        updateModifier();
+      }
+    });
+    
+    valueInput.addEventListener('input', () => {
+      const currentValue = parseInt(valueInput.value) || 0;
+      if (currentValue !== lastSkillValue) {
+        lastSkillValue = currentValue;
+        // Debounce para input
+        if (skillUpdateTimeout !== null) {
+          clearTimeout(skillUpdateTimeout);
+        }
+        skillUpdateTimeout = window.setTimeout(() => {
+          updateModifier();
+          skillUpdateTimeout = null;
+        }, 100);
+      }
+    });
+
+    // Armazenar função de atualização no elemento para atualização global
+    row.updateModifierFn = updateModifier;
+
+    rollBtn.addEventListener('click', () => {
+      // Calcular o modificador total (igual ao updateModifier)
+      const attributeId = attrSelect.value;
+      
+      let attrMod = 0;
+      if (attributeId !== 'none') {
+        const attrValue = getAttributeValue(attributeId);
+        attrMod = getAttributeModifier(attrValue);
+        attrMod = Math.floor(attrMod / 2);
+      }
+      
+      const trainingValue = trainingSelect.value;
+      const training = trainingOptions.find(t => t.value === trainingValue) || trainingOptions[0];
+      const trainingBonus = training.bonus || 0;
+      
+      const skillValue = parseInt(valueInput.value) || 0;
+      const modifier = attrMod + trainingBonus + skillValue;
+
+      const roll = rollD20(modifier);
+      
+      const skillName = nameInput?.value || row.querySelector('.skill-name-static')?.textContent || 'Perícia';
+      const attrName = attributeId !== 'none' ? (attributeNames[attributeId] || attributeId) : '';
+      const rollLabel = attrName ? `${skillName} (${attrName})` : skillName;
+      
+      showDiceRollPopup(roll, rollLabel);
+    });
+
+    // Atualizar modificador inicial
+    setTimeout(updateModifier, 100);
+
+    return row;
+  }
+
+  // Event listener global único para atualizar modificadores de skills quando atributos mudarem
+  // Usar flag global no window para garantir que seja adicionado apenas uma vez
+  function initializeSkillsGlobalListener() {
+    if (window.skillsGlobalListenerInitialized) return;
+    window.skillsGlobalListenerInitialized = true;
+
+    const attributeIds = ['brutalidade', 'destreza', 'compleicao', 'mente', 'sobrenatural'];
+    let updateSkillsTimeout = null;
+    
+    function handleAttributeChangeForSkills(e) {
+      const target = e.target;
+      if (target && target.id && attributeIds.includes(target.id)) {
+        // Debounce para evitar múltiplas atualizações
+        if (updateSkillsTimeout !== null) {
+          clearTimeout(updateSkillsTimeout);
+        }
+        updateSkillsTimeout = window.setTimeout(() => {
+          // Atualizar todos os modificadores de skills
+          document.querySelectorAll('.skill-row').forEach((row) => {
+            const updateFn = row.updateModifierFn;
+            if (updateFn) {
+              updateFn();
+            }
+          });
+          updateSkillsTimeout = null;
+        }, 50);
+      }
+    }
+
+    // Usar event delegation no document (apenas uma vez)
+    document.addEventListener('change', handleAttributeChangeForSkills, { passive: true, capture: true });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('skills-container');
+
+    if (container) {
+      // Adicionar perícias padrão
+      defaultSkills.forEach(skill => {
+        container.appendChild(createSkillRow(skill));
+      });
+      
+      // Inicializar listener global após criar as skills
+      initializeSkillsGlobalListener();
+
+      // Adicionar listener para mostrar/ocultar indicador de scroll
+      const scrollIndicator = document.getElementById('skills-scroll-indicator');
+      if (scrollIndicator && container) {
+        function checkScroll() {
+          const hasScroll = container.scrollHeight > container.clientHeight;
+          const isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 10;
+          if (hasScroll && !isAtBottom) {
+            scrollIndicator.classList.add('show');
+          } else {
+            scrollIndicator.classList.remove('show');
+          }
+        }
+        container.addEventListener('scroll', checkScroll);
+        checkScroll();
+      }
+    }
+  });
+</script>
+
+<style is:global>
+  .skills-header {
+    display: grid;
+    grid-template-columns: 1fr 120px 130px 100px auto 80px;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+    align-items: center;
+  }
+
+  .skills-header-label {
+    font-family: var(--font-accent);
+    color: var(--color-text-accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: help;
+    opacity: 0.8;
+    text-align: left;
+  }
+
+  .skills-header-label:nth-child(4),
+  .skills-header-label:nth-child(5),
+  .skills-header-label:nth-child(6) {
+    text-align: center;
+  }
+
+  .skills-container-wrapper {
+    position: relative;
+  }
+
+  .skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+
+  .skills-scroll-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0.5rem;
+    height: 50px;
+    background: linear-gradient(to top, var(--color-bg-secondary) 80%, transparent 100%);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+  }
+
+  .skills-scroll-indicator.show {
+    opacity: 1;
+  }
+
+  .skills-scroll-indicator::before {
+    content: '↓ Mais perícias abaixo ↓';
+    color: var(--color-text-accent);
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    animation: bounce 2s infinite;
+    text-shadow: 0 0 10px rgba(139, 76, 141, 0.5);
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .skills-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .skills-container::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+    border-radius: 3px;
+  }
+
+  .skills-container::-webkit-scrollbar-thumb {
+    background: var(--color-accent-primary);
+    border-radius: 3px;
+  }
+
+  .skills-container::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-glow);
+  }
+
+  .skill-row {
+    display: grid;
+    grid-template-columns: 1fr 120px 130px 100px auto 80px;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .skill-row:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .skill-name-container {
+    flex: 1;
+  }
+
+  .skill-name-static {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .skill-name {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+  }
+
+  .skill-name:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 5px rgba(139, 76, 141, 0.3);
+  }
+
+  .skill-attribute-select {
+    flex: 1;
+  }
+
+  .skill-attribute {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .skill-attribute:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .skill-training-select {
+    flex: 1;
+  }
+
+  .skill-training {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .skill-training:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .skill-value-input {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    justify-content: center;
+  }
+
+  .skill-value {
+    width: 45px;
+    text-align: center;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    -moz-appearance: textfield;
+  }
+
+  .skill-value::-webkit-outer-spin-button,
+  .skill-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .skill-value:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .skill-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .skill-btn:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    color: var(--color-text-accent);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .skill-btn:active {
+    transform: scale(0.95);
+  }
+
+  .skill-modifier {
+    min-width: 45px;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-text-accent);
+    font-size: 0.9rem;
+  }
+
+  .skill-roll-btn {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .skill-roll-btn:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+    background: rgba(139, 76, 141, 0.1);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .skill-roll-btn:active {
+    transform: scale(0.95);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding: 1rem 0;
+  }
+
+  .section-title-text {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-text-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-shadow: 
+      0 0 20px rgba(139, 76, 141, 0.5),
+      0 2px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title-decoration {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-primary) 20%,
+      var(--color-accent-primary) 80%,
+      transparent
+    );
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      0 0 20px rgba(139, 76, 141, 0.4);
+    opacity: 0.8;
+    transform: scaleX(0.8);
+  }
+
+  .section-title-decoration::before,
+  .section-title-decoration::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 50%;
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      inset 0 0 10px rgba(139, 76, 141, 0.3);
+  }
+
+  .section-title-decoration::before {
+    left: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  .section-title-decoration::after {
+    right: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  @media (max-width: 1024px) {
+    .skill-row,
+    .skills-header {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .skill-value-input,
+    .skill-modifier {
+      justify-self: start;
+    }
+
+    .skill-roll-btn {
+      justify-self: end;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-title-text {
+      font-size: 1.8rem;
+    }
+  }
+</style>

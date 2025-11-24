@@ -1,0 +1,327 @@
+---
+---
+
+<section class="sheet-section abilities">
+  <h2 class="section-title">
+    <span class="section-title-text">Habilidades</span>
+    <span class="section-title-decoration"></span>
+  </h2>
+  <div class="abilities-header">
+    <span class="abilities-header-label" title="Tipo">Tipo</span>
+    <span class="abilities-header-label" title="Nome da habilidade">Nome da habilidade</span>
+    <span class="abilities-header-label" title="Sequência">Sequência</span>
+    <span class="abilities-header-label" title="Custo de mana">Custo de mana</span>
+    <span class="abilities-header-label" title="Descrição">Descrição</span>
+  </div>
+  <div class="abilities-container" id="abilities-container">
+    <!-- Habilidades serão adicionadas aqui -->
+  </div>
+  <button id="add-ability-btn" class="btn-add" type="button">+ Adicionar Habilidade</button>
+</section>
+
+<script type="module">
+  let abilityIdCounter = 0;
+
+  function getSequenciaOptions() {
+    return Array.from({ length: 9 }, (_, i) => {
+      const num = 9 - i;
+      return { value: num, label: `${num}ª sequência` };
+    });
+  }
+
+  function createAbilityRow() {
+    const id = `ability-${abilityIdCounter++}`;
+    const row = document.createElement('div');
+    row.className = 'ability-row';
+    row.setAttribute('data-ability-id', id);
+    
+    const sequenciaOptions = getSequenciaOptions();
+    
+    row.innerHTML = `
+      <div class="ability-type-checkbox">
+        <label class="ability-checkbox-label">
+          <input type="checkbox" class="ability-is-passive" />
+          <span>Passiva</span>
+        </label>
+      </div>
+      <div class="ability-name-input">
+        <input type="text" placeholder="Nome da habilidade" class="ability-name-field" />
+      </div>
+      <div class="ability-sequencia-select">
+        <select class="ability-sequencia">
+          <option value="">--</option>
+          ${sequenciaOptions.map(opt => `<option value="${opt.value}">${opt.label}</option>`).join('')}
+        </select>
+      </div>
+      <div class="ability-mana-input">
+        <input type="number" placeholder="0" min="0" class="ability-mana-field" value="0" />
+      </div>
+      <div class="ability-description-input">
+        <textarea placeholder="Descrição da habilidade" rows="2" class="ability-description-field"></textarea>
+      </div>
+      <button class="btn-remove" type="button" title="Remover habilidade">✕</button>
+    `;
+
+    const passiveCheckbox = row.querySelector('.ability-is-passive');
+    const manaInput = row.querySelector('.ability-mana-field');
+    const removeBtn = row.querySelector('.btn-remove');
+
+    if (passiveCheckbox && manaInput) {
+      function updateManaField() {
+        if (passiveCheckbox.checked) {
+          manaInput.value = '-';
+          manaInput.disabled = true;
+          manaInput.readOnly = true;
+        } else {
+          manaInput.value = '0';
+          manaInput.disabled = false;
+          manaInput.readOnly = false;
+        }
+      }
+
+      passiveCheckbox.addEventListener('change', updateManaField);
+      updateManaField();
+    }
+
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        row.remove();
+      });
+    }
+
+    return row;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('abilities-container');
+    const addBtn = document.getElementById('add-ability-btn');
+
+    if (addBtn && container) {
+      addBtn.addEventListener('click', () => {
+        const row = createAbilityRow();
+        container.appendChild(row);
+      });
+    }
+  });
+
+  window.createAbility = createAbilityRow;
+</script>
+
+<style is:global>
+  .abilities-header {
+    display: grid;
+    grid-template-columns: 100px 1fr 140px 120px 2fr auto;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+  }
+
+  .abilities-header-label {
+    font-family: var(--font-accent);
+    color: var(--color-text-accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: help;
+    opacity: 0.8;
+    text-align: left;
+  }
+
+  .abilities-header-label:nth-child(4) {
+    text-align: center;
+  }
+
+  .abilities-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .ability-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 140px 120px 2fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .ability-row:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .ability-type-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ability-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+  }
+
+  .ability-is-passive {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--color-accent-primary);
+  }
+
+  .ability-name-input,
+  .ability-mana-input {
+    display: flex;
+    align-items: center;
+  }
+
+  .ability-name-field,
+  .ability-mana-field {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .ability-mana-field {
+    text-align: center;
+  }
+
+  .ability-mana-field:disabled {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+  }
+
+  .ability-sequencia-select {
+    display: flex;
+    align-items: center;
+  }
+
+  .ability-sequencia {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ability-sequencia:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .ability-description-input {
+    display: flex;
+    align-items: center;
+  }
+
+  .ability-description-field {
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    resize: vertical;
+    min-height: 40px;
+  }
+
+  .ability-name-field:focus,
+  .ability-mana-field:focus,
+  .ability-description-field:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 5px rgba(139, 76, 141, 0.3);
+  }
+
+  .btn-remove {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .btn-remove:hover {
+    background: #8b1a1a;
+    border-color: #cc2a2a;
+    color: var(--color-text-primary);
+    transform: scale(1.1);
+  }
+
+  .btn-add {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-bg-tertiary);
+    border: 2px dashed var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-add:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+    background: rgba(139, 76, 141, 0.1);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  @media (max-width: 1024px) {
+    .abilities-header,
+    .ability-row {
+      grid-template-columns: 80px 1fr 120px 100px 1.5fr auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .abilities-header,
+    .ability-row {
+      grid-template-columns: 80px 1fr 100px 80px 1fr auto;
+    }
+  }
+</style>

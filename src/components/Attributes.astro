@@ -1,0 +1,497 @@
+---
+--- 
+
+<section class="sheet-section attributes">
+  <h2 class="section-title">
+    <span class="section-title-text">Atributos</span>
+    <span class="section-title-decoration"></span>
+  </h2>
+  <div class="attributes-warning" id="attributes-warning">
+    Para rodar o valor base de seus atributos, gire esse comando no bot do Discord: <strong>5#4d6d1</strong>, e distribua os valores rodados nos atributos que quiser.
+  </div>
+  <div class="attributes-grid" id="attributes-grid">
+    <!-- Atributos serão adicionados via JavaScript -->
+  </div>
+</section>
+
+<script type="module">
+  // Lista de atributos principais
+  const mainAttributes = [
+    { name: 'Brutalidade', id: 'brutalidade', value: 10 },
+    { name: 'Destreza', id: 'destreza', value: 10 },
+    { name: 'Compleição', id: 'compleicao', value: 10 },
+    { name: 'Mente', id: 'mente', value: 10 },
+    { name: 'Sobrenatural', id: 'sobrenatural', value: 10 },
+  ];
+  const attributeIds = mainAttributes.map(attr => attr.id);
+
+  // Função para calcular modificador de atributo (JS puro)
+  function getAttributeModifier(attributeValue) {
+    return Math.floor((attributeValue - 10) / 2);
+  }
+
+  // Função para rolar d20
+  function rollD20(modifier = 0) {
+    const result = Math.floor(Math.random() * 20) + 1;
+    return {
+      result,
+      modifier,
+      total: result + modifier,
+      rolls: [result],
+      critical: result === 20,
+      fumble: result === 1,
+    };
+  }
+
+  // Função para mostrar popup de rolagem (usa o sistema global de popups)
+  function showDiceRollPopup(roll, label) {
+    // Usar o sistema global de popups se disponível, senão criar um simples
+    if (window.showDiceRollPopup) {
+      window.showDiceRollPopup(roll, label, 'd20');
+    } else {
+      // Fallback simples caso o DiceRoller ainda não esteja carregado
+      console.log(`Roll: ${label}`, roll);
+    }
+  }
+
+  function checkBaseAttributeValues() {
+    const warning = document.getElementById('attributes-warning');
+    if (!warning) return;
+    
+    const allBaseValues = attributeIds.every(id => {
+      const input = document.getElementById(id);
+      if (!input) return false;
+      const v = parseInt(input.value, 10);
+      const value = Number.isNaN(v) ? 0 : v;
+      return value === 10;
+    });
+    
+    if (allBaseValues) {
+      warning.classList.add('show');
+    } else {
+      warning.classList.remove('show');
+    }
+  }
+
+  function createAttributeCard(attr) {
+    const card = document.createElement('div');
+    card.className = 'attribute-card';
+    card.setAttribute('data-attr-id', attr.id);
+    
+    card.innerHTML = `
+      <label class="attribute-label" for="${attr.id}">${attr.name}</label>
+      <div class="attribute-value-container">
+        <input 
+          type="number" 
+          id="${attr.id}" 
+          name="${attr.id}" 
+          class="attribute-input" 
+          value="${attr.value}" 
+          min="0" 
+          max="30"
+        />
+      </div>
+      <div class="attribute-modifier">
+        <span class="attribute-modifier-label">Mod:</span>
+        <span class="attribute-modifier-value">+0</span>
+      </div>
+      <button class="attribute-roll-btn" type="button" title="Rolar Teste de ${attr.name}">
+        Rolar
+      </button>
+    `;
+
+    const input = card.querySelector(`#${attr.id}`);
+    const modifierValue = card.querySelector('.attribute-modifier-value');
+    const rollBtn = card.querySelector('.attribute-roll-btn');
+
+    let lastValue = attr.value;
+    let isUpdatingAttribute = false;
+    
+    function updateModifier(skipEvent = false) {
+      // Prevenir loops infinitos
+      if (isUpdatingAttribute) return;
+      
+      const value = parseInt(input.value) || 0;
+      const mod = getAttributeModifier(value);
+      if (modifierValue) {
+        modifierValue.textContent = mod >= 0 ? `+${mod}` : `${mod}`;
+      }
+      
+      // Não disparar eventos programaticamente - deixar o input nativo disparar
+      // O Header já escuta os eventos nativos do input
+      lastValue = value;
+    }
+
+    // Apenas escutar change, não input (para melhor performance)
+    input.addEventListener('change', () => {
+      updateModifier();
+      requestAnimationFrame(checkBaseAttributeValues);
+    }, { passive: true });
+
+    rollBtn.addEventListener('click', () => {
+      const value = parseInt(input.value) || 0;
+      const modifier = getAttributeModifier(value);
+      const roll = rollD20(modifier);
+      
+      showDiceRollPopup(roll, attr.name);
+    });
+
+    // Inicializa o mod visual após inserção
+    requestAnimationFrame(updateModifier);
+
+    return card;
+  }
+
+  // Inicializar atributos quando o DOM estiver pronto
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('attributes-grid');
+
+    if (container) {
+      mainAttributes.forEach(attr => {
+        container.appendChild(createAttributeCard(attr));
+      });
+      requestAnimationFrame(checkBaseAttributeValues);
+    }
+  });
+</script>
+
+<style is:global>
+  .attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .attribute-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .attributes-warning {
+    margin: 0 auto 1.5rem;
+    max-width: 900px;
+    padding: 1rem 1.5rem;
+    border: 1px dashed var(--color-accent-primary);
+    border-radius: 6px;
+    background: rgba(139, 76, 141, 0.08);
+    color: var(--color-text-accent);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: center;
+    display: none;
+  }
+
+  .attributes-warning.show {
+    display: block;
+  }
+
+  .attribute-card:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .attribute-label {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  .attribute-value-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .attribute-input {
+    width: 80px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    font-family: var(--font-heading);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.5rem;
+    color: var(--color-text-accent);
+    transition: all 0.3s ease;
+    -moz-appearance: textfield;
+  }
+
+  .attribute-input::-webkit-outer-spin-button,
+  .attribute-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .attribute-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .attribute-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .attribute-btn:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    color: var(--color-text-accent);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .attribute-btn:active {
+    transform: scale(0.95);
+  }
+
+  .attribute-modifier {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .attribute-modifier-label {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .attribute-modifier-value {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-text-accent);
+  }
+
+  .attribute-roll-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .attribute-roll-btn:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+    background: rgba(139, 76, 141, 0.1);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
+  }
+
+  .attribute-roll-btn:active {
+    transform: scale(0.95);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding: 1rem 0;
+  }
+
+  .section-title-text {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-text-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-shadow: 
+      0 0 20px rgba(139, 76, 141, 0.5),
+      0 2px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title-decoration {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-primary) 20%,
+      var(--color-accent-primary) 80%,
+      transparent
+    );
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      0 0 20px rgba(139, 76, 141, 0.4);
+    opacity: 0.8;
+    transform: scaleX(0.8);
+  }
+
+  .section-title-decoration::before,
+  .section-title-decoration::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 50%;
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      inset 0 0 10px rgba(139, 76, 141, 0.3);
+  }
+
+  .section-title-decoration::before {
+    left: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  .section-title-decoration::after {
+    right: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  /* Popup de rolagem de dados - Fixed na tela */
+  .dice-roll-popup {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2);
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+    min-width: 250px;
+  }
+
+  .dice-roll-popup.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .roll-label {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-accent);
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .roll-details {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--color-text-primary);
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .roll-die {
+    color: var(--color-text-secondary);
+  }
+
+  .roll-modifier {
+    color: var(--color-text-accent);
+    font-weight: 600;
+  }
+
+  .roll-total {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-accent);
+    text-shadow: 0 0 10px rgba(139, 76, 141, 0.5);
+  }
+
+  .roll-status {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.5rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+  }
+
+  .roll-status.critical {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    animation: pulse 0.5s ease-in-out;
+  }
+
+  .roll-status.fumble {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+    animation: pulse 0.5s ease-in-out;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  @media (max-width: 768px) {
+    .attributes-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .attribute-card {
+      padding: 1rem;
+    }
+
+    .dice-roll-popup {
+      bottom: 1rem;
+      right: 1rem;
+      left: 1rem;
+      min-width: auto;
+    }
+  }
+</style>

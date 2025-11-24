@@ -1,0 +1,22 @@
+{
+  "name": "ficha-anatema-profetico",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Ficha de personagem para o sistema de RPG Anátema Profético",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  }
+}
+

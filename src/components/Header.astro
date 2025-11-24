@@ -1,0 +1,1224 @@
+---
+---
+
+<section class="sheet-section header-section">
+  <h2 class="section-title">
+    <span class="section-title-text">Informações do personagem</span>
+    <span class="section-title-decoration"></span>
+  </h2>
+  <div class="header-grid">
+    <div class="header-item">
+      <div class="header-item-label-row">
+        <label for="vida-current">Vida</label>
+        <input type="number" id="vida-temp" name="vida-temp" class="temp-value-small" placeholder="+0" min="0" title="Bônus à Vida Máxima" />
+      </div>
+      <div class="hp-mana-container">
+        <input type="number" id="vida-current" name="vida-current" class="current-value" placeholder="0" min="0" />
+        <span class="separator">/</span>
+        <input type="number" id="vida-max" name="vida-max" readonly class="max-value" />
+      </div>
+    </div>
+    <div class="header-item">
+      <div class="header-item-label-row">
+        <label for="mana-current">Mana</label>
+        <input type="number" id="mana-temp" name="mana-temp" class="temp-value-small" placeholder="+0" min="0" title="Bônus à Mana Máxima" />
+      </div>
+      <div class="hp-mana-container">
+        <input type="number" id="mana-current" name="mana-current" class="current-value" placeholder="0" min="0" />
+        <span class="separator">/</span>
+        <input type="number" id="mana-max" name="mana-max" readonly class="max-value" />
+      </div>
+    </div>
+    <div class="header-item">
+      <div class="header-item-label-row">
+        <label for="sanidade-current">Sanidade</label>
+        <input type="number" id="sanidade-temp" name="sanidade-temp" class="temp-value-small" placeholder="+0" min="0" title="Bônus à Sanidade Máxima" />
+      </div>
+      <div class="hp-mana-container">
+        <input type="number" id="sanidade-current" name="sanidade-current" class="current-value" placeholder="0" min="0" />
+        <span class="separator">/</span>
+        <input type="number" id="sanidade-max" name="sanidade-max" readonly class="max-value" />
+      </div>
+    </div>
+    <div class="header-item">
+      <label for="caminho">Caminho</label>
+      <input type="text" id="caminho" name="caminho" placeholder="Caminho" class="header-input" disabled />
+    </div>
+    <div class="header-item">
+      <label for="nivel-caminho">Sequência</label>
+      <input type="text" id="nivel-caminho" name="nivel-caminho" placeholder="0" readonly class="header-value" />
+    </div>
+    <div class="header-item">
+      <label for="nivel">Nível</label>
+      <input type="number" id="nivel" name="nivel" placeholder="0" min="0" class="header-input" />
+    </div>
+    <div class="header-item">
+      <label for="prestigio">Prestígio em Sociedades Secretas</label>
+      <select id="prestigio" name="prestigio" class="header-select">
+        <option value="">--</option>
+        <option value="muito-baixo">◇ Muito baixo</option>
+        <option value="baixo">◇◇ Baixo</option>
+        <option value="medio">◇◇◇ Médio</option>
+        <option value="alto">◇◇◇◇ Alto</option>
+        <option value="muito-alto">◇◇◇◇◇ Muito alto</option>
+        <option value="supremo">◆ Supremo</option>
+      </select>
+    </div>
+    <div class="header-item">
+      <label for="resistencia">Resistência a dano físico</label>
+      <input type="number" id="resistencia" name="resistencia" readonly class="header-value" />
+    </div>
+    <div class="header-item">
+      <label for="movimento">Movimento</label>
+      <div class="movement-container">
+        <input type="text" id="movimento" name="movimento" readonly class="header-value movement-base" />
+        <input type="number" id="movimento-extra" name="movimento-extra" class="movement-extra" placeholder="+0" min="0" title="Movimentação extra" />
+      </div>
+    </div>
+    <div class="header-item">
+      <label for="dt-projeteis">DT para projéteis (Receber)</label>
+      <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" />
+    </div>
+  </div>
+  
+  <div class="status-container-inline" id="status-container-inline">
+    <!-- Status será inserido aqui -->
+  </div>
+  
+  <div class="death-saves-container" id="death-saves-container" style="display: none;">
+    <h3 class="death-saves-title">Testes de Salvamento</h3>
+    <div class="death-saves-grid">
+      <div class="death-saves-group">
+        <label class="death-saves-label">Sucessos</label>
+        <div class="death-saves-checkboxes">
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="success" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="success" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="success" />
+          </label>
+        </div>
+      </div>
+      <div class="death-saves-group">
+        <label class="death-saves-label">Fracassos</label>
+        <div class="death-saves-checkboxes">
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="failure" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="failure" />
+          </label>
+          <label class="death-save-checkbox-label">
+            <input type="checkbox" class="death-save-checkbox" data-type="failure" />
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  // Integrar Status inline no Header
+  function renderInlineStatus() {
+    const container = document.getElementById('status-container-inline');
+    if (!container) return;
+    
+    const vidaCurrentInput = document.getElementById('vida-current');
+    const vidaMaxInput = document.getElementById('vida-max');
+    const sanidadeCurrentInput = document.getElementById('sanidade-current');
+    const sanidadeMaxInput = document.getElementById('sanidade-max');
+    
+    if (!vidaCurrentInput || !vidaMaxInput || !sanidadeCurrentInput || !sanidadeMaxInput) {
+      return;
+    }
+    
+    const vc = parseInt(vidaCurrentInput.value, 10);
+    const vm = parseInt(vidaMaxInput.value, 10);
+    const sc = parseInt(sanidadeCurrentInput.value, 10);
+    const sm = parseInt(sanidadeMaxInput.value, 10);
+    
+    const vidaCurrent = Number.isNaN(vc) ? 0 : vc;
+    const vidaMax = Number.isNaN(vm) ? 0 : vm;
+    const sanidadeCurrent = Number.isNaN(sc) ? 0 : sc;
+    const sanidadeMax = Number.isNaN(sm) ? 0 : sm;
+    
+    const isMachucado = vidaMax > 0 && vidaCurrent < vidaMax / 2 && vidaCurrent > 0;
+    const isMorrendo = vidaCurrent === 0;
+    const isInsano = sanidadeMax > 0 && sanidadeCurrent < sanidadeMax / 2;
+    
+    container.innerHTML = '';
+    
+    if (isMachucado || isMorrendo || isInsano) {
+      container.style.display = 'flex';
+      container.innerHTML = '<span class="status-label-inline">Status:</span>';
+      
+      if (isMachucado) {
+        const span = document.createElement('span');
+        span.className = 'status-badge status-machucado';
+        span.textContent = '⚠ Machucado - Movimento reduzido pela metade';
+        container.appendChild(span);
+      }
+      
+      if (isMorrendo) {
+        const span = document.createElement('span');
+        span.className = 'status-badge status-morrendo';
+        span.textContent = '○ Morrendo - Movimento zerado - Faça testes de salvamento';
+        container.appendChild(span);
+      }
+      
+      if (isInsano) {
+        const span = document.createElement('span');
+        span.className = 'status-badge status-insano';
+        span.textContent = '○ Insano - Sanidade mental comprometida';
+        container.appendChild(span);
+      }
+    } else {
+      container.style.display = 'none';
+    }
+    
+    // Mostrar/ocultar testes de salvamento quando morrendo
+    const deathSavesContainer = document.getElementById('death-saves-container');
+    if (deathSavesContainer) {
+      if (isMorrendo) {
+        deathSavesContainer.style.display = 'block';
+      } else {
+        deathSavesContainer.style.display = 'none';
+        document.querySelectorAll('.death-save-checkbox').forEach(cb => {
+          cb.checked = false;
+        });
+      }
+    }
+  }
+  
+  // Atualizar status quando valores mudarem
+  function updateInlineStatus() {
+    renderInlineStatus();
+  }
+  
+  // Escutar mudanças
+  ['vida-current', 'vida-max', 'sanidade-current', 'sanidade-max'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', updateInlineStatus);
+      el.addEventListener('change', updateInlineStatus);
+    }
+  });
+  
+  // Atualizar inicial
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      requestAnimationFrame(updateInlineStatus);
+    }, { once: true });
+  } else {
+    requestAnimationFrame(updateInlineStatus);
+  }
+  
+  // Expor função globalmente
+  window.updateInlineStatus = updateInlineStatus;
+</script>
+
+<script type="module">
+  // Função para calcular modificador de atributo (JS puro)
+  function getAttributeModifier(attributeValue) {
+    return Math.floor((attributeValue - 10) / 2);
+  }
+
+  // Função para obter valor de atributo (igual ao usado na rolagem de dados)
+  function getAttributeValue(attributeId) {
+    const input = document.getElementById(attributeId);
+    if (!input) {
+      console.warn(`Atributo ${attributeId} não encontrado no DOM`);
+      return 0;
+    }
+    const v = parseInt(input.value, 10);
+    return Number.isNaN(v) ? 0 : v;
+  }
+
+  // Flag para evitar loops infinitos e debounce
+  let isUpdating = false;
+  let updateTimeout = null;
+
+  // Função para atualizar todos os valores derivados
+  function updateHeaderValues(immediate = false) {
+    // Prevenir loops infinitos
+    if (isUpdating) return;
+    
+    // Se immediate, atualizar sem debounce (para campos temporários)
+    if (immediate) {
+      isUpdating = true;
+      try {
+        _updateHeaderValues();
+      } finally {
+        isUpdating = false;
+      }
+      return;
+    }
+    
+    // Debounce: cancelar atualização pendente e agendar nova
+    if (updateTimeout !== null) {
+      clearTimeout(updateTimeout);
+    }
+    
+    updateTimeout = window.setTimeout(() => {
+      isUpdating = true;
+      try {
+        _updateHeaderValues();
+      } finally {
+        isUpdating = false;
+      }
+      updateTimeout = null;
+    }, 50);
+  }
+
+  // Função interna que faz a atualização real
+  function _updateHeaderValues() {
+
+      // Obter valores dos atributos diretamente do DOM (igual à rolagem de dados)
+      // Pegar os inputs diretamente e ler os valores, como a rolagem faz
+      const forInput = document.getElementById('brutalidade');
+      const dexInput = document.getElementById('destreza');
+      const conInput = document.getElementById('compleicao');
+      const menInput = document.getElementById('mente');
+      const podInput = document.getElementById('sobrenatural');
+      
+      // Ler valores diretamente dos inputs, igual à rolagem
+      const forV = forInput ? parseInt(forInput.value, 10) : 0;
+      const dexV = dexInput ? parseInt(dexInput.value, 10) : 0;
+      const conV = conInput ? parseInt(conInput.value, 10) : 0;
+      const menV = menInput ? parseInt(menInput.value, 10) : 0;
+      const podV = podInput ? parseInt(podInput.value, 10) : 0;
+      
+      const forValue = Number.isNaN(forV) ? 0 : forV;
+      const dexValue = Number.isNaN(dexV) ? 0 : dexV;
+      const conValue = Number.isNaN(conV) ? 0 : conV;
+      const menValue = Number.isNaN(menV) ? 0 : menV;
+      const podValue = Number.isNaN(podV) ? 0 : podV;
+      
+      // Calcular modificadores
+      const modFor = getAttributeModifier(forValue);
+      const modDex = getAttributeModifier(dexValue);
+      const modCon = getAttributeModifier(conValue);
+      const modConj = getAttributeModifier(podValue); // MODconj = modificador de conjuração (sobrenatural)
+      const modEsq = getAttributeModifier(dexValue); // MODesq = modificador de esquiva (destreza)
+
+      // Vida: Brutalidade + Compleição + bônus temporário
+      const vidaMaxInput = document.getElementById('vida-max');
+      const vidaTempInput = document.getElementById('vida-temp');
+      if (vidaMaxInput) {
+        const vidaTempV = vidaTempInput ? parseInt(vidaTempInput.value, 10) : 0;
+        const vidaTempValue = Number.isNaN(vidaTempV) ? 0 : vidaTempV;
+        const maxVida = forValue + conValue + vidaTempValue;
+        vidaMaxInput.value = String(maxVida);
+        
+        // Garantir que vida atual não exceda máximo
+        const vidaCurrentInput = document.getElementById('vida-current');
+        if (vidaCurrentInput) {
+          const vc = parseInt(vidaCurrentInput.value, 10);
+          const currentValue = Number.isNaN(vc) ? 0 : vc;
+          if (currentValue > maxVida && maxVida > 0) {
+            vidaCurrentInput.value = String(maxVida);
+          }
+          vidaCurrentInput.max = String(maxVida);
+        }
+      }
+
+      // Mana: Sobrenatural * 2 + bônus temporário
+      const manaMaxInput = document.getElementById('mana-max');
+      const manaTempInput = document.getElementById('mana-temp');
+      if (manaMaxInput) {
+        const manaTempV = manaTempInput ? parseInt(manaTempInput.value, 10) : 0;
+        const manaTempValue = Number.isNaN(manaTempV) ? 0 : manaTempV;
+        const maxMana = podValue * 2 + manaTempValue;
+        manaMaxInput.value = String(maxMana);
+        
+        // Garantir que mana atual não exceda máximo
+        const manaCurrentInput = document.getElementById('mana-current');
+        if (manaCurrentInput) {
+          const vc = parseInt(manaCurrentInput.value, 10);
+          const currentValue = Number.isNaN(vc) ? 0 : vc;
+          if (currentValue > maxMana && maxMana > 0) {
+            manaCurrentInput.value = String(maxMana);
+          }
+          manaCurrentInput.max = String(maxMana);
+        }
+      }
+
+      // Sanidade: Mente * 2 + bônus temporário
+      const sanidadeMaxInput = document.getElementById('sanidade-max');
+      const sanidadeTempInput = document.getElementById('sanidade-temp');
+      if (sanidadeMaxInput) {
+        const sanidadeTempV = sanidadeTempInput ? parseInt(sanidadeTempInput.value, 10) : 0;
+        const sanidadeTempValue = Number.isNaN(sanidadeTempV) ? 0 : sanidadeTempV;
+        const maxSanidade = menValue * 2 + sanidadeTempValue;
+        sanidadeMaxInput.value = String(maxSanidade);
+        
+        // Garantir que sanidade atual não exceda máximo
+        const sanidadeCurrentInput = document.getElementById('sanidade-current');
+        if (sanidadeCurrentInput) {
+          const cs = parseInt(sanidadeCurrentInput.value, 10);
+          const currentValue = Number.isNaN(cs) ? 0 : cs;
+          if (currentValue > maxSanidade && maxSanidade > 0) {
+            sanidadeCurrentInput.value = String(maxSanidade);
+          }
+          sanidadeCurrentInput.max = String(maxSanidade);
+        }
+      }
+
+      // Resistências a dano: MODcon + MODfor/2
+      const resistenciaInput = document.getElementById('resistencia');
+      if (resistenciaInput) {
+        const resistencia = modCon + Math.floor(modFor / 2);
+        resistenciaInput.value = String(resistencia);
+      }
+
+      // Movimento: MODdex * 2"m" (ou metade se sobrecarregado ou machucado) + movimento extra
+      const movimentoInput = document.getElementById('movimento');
+      const movimentoExtraInput = document.getElementById('movimento-extra');
+      if (movimentoInput) {
+        // Verificar se está sobrecarregado (peso atual > peso máximo)
+        let currentWeight = 0;
+        let maxWeight = 0;
+        
+        // Tentar obter peso atual e máximo dos itens
+        const weightCurrentEl = document.getElementById('weight-current');
+        const weightMaxEl = document.getElementById('weight-max');
+        
+        if (weightCurrentEl && weightMaxEl) {
+          const wc = parseInt(weightCurrentEl.textContent, 10);
+          const wm = parseInt(weightMaxEl.textContent, 10);
+          currentWeight = Number.isNaN(wc) ? 0 : wc;
+          maxWeight = Number.isNaN(wm) ? 0 : wm;
+        }
+        
+        // Verificar se está machucado (vida atual < metade da vida máxima)
+        const vidaCurrentInput = document.getElementById('vida-current');
+        const vidaMaxInput = document.getElementById('vida-max');
+        let isMachucado = false;
+        if (vidaCurrentInput && vidaMaxInput) {
+          const vc = parseInt(vidaCurrentInput.value, 10);
+          const vm = parseInt(vidaMaxInput.value, 10);
+          const vidaCurrent = Number.isNaN(vc) ? 0 : vc;
+          const vidaMax = Number.isNaN(vm) ? 0 : vm;
+          if (vidaMax > 0 && vidaCurrent < vidaMax / 2 && vidaCurrent > 0) {
+            isMachucado = true;
+          }
+        }
+        
+        // Movimento: Destreza / 2
+        let movimento = Math.floor(dexValue / 2);
+        
+        // Se sobrecarregado (peso atual > peso máximo), movimento é metade
+        if (currentWeight > maxWeight && maxWeight > 0) {
+          movimento = Math.floor(movimento / 2);
+        }
+        
+        // Verificar se está morrendo (vida atual = 0)
+        let isMorrendo = false;
+        if (vidaCurrentInput && vidaMaxInput) {
+          const vc = parseInt(vidaCurrentInput.value, 10);
+          const vidaCurrent = Number.isNaN(vc) ? 0 : vc;
+          if (vidaCurrent === 0) {
+            isMorrendo = true;
+          }
+        }
+        
+        // Se morrendo, movimento é zero
+        if (isMorrendo) {
+          movimento = 0;
+        } else {
+          // Se machucado, movimento é metade
+          if (isMachucado) {
+            movimento = Math.floor(movimento / 2);
+          }
+          
+          // Adicionar movimento extra
+          if (movimentoExtraInput) {
+            const me = parseInt(movimentoExtraInput.value, 10);
+            const movimentoExtra = Number.isNaN(me) ? 0 : me;
+            movimento += movimentoExtra;
+          }
+        }
+        
+        movimentoInput.value = `${movimento}m`;
+      }
+
+      // DT para projéteis (Receber): 8 + MODesq
+      const dtProjeteisInput = document.getElementById('dt-projeteis');
+      if (dtProjeteisInput) {
+        const dtProjeteis = 8 + modEsq;
+        dtProjeteisInput.value = String(dtProjeteis);
+      }
+
+      // Sequência baseada no nível
+      const nivelInput = document.getElementById('nivel');
+      const sequenciaInput = document.getElementById('nivel-caminho');
+      if (nivelInput && sequenciaInput) {
+        const n = parseInt(nivelInput.value, 10);
+        const nivel = Number.isNaN(n) ? 0 : n;
+        let sequencia = 0;
+        
+        if (nivel >= 1 && nivel <= 2) sequencia = 9;
+        else if (nivel >= 3 && nivel <= 4) sequencia = 8;
+        else if (nivel >= 5 && nivel <= 6) sequencia = 7;
+        else if (nivel >= 7 && nivel <= 8) sequencia = 6;
+        else if (nivel >= 9 && nivel <= 10) sequencia = 5;
+        else if (nivel >= 11 && nivel <= 12) sequencia = 4;
+        else if (nivel >= 13 && nivel <= 14) sequencia = 3;
+        else if (nivel >= 15 && nivel <= 16) sequencia = 2;
+        else if (nivel >= 17 && nivel <= 20) sequencia = 1;
+        
+        const sequenciaText = sequencia > 0 ? `${sequencia}ª sequência` : '0';
+        sequenciaInput.value = sequenciaText;
+        
+        // Habilitar/desabilitar Caminho baseado no nível
+        const caminhoInput = document.getElementById('caminho');
+        if (caminhoInput) {
+          if (nivel >= 1) {
+            caminhoInput.disabled = false;
+          } else {
+            caminhoInput.disabled = true;
+            caminhoInput.value = '';
+          }
+        }
+        
+        // Habilitar/desabilitar Prestígio baseado no nível
+        const prestigioSelect = document.getElementById('prestigio');
+        if (prestigioSelect) {
+          if (nivel >= 1) {
+            prestigioSelect.disabled = false;
+            if (!prestigioSelect.value || prestigioSelect.value === '') {
+              prestigioSelect.value = 'muito-baixo';
+            }
+          } else {
+            prestigioSelect.disabled = true;
+            prestigioSelect.value = '';
+          }
+        }
+      }
+
+  }
+
+  // Função para reduzir sanidade quando Caminho for preenchido
+  function handleCaminhoChange() {
+    const caminhoInput = document.getElementById('caminho');
+    const sanidadeMaxInput = document.getElementById('sanidade-max');
+    const sanidadeCurrentInput = document.getElementById('sanidade-current');
+    
+    if (!caminhoInput || !sanidadeMaxInput) return;
+    
+    // Verificar se Caminho foi preenchido pela primeira vez
+    const caminhoValue = caminhoInput.value.trim();
+    const wasEmpty = caminhoInput.dataset.wasEmpty === 'true';
+    
+    if (caminhoValue && wasEmpty && caminhoInput.dataset.sanidadeReduced !== 'true') {
+      // Reduzir 10% da sanidade máxima, arredondando para cima
+      const ms = parseInt(sanidadeMaxInput.value, 10);
+      const maxSanidade = Number.isNaN(ms) ? 0 : ms;
+      if (maxSanidade > 0) {
+        const reducao = Math.ceil(maxSanidade * 0.1);
+        const novaMaxSanidade = maxSanidade - reducao;
+        sanidadeMaxInput.value = String(novaMaxSanidade);
+        
+        // Ajustar sanidade atual se necessário
+        if (sanidadeCurrentInput) {
+          const cs = parseInt(sanidadeCurrentInput.value, 10);
+          const currentSanidade = Number.isNaN(cs) ? 0 : cs;
+          if (currentSanidade > novaMaxSanidade) {
+            sanidadeCurrentInput.value = String(novaMaxSanidade);
+          }
+          sanidadeCurrentInput.max = String(novaMaxSanidade);
+        }
+        
+        // Marcar que já foi reduzido
+        caminhoInput.dataset.sanidadeReduced = 'true';
+        
+        // Atualizar status
+        if (window.updateStatus) {
+          window.updateStatus();
+        }
+      }
+    }
+    
+    // Atualizar flag
+    caminhoInput.dataset.wasEmpty = caminhoValue ? 'false' : 'true';
+  }
+
+  // Escutar mudanças nos atributos usando event delegation única e global
+  // Usar flag global no window para garantir que seja adicionado apenas uma vez
+  if (!window.headerListenerInitialized) {
+    window.headerListenerInitialized = true;
+    const attributeIds = ['brutalidade', 'destreza', 'compleicao', 'mente', 'sobrenatural'];
+    
+    // Event delegation única - executar apenas uma vez
+    // Escutar no document com capture para pegar eventos de qualquer elemento
+    document.addEventListener('change', (e) => {
+      const target = e.target;
+      if (target && target.id && attributeIds.includes(target.id)) {
+        updateHeaderValues();
+      }
+    }, { passive: true, capture: true });
+
+    // Escutar eventos de input também para atualização em tempo real
+    document.addEventListener('input', (e) => {
+      const target = e.target;
+      if (target && target.id && attributeIds.includes(target.id)) {
+        updateHeaderValues();
+      }
+    }, { passive: true, capture: true });
+
+    // Função para tentar inicializar valores - tentar múltiplas vezes se necessário
+    function initializeValues(retries = 0) {
+      // Verificar se todos os atributos existem no DOM
+      const allAttributesExist = attributeIds.every(id => {
+        const element = document.getElementById(id);
+        return element !== null;
+      });
+
+      if (allAttributesExist) {
+        // Todos os atributos existem, atualizar valores
+        updateHeaderValues();
+      } else if (retries < 10) {
+        // Ainda não existem, tentar novamente após 50ms
+        setTimeout(() => {
+          initializeValues(retries + 1);
+        }, 50);
+      } else {
+        // Após 10 tentativas (500ms), atualizar mesmo assim
+        updateHeaderValues();
+      }
+    }
+
+    // Atualizar valores iniciais após o DOM estar pronto
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initializeValues();
+      }, { once: true });
+    } else {
+      initializeValues();
+    }
+
+    // Escutar mudanças via eventos globais (caso os atributos sejam atualizados de fora)
+    document.addEventListener('characterDataChanged', () => {
+      updateHeaderValues();
+    }, { passive: true });
+
+    // Escutar mudanças de peso para atualizar movimento
+    document.addEventListener('weightChanged', () => {
+      updateHeaderValues();
+    }, { passive: true });
+
+    // Usar event delegation para otimizar performance
+    if (!window.headerEventDelegationInitialized) {
+      window.headerEventDelegationInitialized = true;
+      
+      document.addEventListener('input', (e) => {
+        const target = e.target;
+        if (!target || !target.id) return;
+        
+        const id = target.id;
+        if (id === 'vida-current' || id === 'sanidade-current') {
+          updateHeaderValues();
+        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp') {
+          updateHeaderValues(true);
+        } else if (id === 'nivel') {
+          updateHeaderValues();
+        }
+      }, { passive: true, capture: true });
+      
+      document.addEventListener('change', (e) => {
+        const target = e.target;
+        if (!target || !target.id) return;
+        
+        const id = target.id;
+        if (id === 'vida-current' || id === 'sanidade-current') {
+          updateHeaderValues();
+        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp') {
+          updateHeaderValues(true);
+        } else if (id === 'nivel') {
+          updateHeaderValues();
+        }
+      }, { passive: true, capture: true });
+    }
+
+    // Escutar mudanças no Caminho para reduzir sanidade
+    const caminhoInput = document.getElementById('caminho');
+    if (caminhoInput) {
+      caminhoInput.dataset.wasEmpty = caminhoInput.value.trim() ? 'false' : 'true';
+      caminhoInput.addEventListener('input', handleCaminhoChange);
+      caminhoInput.addEventListener('change', handleCaminhoChange);
+    }
+
+    // Escutar mudanças de status
+    document.addEventListener('statusChanged', () => {
+      updateHeaderValues();
+    }, { passive: true });
+
+    // Expor função globalmente para outros componentes
+    window.updateHeaderValues = updateHeaderValues;
+  }
+</script>
+
+<style>
+  .sheet-section {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sheet-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-primary),
+      transparent
+    );
+    opacity: 0.5;
+  }
+
+  .sheet-section:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: var(--color-accent-primary);
+    box-shadow: 0 0 8px rgba(139, 76, 141, 0.5);
+  }
+
+  .header-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .header-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .header-item label {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .hp-mana-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .current-value {
+    flex: 1 1 auto;
+    min-width: 80px;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    -moz-appearance: textfield;
+  }
+
+  .current-value::-webkit-outer-spin-button,
+  .current-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .current-value:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .separator {
+    color: var(--color-text-secondary);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .max-value {
+    flex: 1 1 auto;
+    min-width: 80px;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 0.5rem;
+    color: var(--color-text-accent);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: not-allowed;
+    -moz-appearance: textfield;
+  }
+
+  .max-value::-webkit-outer-spin-button,
+  .max-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .header-value {
+    width: 100%;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-accent);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: not-allowed;
+    -moz-appearance: textfield;
+  }
+
+  .header-value::-webkit-outer-spin-button,
+  .header-value::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .header-input {
+    width: 100%;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    -moz-appearance: textfield;
+  }
+
+  .header-input::-webkit-outer-spin-button,
+  .header-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .header-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .header-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--color-bg-primary);
+  }
+
+  .header-select {
+    width: 100%;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .header-select:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 0 0 3px rgba(139, 76, 141, 0.2),
+      0 0 12px rgba(139, 76, 141, 0.3);
+  }
+
+  .header-select option {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+  }
+
+  .header-item-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .temp-value-small {
+    width: 50px;
+    background: rgba(139, 76, 141, 0.1);
+    border: 1px solid rgba(139, 76, 141, 0.3);
+    border-radius: 4px;
+    padding: 0.2rem 0.35rem;
+    color: var(--color-text-accent);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    -moz-appearance: textfield;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .temp-value-small::-webkit-outer-spin-button,
+  .temp-value-small::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .temp-value-small:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(139, 76, 141, 0.3);
+  }
+
+  .temp-value-small::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+  }
+
+  .movement-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .movement-base {
+    flex: 1;
+  }
+
+  .movement-extra {
+    width: 60px;
+    background: rgba(139, 76, 141, 0.1);
+    border: 1px solid rgba(139, 76, 141, 0.3);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: var(--color-text-accent);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    -moz-appearance: textfield;
+    opacity: 0.8;
+  }
+
+  .movement-extra::-webkit-outer-spin-button,
+  .movement-extra::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .movement-extra:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    opacity: 1;
+    box-shadow: 0 0 8px rgba(139, 76, 141, 0.3);
+  }
+
+  .movement-extra::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.5;
+  }
+
+  .status-container-inline {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
+    flex-wrap: wrap;
+  }
+
+  .status-label-inline {
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .status-badge {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .status-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .status-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .status-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .status-text strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .status-description {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    font-weight: 400;
+  }
+
+  .status-badge.status-machucado {
+    background: linear-gradient(135deg, rgba(139, 76, 76, 0.25), rgba(139, 76, 76, 0.15));
+    border: 2px solid rgba(139, 76, 76, 0.5);
+    color: #ff9999;
+  }
+
+  .status-badge.status-morrendo {
+    background: linear-gradient(135deg, rgba(139, 76, 76, 0.35), rgba(139, 76, 76, 0.25));
+    border: 2px solid rgba(255, 85, 85, 0.7);
+    color: #ff5555;
+    animation: pulse-red 2s infinite;
+  }
+
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 85, 85, 0.3); }
+    50% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 85, 85, 0.6); }
+  }
+
+  .status-badge.status-insano {
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.25), rgba(139, 76, 141, 0.15));
+    border: 2px solid rgba(139, 76, 141, 0.5);
+    color: #e6b3e6;
+  }
+
+  .death-saves-container {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .death-saves-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .death-saves-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .death-saves-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .death-saves-label {
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .death-saves-checkboxes {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .death-save-checkbox-label {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--color-bg-tertiary);
+  }
+
+  .death-save-checkbox-label:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+  }
+
+  .death-save-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--color-accent-primary);
+  }
+
+  .death-save-checkbox[data-type="success"]:checked,
+  .death-save-checkbox-label:has(.death-save-checkbox[data-type="success"]:checked) {
+    border-color: #4c8b7d;
+    background: rgba(76, 139, 125, 0.2);
+  }
+
+  .death-save-checkbox[data-type="failure"]:checked,
+  .death-save-checkbox-label:has(.death-save-checkbox[data-type="failure"]:checked) {
+    border-color: #8b4c4c;
+    background: rgba(139, 76, 76, 0.2);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    padding: 1rem 0;
+  }
+
+  .section-title-text {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-text-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-shadow: 
+      0 0 20px rgba(139, 76, 141, 0.5),
+      0 2px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title-decoration {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent-primary) 20%,
+      var(--color-accent-primary) 80%,
+      transparent
+    );
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      0 0 20px rgba(139, 76, 141, 0.4);
+    opacity: 0.8;
+    transform: scaleX(0.8);
+  }
+
+  .section-title-decoration::before,
+  .section-title-decoration::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 50%;
+    box-shadow: 
+      0 0 10px rgba(139, 76, 141, 0.8),
+      inset 0 0 10px rgba(139, 76, 141, 0.3);
+  }
+
+  .section-title-decoration::before {
+    left: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  .section-title-decoration::after {
+    right: 10%;
+    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  }
+
+  @media (max-width: 768px) {
+    .sheet-section {
+      padding: 1.5rem;
+    }
+
+    .section-title-text {
+      font-size: 1.8rem;
+    }
+
+    .header-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .death-saves-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>
