@@ -1,7 +1,14 @@
 ---
 const base = import.meta.env.BASE_URL;
-// Garantir que o base sempre termine com / para facilitar concatenação
-const basePath = base.endsWith('/') ? base : `${base}/`;
+// Função helper para construir URLs com base path
+const getUrl = (path: string) => {
+  const basePath = base.endsWith('/') ? base.slice(0, -1) : base;
+  if (!path || path === '') {
+    return `${basePath}/`;
+  }
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${basePath}/${cleanPath}`;
+};
 ---
 
 <nav class="main-navigation">
@@ -20,25 +27,25 @@ const basePath = base.endsWith('/') ? base : `${base}/`;
     </div>
     <ul class="menu-list">
       <li class="menu-item">
-        <a href={`${basePath}sistema/`} class="menu-link" data-page="sistema">
+        <a href={getUrl('sistema/')} class="menu-link" data-page="sistema">
           <span class="menu-link-icon">◊</span>
           <span class="menu-link-text">Sistema</span>
         </a>
       </li>
       <li class="menu-item">
-        <a href={basePath} class="menu-link" data-page="personagem">
+        <a href={getUrl('')} class="menu-link" data-page="personagem">
           <span class="menu-link-icon">◉</span>
           <span class="menu-link-text">Ficha de personagem</span>
         </a>
       </li>
       <li class="menu-item">
-        <a href={`${basePath}definicoes/`} class="menu-link" data-page="definicoes">
+        <a href={getUrl('definicoes/')} class="menu-link" data-page="definicoes">
           <span class="menu-link-icon">◈</span>
           <span class="menu-link-text">Definições</span>
         </a>
       </li>
       <li class="menu-item">
-        <a href={`${basePath}monstro/`} class="menu-link" data-page="monstro">
+        <a href={getUrl('monstro/')} class="menu-link" data-page="monstro">
           <span class="menu-link-icon">◊</span>
           <span class="menu-link-text">Ficha de monstro</span>
         </a>
