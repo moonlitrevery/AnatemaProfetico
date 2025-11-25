@@ -37,9 +37,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          # Se você usar variáveis de ambiente, defina aqui
-          # PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
