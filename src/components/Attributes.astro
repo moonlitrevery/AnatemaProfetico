@@ -47,7 +47,7 @@
   function showDiceRollPopup(roll, label) {
     // Usar o sistema global de popups se disponível, senão criar um simples
     if (window.showDiceRollPopup) {
-      window.showDiceRollPopup(roll, label, 'd20');
+      window.showDiceRollPopup(roll, label, 'd20', 'atributo');
     } else {
       // Fallback simples caso o DiceRoller ainda não esteja carregado
       console.log(`Roll: ${label}`, roll);

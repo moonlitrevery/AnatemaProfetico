@@ -10,7 +10,10 @@
     <div class="header-item">
       <div class="header-item-label-row">
         <label for="vida-current">Vida</label>
-        <input type="number" id="vida-temp" name="vida-temp" class="temp-value-small" placeholder="+0" min="0" title="Bônus à Vida Máxima" />
+        <div class="bonus-inputs-row">
+          <input type="number" id="vida-temp" name="vida-temp" class="temp-value-small" placeholder="Nível" min="0" title="Bônus de nível à Vida Máxima" />
+          <input type="number" id="vida-extra" name="vida-extra" class="temp-value-small extra" placeholder="Extra" min="0" title="Bônus extra à Vida Máxima (itens, buffs)" />
+        </div>
       </div>
       <div class="hp-mana-container">
         <input type="number" id="vida-current" name="vida-current" class="current-value" placeholder="0" min="0" />
@@ -21,7 +24,10 @@
     <div class="header-item">
       <div class="header-item-label-row">
         <label for="mana-current">Mana</label>
-        <input type="number" id="mana-temp" name="mana-temp" class="temp-value-small" placeholder="+0" min="0" title="Bônus à Mana Máxima" />
+        <div class="bonus-inputs-row">
+          <input type="number" id="mana-temp" name="mana-temp" class="temp-value-small" placeholder="Nível" min="0" title="Bônus de nível à Mana Máxima" />
+          <input type="number" id="mana-extra" name="mana-extra" class="temp-value-small extra" placeholder="Extra" min="0" title="Bônus extra à Mana Máxima (itens, buffs)" />
+        </div>
       </div>
       <div class="hp-mana-container">
         <input type="number" id="mana-current" name="mana-current" class="current-value" placeholder="0" min="0" />
@@ -30,9 +36,13 @@
       </div>
     </div>
     <div class="header-item">
-      <div class="header-item-label-row">
+      <div class="header-item-label-row header-item-sanidade-row">
         <label for="sanidade-current">Sanidade</label>
-        <input type="number" id="sanidade-temp" name="sanidade-temp" class="temp-value-small" placeholder="+0" min="0" title="Bônus à Sanidade Máxima" />
+        <div class="bonus-inputs-row">
+          <input type="number" id="sanidade-temp" name="sanidade-temp" class="temp-value-small" placeholder="Nível" min="0" title="Bônus de nível à Sanidade Máxima" />
+          <input type="number" id="sanidade-extra" name="sanidade-extra" class="temp-value-small extra" placeholder="Extra" min="0" title="Bônus extra à Sanidade Máxima (itens, buffs)" />
+        </div>
+        <button type="button" id="sanity-popup-btn" class="sanity-popup-btn" title="Sanidade mental - Insanidades e traumas">🧠</button>
       </div>
       <div class="hp-mana-container">
         <input type="number" id="sanidade-current" name="sanidade-current" class="current-value" placeholder="0" min="0" />
@@ -120,6 +130,37 @@
       <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" />
     </div>
   </div>
+
+  <!-- Botões de Descanso -->
+  <div class="rest-buttons-section">
+    <h3 class="rest-buttons-title">Descanso</h3>
+    <div class="rest-buttons-grid">
+      <button type="button" class="rest-btn rest-ruim" data-rest="ruim" title="Vida 1/4, Mana 1/4, Sanidade 1/6">Ruim</button>
+      <button type="button" class="rest-btn rest-mediano" data-rest="mediano" title="Vida 1/3, Mana 1/3, Sanidade 1/4">Mediano</button>
+      <button type="button" class="rest-btn rest-bom" data-rest="bom" title="Vida 1/2, Mana 1/2, Sanidade 1/3">Bom</button>
+      <button type="button" class="rest-btn rest-magico" data-rest="magico" title="Recuperação total">Mágico</button>
+    </div>
+  </div>
+
+  <!-- Calculadora de Dano -->
+  <div class="damage-calc-section">
+    <h3 class="damage-calc-title">Aplicar Dano</h3>
+    <div class="damage-calc-grid">
+      <div class="damage-calc-item">
+        <label for="dano-vida">Vida</label>
+        <input type="number" id="dano-vida" class="damage-input" placeholder="0" min="0" />
+      </div>
+      <div class="damage-calc-item">
+        <label for="dano-mana">Mana</label>
+        <input type="number" id="dano-mana" class="damage-input" placeholder="0" min="0" />
+      </div>
+      <div class="damage-calc-item">
+        <label for="dano-sanidade">Sanidade</label>
+        <input type="number" id="dano-sanidade" class="damage-input" placeholder="0" min="0" />
+      </div>
+      <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn">Aplicar</button>
+    </div>
+  </div>
   
   <div class="status-container-inline" id="status-container-inline">
     <!-- Status será inserido aqui -->
@@ -187,11 +228,10 @@
     
     const isMachucado = vidaMax > 0 && vidaCurrent < vidaMax / 2 && vidaCurrent > 0;
     const isMorrendo = vidaCurrent === 0;
-    const isInsano = sanidadeMax > 0 && sanidadeCurrent < sanidadeMax / 2;
     
     container.innerHTML = '';
     
-    if (isMachucado || isMorrendo || isInsano) {
+    if (isMachucado || isMorrendo) {
       container.style.display = 'flex';
       container.innerHTML = '<span class="status-label-inline">Status:</span>';
       
@@ -206,13 +246,6 @@
         const span = document.createElement('span');
         span.className = 'status-badge status-morrendo';
         span.textContent = '○ Morrendo - Movimento zerado - Faça testes de salvamento';
-        container.appendChild(span);
-      }
-      
-      if (isInsano) {
-        const span = document.createElement('span');
-        span.className = 'status-badge status-insano';
-        span.textContent = '○ Insano - Sanidade mental comprometida';
         container.appendChild(span);
       }
     } else {
@@ -244,6 +277,13 @@
     if (el) {
       el.addEventListener('input', updateInlineStatus);
       el.addEventListener('change', updateInlineStatus);
+    }
+  });
+
+  // Botão Sanidade - abre popup (SanitySystem registra openSanityPopup)
+  document.getElementById('sanity-popup-btn')?.addEventListener('click', () => {
+    if (typeof window.openSanityPopup === 'function') {
+      window.openSanityPopup();
     }
   });
   
@@ -344,13 +384,16 @@
       const modConj = getAttributeModifier(podValue); // MODconj = modificador de conjuração (sobrenatural)
       const modEsq = getAttributeModifier(dexValue); // MODesq = modificador de esquiva (destreza)
 
-      // Vida: Brutalidade + Compleição + bônus temporário
+      // Vida: Brutalidade + Compleição + bônus nível + bônus extra
       const vidaMaxInput = document.getElementById('vida-max');
       const vidaTempInput = document.getElementById('vida-temp');
+      const vidaExtraInput = document.getElementById('vida-extra');
       if (vidaMaxInput) {
         const vidaTempV = vidaTempInput ? parseInt(vidaTempInput.value, 10) : 0;
+        const vidaExtraV = vidaExtraInput ? parseInt(vidaExtraInput.value, 10) : 0;
         const vidaTempValue = Number.isNaN(vidaTempV) ? 0 : vidaTempV;
-        const maxVida = forValue + conValue + vidaTempValue;
+        const vidaExtraValue = Number.isNaN(vidaExtraV) ? 0 : vidaExtraV;
+        const maxVida = forValue + conValue + vidaTempValue + vidaExtraValue;
         vidaMaxInput.value = String(maxVida);
         
         // Garantir que vida atual não exceda máximo
@@ -365,13 +408,16 @@
         }
       }
 
-      // Mana: Sobrenatural * 2 + bônus temporário
+      // Mana: Sobrenatural * 2 + bônus nível + bônus extra
       const manaMaxInput = document.getElementById('mana-max');
       const manaTempInput = document.getElementById('mana-temp');
+      const manaExtraInput = document.getElementById('mana-extra');
       if (manaMaxInput) {
         const manaTempV = manaTempInput ? parseInt(manaTempInput.value, 10) : 0;
+        const manaExtraV = manaExtraInput ? parseInt(manaExtraInput.value, 10) : 0;
         const manaTempValue = Number.isNaN(manaTempV) ? 0 : manaTempV;
-        const maxMana = podValue * 2 + manaTempValue;
+        const manaExtraValue = Number.isNaN(manaExtraV) ? 0 : manaExtraV;
+        const maxMana = podValue * 2 + manaTempValue + manaExtraValue;
         manaMaxInput.value = String(maxMana);
         
         // Garantir que mana atual não exceda máximo
@@ -386,13 +432,16 @@
         }
       }
 
-      // Sanidade: Mente * 2 + bônus temporário
+      // Sanidade: Mente * 2 + bônus nível + bônus extra
       const sanidadeMaxInput = document.getElementById('sanidade-max');
       const sanidadeTempInput = document.getElementById('sanidade-temp');
+      const sanidadeExtraInput = document.getElementById('sanidade-extra');
       if (sanidadeMaxInput) {
         const sanidadeTempV = sanidadeTempInput ? parseInt(sanidadeTempInput.value, 10) : 0;
+        const sanidadeExtraV = sanidadeExtraInput ? parseInt(sanidadeExtraInput.value, 10) : 0;
         const sanidadeTempValue = Number.isNaN(sanidadeTempV) ? 0 : sanidadeTempV;
-        const maxSanidade = menValue * 2 + sanidadeTempValue;
+        const sanidadeExtraValue = Number.isNaN(sanidadeExtraV) ? 0 : sanidadeExtraV;
+        const maxSanidade = menValue * 2 + sanidadeTempValue + sanidadeExtraValue;
         sanidadeMaxInput.value = String(maxSanidade);
         
         // Garantir que sanidade atual não exceda máximo
@@ -661,7 +710,7 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp') {
+        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
@@ -675,13 +724,75 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp') {
+        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
         }
       }, { passive: true, capture: true });
     }
+
+    // Botões de Descanso
+    const REST_VALUES = {
+      ruim: { vida: 1/4, mana: 1/4, sanidade: 1/6 },
+      mediano: { vida: 1/3, mana: 1/3, sanidade: 1/4 },
+      bom: { vida: 1/2, mana: 1/2, sanidade: 1/3 },
+      magico: { vida: 1, mana: 1, sanidade: 1 }
+    };
+    document.querySelectorAll('.rest-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tipo = btn.dataset.rest;
+        const ratios = REST_VALUES[tipo];
+        if (!ratios) return;
+        const vidaMax = parseInt(document.getElementById('vida-max')?.value || '0', 10);
+        const manaMax = parseInt(document.getElementById('mana-max')?.value || '0', 10);
+        const sanidadeMax = parseInt(document.getElementById('sanidade-max')?.value || '0', 10);
+        const vidaCur = document.getElementById('vida-current');
+        const manaCur = document.getElementById('mana-current');
+        const sanidadeCur = document.getElementById('sanidade-current');
+        if (vidaCur) {
+          const v = parseInt(vidaCur.value, 10) || 0;
+          vidaCur.value = String(Math.min(vidaMax, Math.floor(v + vidaMax * ratios.vida)));
+        }
+        if (manaCur) {
+          const m = parseInt(manaCur.value, 10) || 0;
+          manaCur.value = String(Math.min(manaMax, Math.floor(m + manaMax * ratios.mana)));
+        }
+        if (sanidadeCur) {
+          const s = parseInt(sanidadeCur.value, 10) || 0;
+          sanidadeCur.value = String(Math.min(sanidadeMax, Math.floor(s + sanidadeMax * ratios.sanidade)));
+        }
+        updateInlineStatus();
+        updateHeaderValues(true);
+      });
+    });
+
+    // Calculadora de Dano
+    document.getElementById('aplicar-dano-btn')?.addEventListener('click', () => {
+      const danoVida = parseInt(document.getElementById('dano-vida')?.value || '0', 10) || 0;
+      const danoMana = parseInt(document.getElementById('dano-mana')?.value || '0', 10) || 0;
+      const danoSanidade = parseInt(document.getElementById('dano-sanidade')?.value || '0', 10) || 0;
+      const vidaCur = document.getElementById('vida-current');
+      const manaCur = document.getElementById('mana-current');
+      const sanidadeCur = document.getElementById('sanidade-current');
+      if (vidaCur && danoVida > 0) {
+        const v = parseInt(vidaCur.value, 10) || 0;
+        vidaCur.value = String(Math.max(0, v - danoVida));
+      }
+      if (manaCur && danoMana > 0) {
+        const m = parseInt(manaCur.value, 10) || 0;
+        manaCur.value = String(Math.max(0, m - danoMana));
+      }
+      if (sanidadeCur && danoSanidade > 0) {
+        const s = parseInt(sanidadeCur.value, 10) || 0;
+        sanidadeCur.value = String(Math.max(0, s - danoSanidade));
+      }
+      document.getElementById('dano-vida').value = '';
+      document.getElementById('dano-mana').value = '';
+      document.getElementById('dano-sanidade').value = '';
+      updateInlineStatus();
+      updateHeaderValues(true);
+    });
 
     // Escutar mudanças no Caminho para reduzir sanidade
     const caminhoSelect = document.getElementById('caminho');
@@ -969,6 +1080,168 @@
   .temp-value-small::placeholder {
     color: var(--color-text-secondary);
     opacity: 0.5;
+  }
+
+  .bonus-inputs-row {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .temp-value-small.extra {
+    opacity: 0.85;
+  }
+
+  .header-item-sanidade-row {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .sanity-popup-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    background: rgba(139, 76, 141, 0.2);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 6px;
+    color: var(--color-text-accent);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sanity-popup-btn:hover {
+    background: rgba(139, 76, 141, 0.35);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.4);
+  }
+
+  .rest-buttons-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .rest-buttons-title {
+    font-family: var(--font-accent);
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .rest-buttons-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .rest-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .rest-btn:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.15);
+    color: var(--color-text-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 76, 141, 0.2);
+  }
+
+  .rest-ruim { border-left: 3px solid #8b4c4c; }
+  .rest-mediano { border-left: 3px solid #8b7d4c; }
+  .rest-bom { border-left: 3px solid #4c8b5e; }
+  .rest-magico { border-left: 3px solid var(--color-accent-primary); }
+
+  .damage-calc-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .damage-calc-title {
+    font-family: var(--font-accent);
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .damage-calc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .damage-calc-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 80px;
+  }
+
+  .damage-calc-item label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+
+  .damage-input {
+    width: 70px;
+    padding: 0.5rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+
+  .damage-input::-webkit-outer-spin-button,
+  .damage-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .damage-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 8px rgba(139, 76, 141, 0.3);
+  }
+
+  .aplicar-dano-btn {
+    padding: 0.5rem 1.25rem;
+    background: linear-gradient(135deg, rgba(139, 76, 76, 0.3), rgba(139, 76, 76, 0.2));
+    border: 1px solid rgba(139, 76, 76, 0.5);
+    border-radius: 6px;
+    color: #ff9999;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .aplicar-dano-btn:hover {
+    background: linear-gradient(135deg, rgba(139, 76, 76, 0.4), rgba(139, 76, 76, 0.3));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 76, 76, 0.3);
   }
 
   .movement-container {

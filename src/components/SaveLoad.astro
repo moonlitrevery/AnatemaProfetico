@@ -48,12 +48,17 @@
       prestigio: prestigioSelect?.value || 'muito-baixo',
       vidaCurrent: document.getElementById('vida-current')?.value || '',
       vidaTemp: document.getElementById('vida-temp')?.value || '',
+      vidaExtra: document.getElementById('vida-extra')?.value || '',
       manaCurrent: document.getElementById('mana-current')?.value || '',
       manaTemp: document.getElementById('mana-temp')?.value || '',
+      manaExtra: document.getElementById('mana-extra')?.value || '',
       sanidadeCurrent: document.getElementById('sanidade-current')?.value || '',
       sanidadeTemp: document.getElementById('sanidade-temp')?.value || '',
+      sanidadeExtra: document.getElementById('sanidade-extra')?.value || '',
       movimentoExtra: document.getElementById('movimento-extra')?.value || '',
     };
+
+    const sanitySystem = typeof window.getSanityData === 'function' ? window.getSanityData() : { insanidades: [], traumas: [] };
 
     const attributes = {};
     const attributeIds = ['brutalidade', 'destreza', 'compleicao', 'mente', 'sobrenatural'];
@@ -169,6 +174,7 @@
       abilities,
       notes,
       status,
+      sanitySystem,
     };
   };
   
@@ -233,18 +239,24 @@
 
       const vidaCurrentInput = document.getElementById('vida-current');
       const vidaTempInput = document.getElementById('vida-temp');
+      const vidaExtraInput = document.getElementById('vida-extra');
       const manaCurrentInput = document.getElementById('mana-current');
       const manaTempInput = document.getElementById('mana-temp');
+      const manaExtraInput = document.getElementById('mana-extra');
       const sanidadeCurrentInput = document.getElementById('sanidade-current');
       const sanidadeTempInput = document.getElementById('sanidade-temp');
+      const sanidadeExtraInput = document.getElementById('sanidade-extra');
       const movimentoExtraInput = document.getElementById('movimento-extra');
 
       if (vidaCurrentInput) vidaCurrentInput.value = data.header.vidaCurrent || '';
       if (vidaTempInput) vidaTempInput.value = data.header.vidaTemp || '';
+      if (vidaExtraInput) vidaExtraInput.value = data.header.vidaExtra || '';
       if (manaCurrentInput) manaCurrentInput.value = data.header.manaCurrent || '';
       if (manaTempInput) manaTempInput.value = data.header.manaTemp || '';
+      if (manaExtraInput) manaExtraInput.value = data.header.manaExtra || '';
       if (sanidadeCurrentInput) sanidadeCurrentInput.value = data.header.sanidadeCurrent || '';
       if (sanidadeTempInput) sanidadeTempInput.value = data.header.sanidadeTemp || '';
+      if (sanidadeExtraInput) sanidadeExtraInput.value = data.header.sanidadeExtra || '';
       if (movimentoExtraInput) movimentoExtraInput.value = data.header.movimentoExtra || '';
     }
 
@@ -437,6 +449,10 @@
           });
         }
       }
+    }
+
+    if (data.sanitySystem && typeof window.loadSanityData === 'function') {
+      window.loadSanityData(data.sanitySystem);
     }
 
     document.dispatchEvent(new Event('characterDataChanged', { bubbles: true }));
