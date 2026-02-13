@@ -21,98 +21,89 @@ const getUrl = (path: string) => {
       <h2>Página Inicial</h2>
     </div>
 
-    <section class="system-section">
-      <div class="system-hero">
+    <div class="home-grid">
+      <!-- Hero Quote - Full Width -->
+      <div class="home-card hero-card">
         <blockquote class="hero-quote">
           <p class="quote-text">"Fale e será caçado; cale-se e talvez sobreviva: esse é o preço do <strong>poder</strong>."</p>
         </blockquote>
       </div>
 
-      <div class="system-content">
-        <div class="system-intro">
-          <p class="system-intro-text">
-            <strong>Anátema profético</strong> é um sistema de RPG de mesa criado por <strong>Nyx (João/Luna)</strong> em 2025, 
-            como um sistema oficial para seu universo <strong>"Ordem Carmesim"</strong>. O sistema tem como foco 
-            <strong>Mistério/Terror</strong> e <strong>Sobrenatural</strong>, onde o universo se passa no nosso mundo, 
-            com fontes místicas inspiradas em <strong>Lord of Mysteries</strong>, <strong>Omniscient Reader Viewpoint</strong> 
-            e <strong>Shadow Slave</strong>.
-          </p>
-        </div>
+      <!-- Intro Card -->
+      <div class="home-card intro-card">
+        <div class="card-icon">🎲</div>
+        <h3 class="card-title">Sobre o Sistema</h3>
+        <p class="card-text">
+          <strong>Anátema profético</strong> é um sistema de RPG de mesa criado por <strong>Nyx (João/Luna)</strong> em 2025, 
+          como um sistema oficial para seu universo <strong>"Ordem Carmesim"</strong>.
+        </p>
+        <p class="card-text">
+          Foco em <strong>Mistério/Terror</strong> e <strong>Sobrenatural</strong>, inspirado em 
+          <strong>Lord of Mysteries</strong>, <strong>Omniscient Reader Viewpoint</strong> e <strong>Shadow Slave</strong>.
+        </p>
+      </div>
 
-        <div class="system-block quote-block">
-          <blockquote class="impact-quote">
-            <p>"Em um universo onde o sobrenatural é algo dito como sussurro e uma maldição pode ser dada a você a força e mudará sua vida eternamente, o que você faria?"</p>
-          </blockquote>
-        </div>
+      <!-- Question Card -->
+      <div class="home-card question-card">
+        <div class="card-icon">❓</div>
+        <blockquote class="question-quote">
+          <p>"Em um universo onde o sobrenatural é algo dito como sussurro e uma maldição pode ser dada a você a força e mudará sua vida eternamente, o que você faria?"</p>
+        </blockquote>
+      </div>
 
-        <div class="system-block">
-          <div class="system-block-content">
-            <p>
-              O sistema se inspira na maneira que <strong>Shadow Slave</strong> entrega os poderes aos personagens na obra, 
-              poderes que são inspirados nos caminhos de <strong>Lord of Mysteries</strong> e que são controlados por entidades 
-              como as de <strong>Omniscient Reader Viewpoint</strong>. 
-              <em class="mystery-text">(Para fins de mistério em canon não deixarei explícito o que quis dizer com isso)</em>
-            </p>
-          </div>
-        </div>
+      <!-- Warning Card -->
+      <div class="home-card warning-card">
+        <div class="card-icon">⚠️</div>
+        <h3 class="card-title">Aviso Importante</h3>
+        <p class="card-text">
+          <strong>O sistema ainda está em desenvolvimento</strong>, todas as informações poderão mudar a qualquer momento sem aviso prévio.
+        </p>
+      </div>
 
-        <div class="warning-box">
-          <div class="warning-icon">⚠</div>
-          <div class="warning-content">
-            <p><strong>O sistema ainda está em desenvolvimento</strong>, todas as informações nessa página e nas subsequentes 
-            poderão mudar a qualquer momento sem aviso prévio.</p>
-          </div>
-        </div>
+      <!-- Contribution Card -->
+      <div class="home-card contribution-card">
+        <div class="card-icon">💡</div>
+        <h3 class="card-title">Contribua</h3>
+        <p class="card-text">
+          Caso queira contribuir para o sistema, se sinta bem-vinde! Só mande uma mensagem para Nyx no Discord e 
+          conversaremos sobre as melhorias e as alterações que você acha pertinente fazer! :)
+        </p>
+      </div>
 
-        <div class="info-box">
-          <div class="info-icon">💡</div>
-          <div class="info-content">
-            <p>Caso queira contribuir para o sistema, se sinta bem-vinde! Só mande uma mensagem para Nyx no Discord e 
-            conversaremos sobre as melhorias e as alterações que você acha pertinente fazer! :)</p>
-          </div>
-        </div>
-
-        <div class="system-divider">
-          <span class="divider-symbol">◊</span>
-        </div>
-
-
-        <div class="system-block documentation-block">
-          <h3 class="system-block-title">📚 Documentação Completa</h3>
-          <div class="system-block-content">
-            <p>
+      <!-- Documentation Card - Full Width -->
+      <div class="home-card documentation-card">
+        <div class="doc-content">
+          <div class="doc-icon">📚</div>
+          <div class="doc-text">
+            <h3 class="doc-title">Documentação Completa</h3>
+            <p class="doc-description">
               Para informações detalhadas sobre cada Caminho, suas habilidades, regras completas do sistema, bestiário, 
               mecânicas avançadas e todo o conteúdo técnico, consulte a documentação completa no Notion:
             </p>
-            <div class="system-link-box">
-              <a href="https://www.notion.so/An-tema-prof-tico-29921ffb951280608f9cd40392390abf?source=copy_link" 
-                 target="_blank" 
-                 rel="noopener noreferrer" 
-                 class="system-link">
-                <span class="system-link-icon">◊</span>
-                <span class="system-link-text">Acessar Documentação Completa</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="system-block monster-block" style="display: none;" id="monster-block">
-          <h3 class="system-block-title">👹 Ficha de Monstro</h3>
-          <div class="system-block-content">
-            <p>
-              A ficha de monstro está disponível para uso em campanhas. Para acessá-la, clique no botão abaixo:
-            </p>
-            <div class="system-link-box">
-              <a href={getUrl('monstro/')} 
-                 class="system-link monster-link">
-                <span class="system-link-icon">👹</span>
-                <span class="system-link-text">Acessar Ficha de Monstro</span>
-              </a>
-            </div>
+            <a href="https://www.notion.so/An-tema-prof-tico-29921ffb951280608f9cd40392390abf?source=copy_link" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="doc-link">
+              <span class="doc-link-icon">◊</span>
+              <span class="doc-link-text">Acessar Documentação Completa</span>
+            </a>
           </div>
         </div>
       </div>
-    </section>
+
+      <!-- Monster Block (Hidden) -->
+      <div class="home-card monster-block" style="display: none;" id="monster-block">
+        <div class="card-icon">👹</div>
+        <h3 class="card-title">Ficha de Monstro</h3>
+        <p class="card-text">
+          A ficha de monstro está disponível para uso em campanhas.
+        </p>
+        <a href={getUrl('monstro/')} class="monster-link">
+          <span class="monster-link-icon">👹</span>
+          <span class="monster-link-text">Acessar Ficha de Monstro</span>
+        </a>
+      </div>
+    </div>
   </div>
 </Layout>
 
@@ -121,7 +112,7 @@ const getUrl = (path: string) => {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    max-width: 1000px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 2rem;
     gap: 2rem;
@@ -142,20 +133,30 @@ const getUrl = (path: string) => {
     font-weight: 400;
   }
 
-  .system-section {
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    padding: 3rem;
-    box-shadow: 
-      0 4px 20px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  /* Grid Layout 16:9 Ratio */
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 1.5rem;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    max-height: calc(100vh - 300px);
   }
 
-  .system-hero {
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 2px solid var(--color-border);
+  /* Hero Card - Full Width */
+  .hero-card {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.15), rgba(107, 60, 109, 0.1));
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 12px;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(139, 76, 141, 0.2);
   }
 
   .hero-quote {
@@ -167,9 +168,9 @@ const getUrl = (path: string) => {
 
   .quote-text {
     font-family: var(--font-heading);
-    font-size: 1.8rem;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
     color: var(--color-text-accent);
-    line-height: 1.6;
+    line-height: 1.4;
     font-style: italic;
     text-shadow: 
       0 0 20px rgba(139, 76, 141, 0.5),
@@ -181,265 +182,146 @@ const getUrl = (path: string) => {
     font-weight: 700;
   }
 
-  .system-content {
+  /* Home Cards */
+  .home-card {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-  }
-
-  .system-intro {
-    text-align: center;
-    padding: 2rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-  }
-
-  .system-intro-text {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-    color: var(--color-text-primary);
-    line-height: 1.8;
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .system-block {
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 2rem;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
   }
 
-  .system-block:hover {
-    border-color: var(--color-border-glow);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  }
-
-  .quote-block {
-    background: linear-gradient(135deg, rgba(139, 76, 141, 0.1), rgba(107, 60, 109, 0.1));
+  .home-card:hover {
     border-color: var(--color-accent-primary);
+    transform: translateY(-3px);
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.3),
+      0 0 25px rgba(139, 76, 141, 0.2);
   }
 
-  .impact-quote {
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .card-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--color-text-accent);
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  .card-text {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    margin: 0.5rem 0;
+    flex: 1;
+  }
+
+  .card-text strong {
+    color: var(--color-text-accent);
+    font-weight: 600;
+  }
+
+  /* Intro Card - 2 columns */
+  .intro-card {
+    grid-column: span 2;
+  }
+
+  /* Question Card - 2 columns */
+  .question-card {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.1), rgba(107, 60, 109, 0.05));
+    border-color: var(--color-accent-primary);
+    justify-content: center;
+  }
+
+  .question-quote {
     margin: 0;
     padding: 0;
     border: none;
     text-align: center;
   }
 
-  .impact-quote p {
+  .question-quote p {
     font-family: var(--font-heading);
-    font-size: 1.4rem;
+    font-size: clamp(1rem, 1.5vw, 1.3rem);
     color: var(--color-text-accent);
-    line-height: 1.6;
+    line-height: 1.5;
     font-style: italic;
-    text-shadow: 0 0 15px rgba(139, 76, 141, 0.4);
-  }
-
-  .mystery-text {
-    color: var(--color-text-secondary);
-    font-style: italic;
-    opacity: 0.8;
-  }
-
-  .warning-box,
-  .info-box {
-    display: flex;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-left: 4px solid var(--color-accent-primary);
-    border-radius: 8px;
-    margin: 1.5rem 0;
-  }
-
-  .warning-box {
-    border-left-color: #f44336;
-  }
-
-  .info-box {
-    border-left-color: #4caf50;
-  }
-
-  .warning-icon,
-  .info-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  .warning-content,
-  .info-content {
-    flex: 1;
-    font-family: var(--font-body);
-    color: var(--color-text-primary);
-    line-height: 1.7;
-  }
-
-  .system-divider {
-    text-align: center;
-    padding: 2rem 0;
-    position: relative;
-  }
-
-  .divider-symbol {
-    font-size: 2rem;
-    color: var(--color-accent-primary);
-    opacity: 0.6;
-    position: relative;
-    display: inline-block;
-  }
-
-  .divider-symbol::before,
-  .divider-symbol::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 100px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-accent-primary), transparent);
-  }
-
-  .divider-symbol::before {
-    right: 120%;
-  }
-
-  .divider-symbol::after {
-    left: 120%;
-  }
-
-  .system-block-title {
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    color: var(--color-text-accent);
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--color-border);
-  }
-
-  .system-block-content {
-    font-family: var(--font-body);
-    color: var(--color-text-primary);
-    line-height: 1.8;
-  }
-
-  .system-block-content p {
-    margin-bottom: 1.25rem;
-  }
-
-  .universe-quote {
-    margin: 1.5rem 0;
-    padding: 1.5rem;
-    background: var(--color-bg-primary);
-    border-left: 4px solid var(--color-accent-primary);
-    border-radius: 6px;
-    font-style: italic;
-  }
-
-  .universe-quote p {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    color: var(--color-text-accent);
-    margin: 0;
     text-shadow: 0 0 10px rgba(139, 76, 141, 0.3);
   }
 
-  .society-type {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
+  /* Warning Card */
+  .warning-card {
+    border-left: 4px solid #f44336;
   }
 
-  .society-type:last-child {
-    margin-bottom: 0;
+  /* Contribution Card */
+  .contribution-card {
+    border-left: 4px solid #4caf50;
   }
 
-  .society-title {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    color: var(--color-text-accent);
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .society-type p {
-    margin-bottom: 0.75rem;
-    line-height: 1.7;
-  }
-
-  .paths-preview {
-    margin-top: 2rem;
-    padding: 2rem;
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-  }
-
-  .paths-intro {
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    color: var(--color-text-accent);
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  .paths-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .paths-list li {
-    padding: 0.75rem 1rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    text-align: center;
-    font-family: var(--font-body);
-    color: var(--color-text-primary);
-    transition: all 0.3s ease;
-  }
-
-  .paths-list li:hover {
-    border-color: var(--color-accent-primary);
-    background: rgba(139, 76, 141, 0.1);
-    transform: translateY(-2px);
-  }
-
-  .paths-list li.mystery-text {
+  /* Documentation Card - Full Width */
+  .documentation-card {
     grid-column: 1 / -1;
-    font-style: italic;
-    opacity: 0.7;
-    border-style: dashed;
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.2), rgba(107, 60, 109, 0.15));
+    border: 2px solid var(--color-accent-primary);
+    padding: 2rem;
   }
 
-  .system-link-box {
-    margin-top: 2rem;
-    text-align: center;
+  .doc-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  .system-link {
+  .doc-icon {
+    font-size: 4rem;
+    flex-shrink: 0;
+  }
+
+  .doc-text {
+    flex: 1;
+  }
+
+  .doc-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--color-text-accent);
+    margin: 0 0 1rem 0;
+  }
+
+  .doc-description {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-primary);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .doc-link {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 1.25rem 2.5rem;
+    padding: 1rem 2rem;
     background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-glow));
     border: 2px solid var(--color-accent-primary);
     border-radius: 8px;
     color: var(--color-text-primary);
     text-decoration: none;
     font-family: var(--font-heading);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     transition: all 0.3s ease;
     text-transform: uppercase;
@@ -447,104 +329,62 @@ const getUrl = (path: string) => {
     box-shadow: 0 4px 15px rgba(139, 76, 141, 0.3);
   }
 
-  .system-link:hover {
+  .doc-link:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 25px rgba(139, 76, 141, 0.5);
     border-color: var(--color-accent-glow);
   }
 
-  .system-link-icon {
-    font-size: 1.5rem;
+  .doc-link-icon {
+    font-size: 1.3rem;
   }
 
-  .leveling-intro {
-    text-align: center;
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: rgba(139, 76, 141, 0.1);
-    border-radius: 8px;
-    border-left: 4px solid var(--color-accent-primary);
-  }
-
-  .leveling-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
-  }
-
-  .leveling-card {
-    background: var(--color-bg-primary);
-    border: 2px solid var(--color-border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  .leveling-card:hover {
-    border-color: var(--color-accent-primary);
-    transform: translateY(-5px);
-    box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.3),
-      0 0 25px rgba(139, 76, 141, 0.2);
-  }
-
-  .leveling-card-header {
-    background: linear-gradient(135deg, rgba(139, 76, 141, 0.2), rgba(107, 60, 109, 0.15));
-    padding: 1rem 1.5rem;
-    border-bottom: 2px solid var(--color-border);
-  }
-
-  .leveling-level-badge {
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-text-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .leveling-card-content {
-    padding: 1.5rem;
-  }
-
-  .leveling-bonus-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .leveling-bonus-list li {
-    padding: 0.75rem 1rem;
-    background: var(--color-bg-tertiary);
-    border-left: 3px solid var(--color-accent-primary);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    transition: all 0.2s ease;
-  }
-
-  .leveling-bonus-list li:hover {
-    background: rgba(139, 76, 141, 0.1);
-    transform: translateX(5px);
-  }
-
-  .leveling-note {
-    margin-top: 2rem;
-  }
-
+  /* Monster Block */
   .monster-block {
     background: linear-gradient(135deg, rgba(139, 76, 141, 0.15), rgba(107, 60, 109, 0.1));
     border: 2px dashed var(--color-accent-primary);
   }
 
   .monster-link {
-    background: linear-gradient(135deg, rgba(139, 76, 141, 0.3), rgba(107, 60, 109, 0.2));
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(139, 76, 141, 0.2);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 6px;
+    color: var(--color-text-accent);
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    align-self: center;
+  }
+
+  .monster-link:hover {
+    background: rgba(139, 76, 141, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(139, 76, 141, 0.3);
+  }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .home-grid {
+      grid-template-columns: repeat(2, 1fr);
+      aspect-ratio: auto;
+      max-height: none;
+    }
+
+    .hero-card,
+    .documentation-card {
+      grid-column: 1 / -1;
+    }
+
+    .intro-card,
+    .question-card {
+      grid-column: span 1;
+    }
   }
 
   @media (max-width: 768px) {
@@ -552,36 +392,30 @@ const getUrl = (path: string) => {
       padding: 1rem;
     }
 
-    .system-section {
-      padding: 1.5rem;
+    .home-grid {
+      grid-template-columns: 1fr;
+      aspect-ratio: auto;
+      max-height: none;
     }
 
-    .system-block {
-      padding: 1.5rem;
+    .hero-card,
+    .intro-card,
+    .question-card,
+    .documentation-card {
+      grid-column: 1;
+    }
+
+    .doc-content {
+      flex-direction: column;
+      text-align: center;
     }
 
     .quote-text {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
     }
 
-    .impact-quote p {
-      font-size: 1.2rem;
-    }
-
-    .system-block-title {
-      font-size: 1.5rem;
-    }
-
-    .paths-list {
-      grid-template-columns: 1fr;
-    }
-
-    .leveling-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .leveling-card {
-      margin-bottom: 1rem;
+    .question-quote p {
+      font-size: 1rem;
     }
   }
 </style>
