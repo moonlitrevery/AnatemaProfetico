@@ -477,35 +477,10 @@
         try {
           const data = getAllCharacterData();
           
-          // Sempre salvar localmente de forma independente
+          // Salvar localmente
           localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
           
-          // Verificar se o nome do personagem corresponde a alguma ficha salva no gerenciador
-          const charName = data.basicInfo?.characterName || '';
-          if (charName) {
-            const characters = JSON.parse(localStorage.getItem('anathema-characters') || '{}');
-            const matchingChar = Object.values(characters).find(char => 
-              char.data?.basicInfo?.characterName === charName
-            );
-            
-            if (matchingChar) {
-              // Sincronizar automaticamente com a ficha do gerenciador
-              characters[matchingChar.id].data = data;
-              characters[matchingChar.id].timestamp = Date.now();
-              localStorage.setItem('anathema-characters', JSON.stringify(characters));
-              
-              // Atualizar lista se o CharacterManager estiver disponível
-              if (window.renderCharactersList) {
-                window.renderCharactersList();
-              }
-              
-              showMessage(`Ficha salva localmente e sincronizada com "${matchingChar.name}"!`, 'success');
-            } else {
-              showMessage('Ficha salva localmente com sucesso!', 'success');
-            }
-          } else {
-            showMessage('Ficha salva localmente com sucesso!', 'success');
-          }
+          showMessage('Ficha salva localmente com sucesso!', 'success');
         } catch (error) {
           console.error(error);
           showMessage('Erro ao salvar a ficha.', 'error');
@@ -562,19 +537,6 @@
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
         if (confirm('Tem certeza que deseja limpar toda a ficha? Esta ação não pode ser desfeita.')) {
-          // Salvar ficha atual antes de limpar (se houver ID ativo)
-          const currentCharId = localStorage.getItem('anathema-current-character-id');
-          if (currentCharId && window.saveCurrentCharacter) {
-            try {
-              window.saveCurrentCharacter();
-            } catch (e) {
-              console.warn('Erro ao salvar antes de limpar:', e);
-            }
-          }
-          
-          // Limpar ID atual para que não sobrescreva a ficha anterior
-          localStorage.removeItem('anathema-current-character-id');
-          
           // Limpar todos os campos
           document.querySelectorAll('input, textarea').forEach((input) => {
             if (input) {
@@ -598,13 +560,8 @@
           if (weaponsList) weaponsList.innerHTML = '';
           if (itemsList) itemsList.innerHTML = '';
 
-          // Limpar também a chave única (compatibilidade)
+          // Limpar localStorage
           localStorage.removeItem('anatema-profetico-character');
-          
-          // Atualizar lista de fichas se disponível
-          if (window.renderCharactersList) {
-            window.renderCharactersList();
-          }
           
           showMessage('Ficha limpa com sucesso!', 'success');
           
@@ -670,29 +627,8 @@
           try {
             const data = getAllCharacterData();
             
-            // Sempre salvar localmente de forma independente
+            // Salvar localmente
             localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
-            
-            // Verificar se o nome do personagem corresponde a alguma ficha salva no gerenciador
-            const charName = data.basicInfo?.characterName || '';
-            if (charName) {
-              const characters = JSON.parse(localStorage.getItem('anathema-characters') || '{}');
-              const matchingChar = Object.values(characters).find(char => 
-                char.data?.basicInfo?.characterName === charName
-              );
-              
-              if (matchingChar) {
-                // Sincronizar automaticamente com a ficha do gerenciador
-                characters[matchingChar.id].data = data;
-                characters[matchingChar.id].timestamp = Date.now();
-                localStorage.setItem('anathema-characters', JSON.stringify(characters));
-                
-                // Atualizar lista se o CharacterManager estiver disponível
-                if (window.renderCharactersList) {
-                  window.renderCharactersList();
-                }
-              }
-            }
           } catch (error) {
             console.error('Erro no auto-save:', error);
           }

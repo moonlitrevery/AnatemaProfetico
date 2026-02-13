@@ -34,8 +34,11 @@ const getUrl = (path: string) => {
   </head>
   <body>
     <Navigation />
-    <div id="theme-toggle-container" class="theme-toggle-container">
-      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar tema">
+    <div class="top-controls">
+      <button id="open-quick-reference" class="quick-reference-btn" type="button" aria-label="Abrir referência rápida" title="Referência Rápida">
+        📚
+      </button>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar tema" title="Alternar tema">
         <span class="theme-icon" id="theme-icon">🌙</span>
       </button>
     </div>
@@ -194,14 +197,18 @@ const getUrl = (path: string) => {
     cursor: not-allowed;
   }
 
-  .theme-toggle-container {
+  .top-controls {
     position: fixed;
     top: 1.5rem;
     left: 1.5rem;
     z-index: 10000;
+    display: flex;
+    gap: 0.75rem;
+    flex-direction: column;
   }
 
-  .theme-toggle {
+  .theme-toggle,
+  .quick-reference-btn {
     width: 50px;
     height: 50px;
     background: var(--color-bg-secondary);
@@ -216,7 +223,8 @@ const getUrl = (path: string) => {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 
-  .theme-toggle:hover {
+  .theme-toggle:hover,
+  .quick-reference-btn:hover {
     border-color: var(--color-accent-primary);
     background: rgba(139, 76, 141, 0.1);
     box-shadow: 0 0 15px rgba(139, 76, 141, 0.3);

@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SaveLoad from '../components/SaveLoad.astro';
-import CharacterManager from '../components/CharacterManager.astro';
+import QuickReferencePopup from '../components/QuickReferencePopup.astro';
 import Logo from '../components/Logo.astro';
 import Header from '../components/Header.astro';
 import BasicInfo from '../components/BasicInfo.astro';
@@ -15,8 +15,8 @@ import LevelingSystem from '../components/LevelingSystem.astro';
 ---
 
 <Layout title="[AP] - Ficha de Personagem">
+  <QuickReferencePopup />
   <div class="container" data-page="personagem">
-    <CharacterManager />
     <SaveLoad />
     
     <Logo />

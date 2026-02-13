@@ -1,0 +1,444 @@
+---
+---
+
+<div id="quick-reference-popup" class="quick-reference-popup" style="display: none;">
+  <div class="quick-reference-overlay"></div>
+  <div class="quick-reference-content">
+    <div class="quick-reference-header">
+      <h2 class="quick-reference-title">📚 Referência Rápida</h2>
+      <button id="close-quick-reference" class="close-quick-reference" type="button" aria-label="Fechar">✕</button>
+    </div>
+    
+    <div class="quick-reference-body">
+      <div class="reference-grid">
+        <!-- Tabela de Dificuldades -->
+        <div class="reference-card">
+          <h3 class="reference-title">🎯 Tabela de Dificuldades (ND)</h3>
+          <div class="reference-content">
+            <table class="reference-table">
+              <thead>
+                <tr>
+                  <th>ND</th>
+                  <th>Dificuldade</th>
+                  <th>Exemplo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Fácil</td>
+                  <td>Porta aberta já</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Trivial</td>
+                  <td>Abrir uma porta destrancada</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Fácil</td>
+                  <td>Pular um buraco pequeno</td>
+                </tr>
+                <tr>
+                  <td>15</td>
+                  <td>Médio</td>
+                  <td>Escalar uma parede</td>
+                </tr>
+                <tr>
+                  <td>20</td>
+                  <td>Difícil</td>
+                  <td>Abordar uma fechadura complexa</td>
+                </tr>
+                <tr>
+                  <td>25</td>
+                  <td>Muito Difícil</td>
+                  <td>Convencer um guarda hostil</td>
+                </tr>
+                <tr>
+                  <td>30</td>
+                  <td>Quase Impossível</td>
+                  <td>Realizar uma ação sobre-humana</td>
+                </tr>
+                <tr>
+                  <td>35</td>
+                  <td>Extremamente Difícil</td>
+                  <td>Ações sobre-humanas avançadas</td>
+                </tr>
+                <tr>
+                  <td>40</td>
+                  <td>Quase Divino</td>
+                  <td>Proezas quase divinas</td>
+                </tr>
+                <tr>
+                  <td>45</td>
+                  <td>Divino</td>
+                  <td>Ações sobre-humanas máximas</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Ações de Combate -->
+        <div class="reference-card">
+          <h3 class="reference-title">⚔️ Ações de Combate</h3>
+          <div class="reference-content">
+            <div class="action-item">
+              <strong>Ataque:</strong> Rode 1d20 + modificador de perícia. Se igual ou maior que a DT do alvo, acerta.
+            </div>
+            <div class="action-item">
+              <strong>Esquiva:</strong> Rode 1d20 + Esquiva. Se igual ou maior que o ataque, evita o dano.
+            </div>
+            <div class="action-item">
+              <strong>Defender:</strong> Use sua Resistência a Dano Físico para reduzir dano recebido.
+            </div>
+            <div class="action-item">
+              <strong>Movimento:</strong> Você pode se mover até seu valor de Movimento em metros por turno.
+            </div>
+            <div class="action-item">
+              <strong>Ação Bônus:</strong> Algumas habilidades permitem ações bônus. Consulte sua ficha.
+            </div>
+          </div>
+        </div>
+
+        <!-- Condições -->
+        <div class="reference-card">
+          <h3 class="reference-title">⚡ Condições</h3>
+          <div class="reference-content">
+            <div class="condition-item">
+              <strong>Machucado:</strong> Vida &lt; 50% do máximo. Movimento reduzido pela metade.
+            </div>
+            <div class="condition-item">
+              <strong>Morrendo:</strong> Vida = 0. Movimento zerado. Faça testes de salvamento (3 sucessos ou 3 falhas).
+            </div>
+            <div class="condition-item">
+              <strong>Insano:</strong> Sanidade &lt; 50% do máximo. Pode afetar testes sociais e mentais.
+            </div>
+            <div class="condition-item">
+              <strong>Sobrecarga:</strong> Peso &gt; máximo. Movimento reduzido pela metade.
+            </div>
+          </div>
+        </div>
+
+        <!-- Cálculos Rápidos -->
+        <div class="reference-card">
+          <h3 class="reference-title">🧮 Cálculos Rápidos</h3>
+          <div class="reference-content">
+            <div class="calc-item">
+              <strong>Modificador de Atributo:</strong> (Valor - 10) ÷ 2 (arredondado para baixo)
+            </div>
+            <div class="calc-item">
+              <strong>Vida Máxima:</strong> 20 + (Compleição ou Brutalidade, o maior) + bônus de nível
+            </div>
+            <div class="calc-item">
+              <strong>Mana Máxima:</strong> 10 + Sobrenatural + bônus de nível
+            </div>
+            <div class="calc-item">
+              <strong>Sanidade Máxima:</strong> 20 + Mente + bônus de nível
+            </div>
+            <div class="calc-item">
+              <strong>Resistência:</strong> (Compleição + Brutalidade) ÷ 2 (arredondado para baixo)
+            </div>
+            <div class="calc-item">
+              <strong>Movimento:</strong> 6 + Destreza (em metros)
+            </div>
+            <div class="calc-item">
+              <strong>DT Projéteis:</strong> 10 + Destreza
+            </div>
+          </div>
+        </div>
+
+        <!-- Sequências -->
+        <div class="reference-card">
+          <h3 class="reference-title">🔮 Sequências</h3>
+          <div class="reference-content">
+            <div class="sequence-item">
+              <strong>9ª Sequência:</strong> Níveis 1-2
+            </div>
+            <div class="sequence-item">
+              <strong>8ª Sequência:</strong> Níveis 3-4
+            </div>
+            <div class="sequence-item">
+              <strong>7ª Sequência:</strong> Níveis 5-6
+            </div>
+            <div class="sequence-item">
+              <strong>6ª Sequência:</strong> Níveis 7-8
+            </div>
+            <div class="sequence-item">
+              <strong>5ª Sequência:</strong> Níveis 9-10
+            </div>
+            <div class="sequence-item">
+              <strong>4ª Sequência:</strong> Níveis 11-12
+            </div>
+            <div class="sequence-item">
+              <strong>3ª Sequência:</strong> Níveis 13-14
+            </div>
+            <div class="sequence-item">
+              <strong>2ª Sequência:</strong> Níveis 15-16
+            </div>
+            <div class="sequence-item">
+              <strong>1ª Sequência:</strong> Níveis 17-20
+            </div>
+          </div>
+        </div>
+
+        <!-- Treinamentos -->
+        <div class="reference-card">
+          <h3 class="reference-title">📖 Bônus de Treinamento</h3>
+          <div class="reference-content">
+            <div class="training-item">
+              <strong>Nenhum:</strong> +0
+            </div>
+            <div class="training-item">
+              <strong>Básico:</strong> +2
+            </div>
+            <div class="training-item">
+              <strong>Médio:</strong> +4
+            </div>
+            <div class="training-item">
+              <strong>Avançado:</strong> +6
+            </div>
+            <div class="training-item">
+              <strong>Mestre:</strong> +8
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('quick-reference-popup');
+    const overlay = popup?.querySelector('.quick-reference-overlay');
+    const closeBtn = document.getElementById('close-quick-reference');
+    const openBtn = document.getElementById('open-quick-reference');
+
+    function openPopup() {
+      if (popup) {
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closePopup() {
+      if (popup) {
+        popup.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (openBtn) {
+      openBtn.addEventListener('click', openPopup);
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closePopup);
+    }
+
+    if (overlay) {
+      overlay.addEventListener('click', closePopup);
+    }
+
+    // Fechar com ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && popup && popup.style.display === 'flex') {
+        closePopup();
+      }
+    });
+
+    // Exportar função para uso externo
+    window.openQuickReference = openPopup;
+    window.closeQuickReference = closePopup;
+  });
+</script>
+
+<style>
+  .quick-reference-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .quick-reference-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .quick-reference-content {
+    position: relative;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 16px;
+    max-width: 1200px;
+    max-height: 90vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(139, 76, 141, 0.3);
+    z-index: 1;
+  }
+
+  .quick-reference-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 2px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    border-radius: 14px 14px 0 0;
+  }
+
+  .quick-reference-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--color-text-accent);
+    margin: 0;
+  }
+
+  .close-quick-reference {
+    width: 40px;
+    height: 40px;
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .close-quick-reference:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.2);
+    transform: rotate(90deg);
+  }
+
+  .quick-reference-body {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .reference-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .reference-card {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .reference-card:hover {
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 4px 20px rgba(139, 76, 141, 0.2);
+  }
+
+  .reference-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--color-text-accent);
+    margin: 0 0 1rem 0;
+  }
+
+  .reference-content {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+    line-height: 1.8;
+  }
+
+  .reference-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+  }
+
+  .reference-table th,
+  .reference-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .reference-table th {
+    background: var(--color-bg-primary);
+    color: var(--color-text-accent);
+    font-weight: 600;
+    font-family: var(--font-heading);
+  }
+
+  .reference-table tr:hover {
+    background: rgba(139, 76, 141, 0.05);
+  }
+
+  .action-item,
+  .condition-item,
+  .calc-item,
+  .sequence-item,
+  .training-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: var(--color-bg-primary);
+    border-radius: 6px;
+    border-left: 3px solid var(--color-accent-primary);
+  }
+
+  .action-item strong,
+  .condition-item strong,
+  .calc-item strong,
+  .sequence-item strong,
+  .training-item strong {
+    color: var(--color-text-accent);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .quick-reference-popup {
+      padding: 1rem;
+    }
+
+    .quick-reference-content {
+      max-height: 95vh;
+    }
+
+    .quick-reference-header {
+      padding: 1rem 1.5rem;
+    }
+
+    .quick-reference-title {
+      font-size: 1.4rem;
+    }
+
+    .quick-reference-body {
+      padding: 1.5rem;
+    }
+
+    .reference-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+

@@ -21,11 +21,13 @@
 
 **Anátema Profético** é um sistema de RPG de terror/mistério ambientado no nosso mundo, com trilhas místicas inspiradas em narrativas como *Lord of Mysteries* e *Shadow Slave*. Este repositório concentra:
 
-- Ficha digital de personagem com salvamento local, exportação/importação em JSON e validações automáticas.
-- Página “Sistema” com resumo narrativo, sociedades secretas e caminhos.
-- Página “Definições” com cards explicativos para novos jogadores.
-- Ficha de monstro com o mesmo visual e campos editáveis da ficha principal.
-- Utilidades extras como rolagem de dados em cascata, aviso de atributos base e controle visual de habilidades.
+- Ficha digital de personagem com salvamento local, exportação/importação em JSON e auto-save.
+- Sistema de nivelamento dinâmico com avisos contextuais e popups informativos.
+- Página "Página Inicial" com resumo narrativo do sistema e informações essenciais.
+- Páginas "Criação de Ficha" e "Cálculos" com guias detalhados em formato de acordeão.
+- Referência rápida de regras acessível via popup (botão no topo da página).
+- Tema claro/escuro com persistência de preferência.
+- Utilidades extras como rolagem de dados com modificadores, aviso de atributos base e controle visual de habilidades.
 
 ### 🎯 Objetivo
 
@@ -33,12 +35,14 @@ Oferecer uma experiência de ficha online rápida (alvo de 1–1,5 s de navega
 
 ### ✨ Destaques
 
-- 🔁 **Salvamento Local Seguro**: tudo fica em `localStorage`, com import/export em JSON.
-- 🎲 **Dice Roller Contextual**: seleção de dados, rolagem em lote e notificações empilhadas.
-- ⚠️ **Alertas Inteligentes**: aviso automático para atributos base e status responsivos ao nível.
+- 🔁 **Salvamento Local Seguro**: tudo fica em `localStorage`, com import/export em JSON e auto-save a cada 2 segundos.
+- 📊 **Sistema de Nivelamento Dinâmico**: avisos contextuais nos setores relevantes quando você sobe de nível, com popups informativos.
+- 🎲 **Dice Roller Avançado**: seleção de dados, modificadores customizáveis, rolagem em lote e notificações empilhadas.
+- ⚠️ **Alertas Inteligentes**: aviso automático para atributos base e status responsivos ao nível (Machucado, Morrendo, Insano).
 - 🧩 **Seções Modulares**: habilidades, equipamentos, perícias e notas com o mesmo padrão visual.
-- 🧠 **Lore Integrado**: páginas “Sistema” e “Definições” com narrativa em blocos temáticos.
-- 🐉 **Ficha de Monstro**: template completo inspirado em D&D, adaptado ao tom do cenário.
+- 📚 **Referência Rápida**: popup acessível via botão no topo da página com todas as regras essenciais (NDs 1-45, ações de combate, condições, etc.).
+- 🌓 **Tema Claro/Escuro**: alternância entre temas com persistência de preferência.
+- 🧠 **Lore Integrado**: páginas "Página Inicial", "Criação de Ficha" e "Cálculos" com narrativa e guias detalhados.
 - ⚡ **Performance Otimizada**: uso de `requestAnimationFrame`, debounce e delegação de eventos.
 
 ---
@@ -109,9 +113,12 @@ Acesse `http://localhost:4321`.
 
 ## 💾 Salvamento Local
 
-- Botão **Salvar localmente** → serializa a ficha completa e grava em `localStorage` (`anathemaCharacterData`).
-- **Exportar JSON** → baixa um arquivo com o estado atual.
+- **Auto-save**: a ficha é salva automaticamente a cada 2 segundos em `localStorage` (`anatema-profetico-character`).
+- Botão **Salvar localmente** → salva manualmente a ficha completa.
+- **Exportar JSON** → baixa um arquivo com o estado atual (recomendado para backup no Discord).
 - **Importar JSON** → reconstrói a ficha a partir de um arquivo válido.
+
+> **Nota**: O gerenciamento de múltiplas fichas foi removido. Recomenda-se usar o sistema de exportação/importação JSON para gerenciar múltiplas fichas via Discord ou armazenamento local.
 
 > Nenhum dado pessoal é enviado para servidores; tudo acontece no navegador do usuário.
 
