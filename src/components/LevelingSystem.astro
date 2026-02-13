@@ -262,16 +262,19 @@
     const currentLevel = parseInt(nivelInput.value) || 0;
     const lastLevel = parseInt(nivelInput.dataset.lastLevel || '0');
 
-    // Verificar se pode mudar de nível (só pode mudar 1 nível por vez)
-    if (currentLevel !== lastLevel && lastLevel !== 0) {
-      const levelDiff = Math.abs(currentLevel - lastLevel);
+    // Verificar se pode mudar de nível
+    // Permitir voltar para níveis menores sem restrição
+    // Apenas proibir pular níveis maiores (não pode ir de 1 para 3, mas pode ir de 3 para 1)
+    if (currentLevel > lastLevel && lastLevel !== 0) {
+      const levelDiff = currentLevel - lastLevel;
       if (levelDiff > 1) {
-        // Não permitir pular níveis - reverter para o último nível válido
+        // Não permitir pular níveis maiores - reverter para o último nível válido
         nivelInput.value = String(lastLevel);
-        alert(`Você só pode alterar o nível para um nível adjacente (${lastLevel - 1} ou ${lastLevel + 1}). Para criar a ficha nível a nível, altere o nível gradualmente.`);
+        alert(`Você só pode subir para o próximo nível adjacente (${lastLevel + 1}). Para criar a ficha nível a nível, altere o nível gradualmente.`);
         return;
       }
     }
+    // Se currentLevel <= lastLevel, permitir (pode voltar para níveis menores)
 
     if (currentLevel !== lastLevel && currentLevel > 0) {
       nivelInput.dataset.lastLevel = String(currentLevel);

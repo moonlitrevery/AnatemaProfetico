@@ -222,6 +222,9 @@
           <button class="action-btn-small load-btn" data-id="${char.id}" title="Carregar">
             📂
           </button>
+          <button class="action-btn-small overwrite-btn" data-id="${char.id}" title="Sobrescrever">
+            💾
+          </button>
           <button class="action-btn-small rename-btn" data-id="${char.id}" title="Renomear">
             ✏️
           </button>
@@ -240,6 +243,13 @@
       });
     });
 
+    listContainer.querySelectorAll('.overwrite-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        overwriteCharacter(id);
+      });
+    });
+
     listContainer.querySelectorAll('.rename-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = btn.dataset.id;
@@ -253,6 +263,38 @@
         deleteCharacter(id);
       });
     });
+  }
+  
+  function overwriteCharacter(id) {
+    if (!confirm('Tem certeza que deseja sobrescrever esta ficha com os dados atuais da ficha?')) {
+      return;
+    }
+    
+    const characters = getAllCharacters();
+    const character = characters[id];
+    
+    if (!character) {
+      alert('Ficha não encontrada!');
+      return;
+    }
+    
+    // Obter dados atuais da ficha
+    const currentData = getCharacterData();
+    
+    // Sobrescrever dados
+    characters[id].data = currentData;
+    characters[id].timestamp = Date.now();
+    
+    // Atualizar nome se o nome do personagem mudou
+    const charName = currentData.basicInfo?.characterName || 'Ficha sem nome';
+    if (charName && charName !== characters[id].name) {
+      characters[id].name = charName;
+    }
+    
+    saveAllCharacters(characters);
+    renderCharactersList();
+    
+    alert(`Ficha "${character.name}" sobrescrita com sucesso!`);
   }
 
   function saveCurrentCharacter(name = null) {
