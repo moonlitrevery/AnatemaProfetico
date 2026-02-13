@@ -293,6 +293,95 @@ import Logo from '../components/Logo.astro';
             <p>O link da imagem fica visível abaixo da foto como uma forma de tooltip, permitindo fácil edição quando necessário.</p>
           </div>
         </div>
+
+        <div class="guide-section">
+          <h3 class="guide-section-title">Sistema de Nivelamento</h3>
+          <div class="guide-text">
+            <p>O sistema de nivelamento é totalmente automático e dinâmico. Quando você altera o nível do personagem, a ficha calcula automaticamente os bônus que você recebe e mostra avisos nos setores relevantes.</p>
+            
+            <h4>Como Funciona</h4>
+            <ol>
+              <li><strong>Altere o nível:</strong> Quando você muda o nível do personagem no campo "Nível" na seção de Informações do Personagem, o sistema detecta a mudança automaticamente.</li>
+              <li><strong>Popup de confirmação:</strong> Se você subiu de nível, aparecerá um popup mostrando todos os bônus que você ganhou.</li>
+              <li><strong>Avisos dinâmicos:</strong> Avisos aparecem automaticamente nos setores relevantes da ficha:
+                <ul>
+                  <li><strong>Atributos:</strong> Mostra quantos pontos você pode adicionar em atributos</li>
+                  <li><strong>Vida/Mana/Sanidade:</strong> Mostra os bônus que você ganhou (use os campos temporários ao lado dos títulos para adicionar)</li>
+                  <li><strong>Habilidades:</strong> Lembra que você pode escolher uma habilidade de sua sequência</li>
+                  <li><strong>Perícias:</strong> Mostra as opções de treinamento disponíveis</li>
+                </ul>
+              </li>
+              <li><strong>Aplicar bônus:</strong> Você pode aplicar os bônus diretamente nos campos correspondentes. Os avisos desaparecem quando você altera o nível novamente.</li>
+            </ol>
+
+            <h4>Bônus por Nível</h4>
+            <p>Todos os valores são <strong>arredondados para cima</strong>. Os bônus são calculados automaticamente baseados nos valores atuais dos seus atributos.</p>
+            
+            <div class="formula-box">
+              <strong>Exemplo:</strong> Se você tem Brutalidade 12 e Compleição 14, o sistema usa 14 (o maior) para calcular os bônus de vida.
+            </div>
+
+            <h4>Nível 1</h4>
+            <ul>
+              <li>Escolha de caminho e de uma habilidade desse caminho</li>
+              <li><strong>3 + MODMente</strong> de treinamentos básicos (MODMente = modificador de Mente)</li>
+            </ul>
+
+            <h4>Níveis 2-5</h4>
+            <ul>
+              <li>1 ponto em um atributo à sua escolha</li>
+              <li>+1/2 do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li>+1/2 do valor de Sobrenatural em Mana</li>
+              <li>+1/3 do valor de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> um treinamento básico em uma perícia</li>
+            </ul>
+
+            <h4>Níveis 6-9</h4>
+            <ul>
+              <li>1 ponto em um atributo à sua escolha</li>
+              <li>+1/2 do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li>+1/2 do valor de Sobrenatural em Mana</li>
+              <li>+1/3 do valor de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+            </ul>
+
+            <h4>Níveis 10-11</h4>
+            <ul>
+              <li>2 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+              <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li>+o valor completo de Sobrenatural em Mana</li>
+              <li>+1/2 do valor de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+            </ul>
+
+            <h4>Níveis 12-14</h4>
+            <ul>
+              <li>2 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+              <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li>+o valor completo de Sobrenatural em Mana</li>
+              <li>+1/2 do valor de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+            </ul>
+
+            <h4>Níveis 15-20</h4>
+            <ul>
+              <li>3 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+              <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li>+o valor completo de Sobrenatural em Mana</li>
+              <li>+1/2 do valor de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+            </ul>
+
+            <div class="info-box" style="margin-top: 1.5rem;">
+              <div class="info-icon">💡</div>
+              <div class="info-content">
+                <p><strong>Dica:</strong> Os avisos aparecem apenas quando você sobe de nível. Se você quiser ver os avisos novamente, 
+                altere o nível para um valor diferente e depois volte para o nível atual. Os bônus de Vida, Mana e Sanidade devem 
+                ser adicionados manualmente usando os campos temporários (os campos pequenos ao lado dos títulos "Vida", "Mana" e "Sanidade").</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>

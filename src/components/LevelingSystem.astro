@@ -1,0 +1,663 @@
+---
+---
+
+<script type="module">
+  // Função para calcular modificador de atributo
+  function getAttributeModifier(attributeValue) {
+    return Math.floor((attributeValue - 10) / 2);
+  }
+
+  // Função para obter valor de atributo
+  function getAttributeValue(attributeId) {
+    const input = document.getElementById(attributeId);
+    if (!input) return 0;
+    const v = parseInt(input.value, 10);
+    return Number.isNaN(v) ? 0 : v;
+  }
+
+  // Função para arredondar para cima
+  function ceil(value) {
+    return Math.ceil(value);
+  }
+
+  // Configuração de bônus por nível
+  function getLevelBonuses(level) {
+    const nivel = parseInt(level) || 0;
+    
+    if (nivel === 0) {
+      return null;
+    }
+
+    const brutalidade = getAttributeValue('brutalidade');
+    const compleicao = getAttributeValue('compleicao');
+    const sobrenatural = getAttributeValue('sobrenatural');
+    const mente = getAttributeValue('mente');
+    
+    const maiorFisico = Math.max(brutalidade, compleicao);
+    const modMente = getAttributeModifier(mente);
+
+    let bonuses = {
+      attributePoints: 0,
+      canSplitAttribute: false,
+      vida: 0,
+      mana: 0,
+      sanidade: 0,
+      habilidade: true,
+      treinamento: {
+        available: false,
+        options: []
+      }
+    };
+
+    if (nivel === 1) {
+      // Nivel 1 - Escolha de caminho e de uma habilidade desse caminho e 3 + MODMente de treinamentos básicos
+      bonuses.habilidade = true;
+      bonuses.treinamento.available = true;
+      bonuses.treinamento.options = ['basico'];
+      bonuses.treinamento.count = 3 + modMente;
+    } else if (nivel >= 2 && nivel <= 5) {
+      // Nivel 2-5 - 1 ponto em atributo + vida/mana/sanidade + habilidade ou treinamento básico
+      bonuses.attributePoints = 1;
+      bonuses.vida = ceil(maiorFisico / 2);
+      bonuses.mana = ceil(sobrenatural / 2);
+      bonuses.sanidade = ceil(mente / 3);
+      bonuses.treinamento.available = true;
+      bonuses.treinamento.options = ['basico'];
+    } else if (nivel >= 6 && nivel <= 9) {
+      // Nivel 6-9 - 1 ponto em atributo + vida/mana/sanidade + habilidade ou treinamento (Básico ou Mudar Basico → Médio)
+      bonuses.attributePoints = 1;
+      bonuses.vida = ceil(maiorFisico / 2);
+      bonuses.mana = ceil(sobrenatural / 2);
+      bonuses.sanidade = ceil(mente / 3);
+      bonuses.treinamento.available = true;
+      bonuses.treinamento.options = ['basico', 'basico-medio'];
+    } else if (nivel >= 10 && nivel <= 11) {
+      // Nivel 10-11 - 2 pontos em atributo (ou 1 em dois) + vida/mana/sanidade + habilidade ou treinamento
+      bonuses.attributePoints = 2;
+      bonuses.canSplitAttribute = true;
+      bonuses.vida = maiorFisico;
+      bonuses.mana = sobrenatural;
+      bonuses.sanidade = ceil(mente / 2);
+      bonuses.treinamento.available = true;
+      bonuses.treinamento.options = ['basico', 'basico-medio'];
+    } else if (nivel >= 12 && nivel <= 14) {
+      // Nivel 12-14 - 2 pontos em atributo (ou 1 em dois) + vida/mana/sanidade + habilidade ou treinamento (Básico, Basico → Médio ou Médio → Avançado)
+      bonuses.attributePoints = 2;
+      bonuses.canSplitAttribute = true;
+      bonuses.vida = maiorFisico;
+      bonuses.mana = sobrenatural;
+      bonuses.sanidade = ceil(mente / 2);
+      bonuses.treinamento.available = true;
+      bonuses.treinamento.options = ['basico', 'basico-medio', 'medio-avancado'];
+    } else if (nivel >= 15 && nivel <= 20) {
+      // Nivel 15-20 - 3 pontos em atributo (ou 1 em dois) + vida/mana/sanidade + habilidade ou treinamento
+      bonuses.attributePoints = 3;
+      bonuses.canSplitAttribute = true;
+      bonuses.vida = maiorFisico;
+      bonuses.mana = sobrenatural;
+      bonuses.sanidade = ceil(mente / 2);
+      bonuses.treinamento.available = true;
+      bonuses.treinamento.options = ['basico', 'basico-medio', 'medio-avancado'];
+    }
+
+    return bonuses;
+  }
+
+  // Função para mostrar avisos dinâmicos
+  function showLevelingWarnings(level, bonuses) {
+    if (!bonuses) return;
+
+    // Remover avisos anteriores
+    document.querySelectorAll('.leveling-warning').forEach(el => el.remove());
+
+    // Aviso em atributos
+    if (bonuses.attributePoints > 0) {
+      const attributesSection = document.querySelector('.attributes');
+      if (attributesSection) {
+        const warning = document.createElement('div');
+        warning.className = 'leveling-warning leveling-warning-attributes';
+        const pointsText = bonuses.canSplitAttribute 
+          ? `${bonuses.attributePoints} pontos (ou 1 em dois atributos diferentes)`
+          : `${bonuses.attributePoints} ponto${bonuses.attributePoints > 1 ? 's' : ''}`;
+        warning.innerHTML = `
+          <div class="leveling-warning-content">
+            <span class="leveling-warning-icon">⚡</span>
+            <span class="leveling-warning-text">
+              <strong>Nível ${level}:</strong> Você pode adicionar ${pointsText} em atributos!
+            </span>
+          </div>
+        `;
+        const grid = attributesSection.querySelector('.attributes-grid');
+        if (grid) {
+          grid.insertBefore(warning, grid.firstChild);
+        }
+      }
+    }
+
+    // Aviso em vida/mana/sanidade
+    if (bonuses.vida > 0 || bonuses.mana > 0 || bonuses.sanidade > 0) {
+      const headerSection = document.querySelector('.header-section');
+      if (headerSection) {
+        const warning = document.createElement('div');
+        warning.className = 'leveling-warning leveling-warning-stats';
+        const stats = [];
+        if (bonuses.vida > 0) stats.push(`+${bonuses.vida} Vida`);
+        if (bonuses.mana > 0) stats.push(`+${bonuses.mana} Mana`);
+        if (bonuses.sanidade > 0) stats.push(`+${bonuses.sanidade} Sanidade`);
+        warning.innerHTML = `
+          <div class="leveling-warning-content">
+            <span class="leveling-warning-icon">❤️</span>
+            <span class="leveling-warning-text">
+              <strong>Nível ${level}:</strong> Você ganhou ${stats.join(', ')}! Use os campos temporários ao lado dos títulos para adicionar.
+            </span>
+          </div>
+        `;
+        const grid = headerSection.querySelector('.header-grid');
+        if (grid) {
+          grid.insertBefore(warning, grid.firstChild);
+        }
+      }
+    }
+
+    // Aviso em habilidades
+    if (bonuses.habilidade) {
+      const abilitiesSection = document.querySelector('.abilities');
+      if (abilitiesSection) {
+        const warning = document.createElement('div');
+        warning.className = 'leveling-warning leveling-warning-abilities';
+        const sequenciaInput = document.getElementById('nivel-caminho');
+        const sequencia = sequenciaInput ? sequenciaInput.value : '';
+        const nivelNum = parseInt(level) || 0;
+        let habilidadeText = '';
+        if (nivelNum === 1) {
+          habilidadeText = 'Escolha de caminho e de uma habilidade desse caminho';
+        } else {
+          habilidadeText = `Uma habilidade de sua sequência equivalente ou superior (${sequencia || 'verifique sua sequência'})`;
+        }
+        warning.innerHTML = `
+          <div class="leveling-warning-content">
+            <span class="leveling-warning-icon">✨</span>
+            <span class="leveling-warning-text">
+              <strong>Nível ${level}:</strong> Você pode escolher ${habilidadeText}!
+            </span>
+          </div>
+        `;
+        const container = abilitiesSection.querySelector('.abilities-container');
+        if (container) {
+          container.insertBefore(warning, container.firstChild);
+        }
+      }
+    }
+
+    // Aviso em perícias
+    if (bonuses.treinamento.available) {
+      const skillsSection = document.querySelector('.skills');
+      if (skillsSection) {
+        const warning = document.createElement('div');
+        warning.className = 'leveling-warning leveling-warning-skills';
+        let trainingText = '';
+        if (level === 1) {
+          trainingText = `${bonuses.treinamento.count} treinamentos básicos`;
+        } else {
+          const options = [];
+          if (bonuses.treinamento.options.includes('basico')) options.push('Treinamento Básico');
+          if (bonuses.treinamento.options.includes('basico-medio')) options.push('Mudar uma de Básico → Médio');
+          if (bonuses.treinamento.options.includes('medio-avancado')) options.push('Mudar uma de Médio → Avançado');
+          trainingText = options.join(' ou ');
+        }
+        warning.innerHTML = `
+          <div class="leveling-warning-content">
+            <span class="leveling-warning-icon">📚</span>
+            <span class="leveling-warning-text">
+              <strong>Nível ${level}:</strong> Você pode escolher receber ${trainingText} em uma perícia de sua escolha!
+            </span>
+          </div>
+        `;
+        const container = skillsSection.querySelector('.skills-container');
+        if (container) {
+          container.insertBefore(warning, container.firstChild);
+        }
+      }
+    }
+  }
+
+  // Função para verificar se o nível mudou
+  function checkLevelChange() {
+    const nivelInput = document.getElementById('nivel');
+    if (!nivelInput) return;
+
+    const currentLevel = parseInt(nivelInput.value) || 0;
+    const lastLevel = parseInt(nivelInput.dataset.lastLevel || '0');
+
+    if (currentLevel !== lastLevel && currentLevel > 0) {
+      nivelInput.dataset.lastLevel = String(currentLevel);
+      const bonuses = getLevelBonuses(currentLevel);
+      showLevelingWarnings(currentLevel, bonuses);
+      
+      // Mostrar popup de confirmação se necessário
+      if (bonuses && (bonuses.attributePoints > 0 || bonuses.treinamento.available || bonuses.habilidade)) {
+        showLevelingPopup(currentLevel, bonuses);
+      }
+    } else if (currentLevel !== lastLevel) {
+      // Nível mudou mas não subiu - remover avisos
+      document.querySelectorAll('.leveling-warning').forEach(el => el.remove());
+      nivelInput.dataset.lastLevel = String(currentLevel);
+    }
+  }
+
+  // Função para mostrar popup de nivelamento
+  function showLevelingPopup(level, bonuses) {
+    // Remover popup anterior se existir
+    const existingPopup = document.getElementById('leveling-popup');
+    if (existingPopup) {
+      existingPopup.remove();
+    }
+
+    const popup = document.createElement('div');
+    popup.id = 'leveling-popup';
+    popup.className = 'leveling-popup';
+    
+    let content = `
+      <div class="leveling-popup-content">
+        <div class="leveling-popup-header">
+          <h3 class="leveling-popup-title">🎉 Parabéns! Você subiu para o Nível ${level}!</h3>
+          <button class="leveling-popup-close" type="button">✕</button>
+        </div>
+        <div class="leveling-popup-body">
+          <p class="leveling-popup-intro">Você ganhou os seguintes bônus:</p>
+          <ul class="leveling-popup-bonuses">
+    `;
+
+    if (bonuses.attributePoints > 0) {
+      const pointsText = bonuses.canSplitAttribute 
+        ? `${bonuses.attributePoints} pontos em um atributo (ou 1 em dois atributos diferentes)`
+        : `${bonuses.attributePoints} ponto${bonuses.attributePoints > 1 ? 's' : ''} em um atributo`;
+      content += `<li>➕ ${pointsText}</li>`;
+    }
+
+    if (bonuses.vida > 0 || bonuses.mana > 0 || bonuses.sanidade > 0) {
+      const stats = [];
+      if (bonuses.vida > 0) stats.push(`+${bonuses.vida} Vida`);
+      if (bonuses.mana > 0) stats.push(`+${bonuses.mana} Mana`);
+      if (bonuses.sanidade > 0) stats.push(`+${bonuses.sanidade} Sanidade`);
+      content += `<li>❤️ ${stats.join(', ')}</li>`;
+    }
+
+    if (bonuses.habilidade) {
+      if (level === 1) {
+        content += `<li>✨ Escolha de caminho e de uma habilidade desse caminho</li>`;
+      } else {
+        content += `<li>✨ Uma habilidade de sua sequência equivalente ou superior</li>`;
+      }
+    }
+
+    if (bonuses.treinamento.available) {
+      let trainingText = '';
+      if (level === 1) {
+        trainingText = `${bonuses.treinamento.count} treinamentos básicos`;
+      } else {
+        const options = [];
+        if (bonuses.treinamento.options.includes('basico')) options.push('Treinamento Básico');
+        if (bonuses.treinamento.options.includes('basico-medio')) options.push('Mudar uma de Básico → Médio');
+        if (bonuses.treinamento.options.includes('medio-avancado')) options.push('Mudar uma de Médio → Avançado');
+        trainingText = options.join(' ou ');
+      }
+      content += `<li>📚 ${trainingText} em uma perícia de sua escolha</li>`;
+    }
+
+    content += `
+          </ul>
+          <p class="leveling-popup-note">
+            <strong>Nota:</strong> Os avisos aparecerão nos setores relevantes da ficha. 
+            Você pode aplicar os bônus diretamente nos campos correspondentes.
+          </p>
+        </div>
+        <div class="leveling-popup-footer">
+          <button class="leveling-popup-ok" type="button">Entendi!</button>
+        </div>
+      </div>
+    `;
+
+    popup.innerHTML = content;
+    document.body.appendChild(popup);
+
+    // Fechar popup
+    const closeBtn = popup.querySelector('.leveling-popup-close');
+    const okBtn = popup.querySelector('.leveling-popup-ok');
+    
+    function closePopup() {
+      popup.classList.add('closing');
+      setTimeout(() => popup.remove(), 300);
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closePopup);
+    if (okBtn) okBtn.addEventListener('click', closePopup);
+    
+    // Fechar ao clicar fora
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) closePopup();
+    });
+  }
+
+  // Inicializar sistema de nivelamento
+  function initializeLevelingSystem() {
+    const nivelInput = document.getElementById('nivel');
+    if (!nivelInput) {
+      // Tentar novamente após um delay se o elemento ainda não existir
+      setTimeout(initializeLevelingSystem, 100);
+      return;
+    }
+
+    // Verificar nível inicial
+    checkLevelChange();
+
+    // Escutar mudanças no nível
+    nivelInput.addEventListener('change', checkLevelChange);
+    nivelInput.addEventListener('input', () => {
+      // Debounce para evitar muitas verificações
+      clearTimeout(nivelInput.levelingTimeout);
+      nivelInput.levelingTimeout = setTimeout(checkLevelChange, 300);
+    });
+
+    // Escutar mudanças em atributos para recalcular bônus
+    ['brutalidade', 'compleicao', 'sobrenatural', 'mente'].forEach(attrId => {
+      const attrInput = document.getElementById(attrId);
+      if (attrInput) {
+        attrInput.addEventListener('change', () => {
+          const level = parseInt(nivelInput.value) || 0;
+          if (level > 0) {
+            const bonuses = getLevelBonuses(level);
+            showLevelingWarnings(level, bonuses);
+          }
+        });
+      }
+    });
+  }
+
+  // Inicializar quando o DOM estiver pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeLevelingSystem);
+  } else {
+    initializeLevelingSystem();
+  }
+
+  // Expor funções globalmente para uso em outros componentes
+  window.getLevelBonuses = getLevelBonuses;
+  window.showLevelingWarnings = showLevelingWarnings;
+</script>
+
+<style is:global>
+  .leveling-warning {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.2), rgba(107, 60, 109, 0.15));
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    animation: levelingPulse 2s ease-in-out infinite;
+    box-shadow: 
+      0 4px 15px rgba(139, 76, 141, 0.3),
+      0 0 20px rgba(139, 76, 141, 0.2);
+  }
+
+  @keyframes levelingPulse {
+    0%, 100% {
+      box-shadow: 
+        0 4px 15px rgba(139, 76, 141, 0.3),
+        0 0 20px rgba(139, 76, 141, 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 4px 20px rgba(139, 76, 141, 0.5),
+        0 0 30px rgba(139, 76, 141, 0.4);
+    }
+  }
+
+  .leveling-warning-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .leveling-warning-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .leveling-warning-text {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .leveling-warning-text strong {
+    color: var(--color-text-accent);
+    font-weight: 600;
+  }
+
+  .leveling-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .leveling-popup.closing {
+    animation: fadeOut 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .leveling-popup-content {
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(139, 76, 141, 0.4);
+    animation: slideUp 0.3s ease;
+  }
+
+  .leveling-popup.closing .leveling-popup-content {
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+  }
+
+  .leveling-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .leveling-popup-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin: 0;
+    text-shadow: 0 0 10px rgba(139, 76, 141, 0.5);
+  }
+
+  .leveling-popup-close {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .leveling-popup-close:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.2);
+    color: var(--color-text-accent);
+  }
+
+  .leveling-popup-body {
+    padding: 2rem;
+  }
+
+  .leveling-popup-intro {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .leveling-popup-bonuses {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .leveling-popup-bonuses li {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-accent-primary);
+    border-radius: 6px;
+  }
+
+  .leveling-popup-note {
+    font-family: var(--font-body);
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(139, 76, 141, 0.1);
+    border-radius: 6px;
+  }
+
+  .leveling-popup-note strong {
+    color: var(--color-text-accent);
+  }
+
+  .leveling-popup-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: center;
+  }
+
+  .leveling-popup-ok {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-glow));
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .leveling-popup-ok:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 76, 141, 0.4);
+  }
+
+  .leveling-popup-ok:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .leveling-popup {
+      padding: 1rem;
+    }
+
+    .leveling-popup-content {
+      max-width: 100%;
+    }
+
+    .leveling-popup-header {
+      padding: 1rem 1.5rem;
+    }
+
+    .leveling-popup-title {
+      font-size: 1.2rem;
+    }
+
+    .leveling-popup-body {
+      padding: 1.5rem;
+    }
+
+    .leveling-warning {
+      padding: 0.75rem 1rem;
+    }
+
+    .leveling-warning-text {
+      font-size: 0.85rem;
+    }
+  }
+</style>
+

@@ -249,6 +249,81 @@ import Logo from '../components/Logo.astro';
           <span class="divider-symbol">◊</span>
         </div>
 
+        <div class="system-block leveling-block">
+          <h3 class="system-block-title">Sistema de Nivelamento</h3>
+          <div class="system-block-content">
+            <p>
+              Conforme o personagem ganha experiência e sobe de nível, ele recebe bônus automáticos que são calculados 
+              dinamicamente pela ficha. O sistema mostra avisos nos setores relevantes quando você sobe de nível, 
+              indicando exatamente o que você pode adicionar.
+            </p>
+            
+            <h4>Nível 1</h4>
+            <ul>
+              <li>Escolha de caminho e de uma habilidade desse caminho</li>
+              <li><strong>3 + MODMente</strong> de treinamentos básicos</li>
+            </ul>
+
+            <h4>Níveis 2-5</h4>
+            <ul>
+              <li><strong>1 ponto</strong> em um atributo à sua escolha</li>
+              <li><strong>+1/2 do valor</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li><strong>+1/2 do valor</strong> de Sobrenatural em Mana</li>
+              <li><strong>+1/3 do valor</strong> de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> pode escolher receber um treinamento (Treinamento Básico) em uma perícia de sua escolha</li>
+            </ul>
+
+            <h4>Níveis 6-9</h4>
+            <ul>
+              <li><strong>1 ponto</strong> em um atributo à sua escolha</li>
+              <li><strong>+1/2 do valor</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li><strong>+1/2 do valor</strong> de Sobrenatural em Mana</li>
+              <li><strong>+1/3 do valor</strong> de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> pode escolher receber um treinamento (Treinamento Básico ou Mudar uma de Básico → Médio) em uma perícia de sua escolha</li>
+            </ul>
+
+            <h4>Níveis 10-11</h4>
+            <ul>
+              <li><strong>2 pontos</strong> em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+              <li><strong>+o valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li><strong>+o valor completo</strong> de Sobrenatural em Mana</li>
+              <li><strong>+1/2 do valor</strong> de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> pode escolher receber um treinamento (Treinamento Básico ou Mudar uma de Básico → Médio) em uma perícia de sua escolha</li>
+            </ul>
+
+            <h4>Níveis 12-14</h4>
+            <ul>
+              <li><strong>2 pontos</strong> em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+              <li><strong>+o valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li><strong>+o valor completo</strong> de Sobrenatural em Mana</li>
+              <li><strong>+1/2 do valor</strong> de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> pode escolher receber um treinamento (Treinamento Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia de sua escolha</li>
+            </ul>
+
+            <h4>Níveis 15-20</h4>
+            <ul>
+              <li><strong>3 pontos</strong> em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+              <li><strong>+o valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+              <li><strong>+o valor completo</strong> de Sobrenatural em Mana</li>
+              <li><strong>+1/2 do valor</strong> de Mente em Sanidade</li>
+              <li>Uma habilidade de sua sequência equivalente ou superior, <strong>ou</strong> pode escolher receber um treinamento (Treinamento Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia de sua escolha</li>
+            </ul>
+
+            <div class="info-box">
+              <div class="info-icon">💡</div>
+              <div class="info-content">
+                <p><strong>Nota:</strong> Todos os valores são arredondados para cima. Quando você sobe de nível, 
+                a ficha mostra automaticamente avisos nos setores relevantes (Atributos, Vida/Mana/Sanidade, Habilidades e Perícias) 
+                indicando exatamente o que você pode adicionar. Você também receberá um popup de confirmação com todos os bônus ganhos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="system-divider">
+          <span class="divider-symbol">◊</span>
+        </div>
+
         <div class="system-block documentation-block">
           <h3 class="system-block-title">Documentação Completa</h3>
           <div class="system-block-content">
