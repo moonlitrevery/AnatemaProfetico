@@ -169,16 +169,18 @@
         const sequencia = sequenciaInput ? sequenciaInput.value : '';
         const nivelNum = parseInt(level) || 0;
         let habilidadeText = '';
+        let escolhaText = '';
         if (nivelNum === 1) {
           habilidadeText = 'Escolha de caminho e de uma habilidade desse caminho';
         } else {
           habilidadeText = `Uma habilidade de sua sequência equivalente ou superior (${sequencia || 'verifique sua sequência'})`;
+          escolhaText = 'Você pode escolher ENTRE ';
         }
         warning.innerHTML = `
           <div class="leveling-warning-content">
             <span class="leveling-warning-icon">✨</span>
             <span class="leveling-warning-text">
-              <strong>Nível ${level}:</strong> Você pode escolher ${habilidadeText}!
+              <strong>Nível ${level}:</strong> ${escolhaText}${habilidadeText}${nivelNum >= 2 ? ' OU um treinamento' : ''}!
             </span>
           </div>
         `;
@@ -197,19 +199,21 @@
         warning.className = 'leveling-warning leveling-warning-skills';
         let trainingText = '';
         if (level === 1) {
-          trainingText = `${bonuses.treinamento.count} treinamentos básicos`;
+          trainingText = `${bonuses.treinamento.count} treinamentos básicos em perícias de sua escolha`;
         } else {
           const options = [];
           if (bonuses.treinamento.options.includes('basico')) options.push('Treinamento Básico');
           if (bonuses.treinamento.options.includes('basico-medio')) options.push('Mudar uma de Básico → Médio');
           if (bonuses.treinamento.options.includes('medio-avancado')) options.push('Mudar uma de Médio → Avançado');
-          trainingText = options.join(' ou ');
+          trainingText = `${options.join(' ou ')} em uma perícia de sua escolha`;
         }
+        const nivelNum = parseInt(level) || 0;
+        const escolhaText = nivelNum >= 2 ? 'Você pode escolher ENTRE uma habilidade de sua sequência OU' : '';
         warning.innerHTML = `
           <div class="leveling-warning-content">
             <span class="leveling-warning-icon">📚</span>
             <span class="leveling-warning-text">
-              <strong>Nível ${level}:</strong> Você pode escolher receber ${trainingText} em uma perícia de sua escolha!
+              <strong>Nível ${level}:</strong> ${escolhaText} ${escolhaText ? 'receber ' : 'Você pode escolher receber '}${trainingText}!
             </span>
           </div>
         `;
@@ -228,6 +232,17 @@
 
     const currentLevel = parseInt(nivelInput.value) || 0;
     const lastLevel = parseInt(nivelInput.dataset.lastLevel || '0');
+
+    // Verificar se pode mudar de nível (só pode mudar 1 nível por vez)
+    if (currentLevel !== lastLevel && lastLevel !== 0) {
+      const levelDiff = Math.abs(currentLevel - lastLevel);
+      if (levelDiff > 1) {
+        // Não permitir pular níveis - reverter para o último nível válido
+        nivelInput.value = String(lastLevel);
+        alert(`Você só pode alterar o nível para um nível adjacente (${lastLevel - 1} ou ${lastLevel + 1}). Para criar a ficha nível a nível, altere o nível gradualmente.`);
+        return;
+      }
+    }
 
     if (currentLevel !== lastLevel && currentLevel > 0) {
       nivelInput.dataset.lastLevel = String(currentLevel);
@@ -294,15 +309,19 @@
     if (bonuses.treinamento.available) {
       let trainingText = '';
       if (level === 1) {
-        trainingText = `${bonuses.treinamento.count} treinamentos básicos`;
+        trainingText = `${bonuses.treinamento.count} treinamentos básicos em perícias de sua escolha`;
       } else {
         const options = [];
         if (bonuses.treinamento.options.includes('basico')) options.push('Treinamento Básico');
         if (bonuses.treinamento.options.includes('basico-medio')) options.push('Mudar uma de Básico → Médio');
         if (bonuses.treinamento.options.includes('medio-avancado')) options.push('Mudar uma de Médio → Avançado');
-        trainingText = options.join(' ou ');
+        trainingText = `${options.join(' ou ')} em uma perícia de sua escolha`;
       }
-      content += `<li>📚 ${trainingText} em uma perícia de sua escolha</li>`;
+      if (level === 1) {
+        content += `<li>📚 ${trainingText}</li>`;
+      } else {
+        content += `<li>📚 <strong>OU</strong> ${trainingText}</li>`;
+      }
     }
 
     content += `
@@ -348,16 +367,15 @@
       return;
     }
 
+    // Inicializar lastLevel com o valor atual
+    const currentLevel = parseInt(nivelInput.value) || 0;
+    nivelInput.dataset.lastLevel = String(currentLevel);
+
     // Verificar nível inicial
     checkLevelChange();
 
-    // Escutar mudanças no nível
+    // Escutar mudanças no nível (select usa change, não input)
     nivelInput.addEventListener('change', checkLevelChange);
-    nivelInput.addEventListener('input', () => {
-      // Debounce para evitar muitas verificações
-      clearTimeout(nivelInput.levelingTimeout);
-      nivelInput.levelingTimeout = setTimeout(checkLevelChange, 300);
-    });
 
     // Escutar mudanças em atributos para recalcular bônus
     ['brutalidade', 'compleicao', 'sobrenatural', 'mente'].forEach(attrId => {

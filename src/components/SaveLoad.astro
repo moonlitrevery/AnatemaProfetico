@@ -198,16 +198,32 @@
     }
 
     if (data.header) {
-      const caminhoInput = document.getElementById('caminho');
+      const caminhoSelect = document.getElementById('caminho');
       const sequenciaInput = document.getElementById('nivel-caminho');
-      const nivelInput = document.getElementById('nivel');
+      const nivelSelect = document.getElementById('nivel');
       const prestigioSelect = document.getElementById('prestigio');
 
-      if (caminhoInput) caminhoInput.value = data.header.caminho || '';
+      if (caminhoSelect) {
+        // Compatibilidade: se o valor não estiver na lista, tentar encontrar o mais próximo
+        const caminhoValue = data.header.caminho || '';
+        if (caminhoValue) {
+          // Verificar se o valor existe nas opções
+          const optionExists = Array.from(caminhoSelect.options).some(opt => opt.value === caminhoValue);
+          if (optionExists) {
+            caminhoSelect.value = caminhoValue;
+          } else {
+            // Se não existir, tentar adicionar como opção temporária ou usar o primeiro disponível
+            caminhoSelect.value = caminhoValue;
+          }
+        }
+      }
       if (sequenciaInput) sequenciaInput.value = data.header.sequencia || data.header.nivelCaminho || '';
-      if (nivelInput) {
-        nivelInput.value = data.header.nivel || '0';
-        nivelInput.dispatchEvent(new Event('change', { bubbles: true }));
+      if (nivelSelect) {
+        const nivelValue = data.header.nivel || '0';
+        nivelSelect.value = nivelValue;
+        // Inicializar lastLevel para nivelamento progressivo
+        nivelSelect.dataset.lastLevel = nivelValue;
+        nivelSelect.dispatchEvent(new Event('change', { bubbles: true }));
       }
       if (prestigioSelect) prestigioSelect.value = data.header.prestigio || 'muito-baixo';
 
@@ -424,6 +440,13 @@
     setTimeout(() => {
       if (window.updateHeaderValues) window.updateHeaderValues();
       if (window.updateInlineStatus) window.updateInlineStatus();
+      
+      // Inicializar lastLevel para nivelamento progressivo após carregar dados
+      const nivelSelect = document.getElementById('nivel');
+      if (nivelSelect) {
+        const currentLevel = parseInt(nivelSelect.value) || 0;
+        nivelSelect.dataset.lastLevel = String(currentLevel);
+      }
     }, 300);
   }
 

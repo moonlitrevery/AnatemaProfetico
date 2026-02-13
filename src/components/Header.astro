@@ -42,7 +42,25 @@
     </div>
     <div class="header-item">
       <label for="caminho">Caminho</label>
-      <input type="text" id="caminho" name="caminho" placeholder="Caminho" class="header-input" disabled />
+      <select id="caminho" name="caminho" class="header-select" disabled>
+        <option value="">--</option>
+        <option value="Caminho do Enforcado">🔗 Caminho do Enforcado</option>
+        <option value="Caminho da Escuridão">🌑 Caminho da Escuridão</option>
+        <option value="Caminho da Morte">💀 Caminho da Morte</option>
+        <option value="Caminho do Gigante do Crepúsculo">🌆 Caminho do Gigante do Crepúsculo</option>
+        <option value="Caminho da Daemonia">👹 Caminho da Daemonia</option>
+        <option value="Caminho do Sacerdote Carmesim">⛪ Caminho do Sacerdote Carmesim</option>
+        <option value="Caminho do Eremita">🧘 Caminho do Eremita</option>
+        <option value="Caminho do Exemplar">⭐ Caminho do Exemplar</option>
+        <option value="Caminho da Roda da Fortuna">🎡 Caminho da Roda da Fortuna</option>
+        <option value="Caminho do Tolo">🃏 Caminho do Tolo</option>
+        <option value="Caminho da Anomalia">🌀 Caminho da Anomalia</option>
+        <option value="Caminho da Porta">🚪 Caminho da Porta</option>
+        <option value="Caminho do Visionário">👁️ Caminho do Visionário</option>
+        <option value="Caminho do Sol">☀️ Caminho do Sol</option>
+        <option value="Caminho do Tirano">👑 Caminho do Tirano</option>
+        <option value="Caminho da Torre Pálida">🗼 Caminho da Torre Pálida</option>
+      </select>
     </div>
     <div class="header-item">
       <label for="nivel-caminho">Sequência</label>
@@ -50,7 +68,29 @@
     </div>
     <div class="header-item">
       <label for="nivel">Nível</label>
-      <input type="number" id="nivel" name="nivel" placeholder="0" min="0" class="header-input" />
+      <select id="nivel" name="nivel" class="header-select">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+      </select>
     </div>
     <div class="header-item">
       <label for="prestigio">Prestígio em Sociedades Secretas</label>
@@ -474,13 +514,13 @@
         sequenciaInput.value = sequenciaText;
         
         // Habilitar/desabilitar Caminho baseado no nível
-        const caminhoInput = document.getElementById('caminho');
-        if (caminhoInput) {
+        const caminhoSelect = document.getElementById('caminho');
+        if (caminhoSelect) {
           if (nivel >= 1) {
-            caminhoInput.disabled = false;
+            caminhoSelect.disabled = false;
           } else {
-            caminhoInput.disabled = true;
-            caminhoInput.value = '';
+            caminhoSelect.disabled = true;
+            caminhoSelect.value = '';
           }
         }
         
@@ -503,17 +543,17 @@
 
   // Função para reduzir sanidade quando Caminho for preenchido
   function handleCaminhoChange() {
-    const caminhoInput = document.getElementById('caminho');
+    const caminhoSelect = document.getElementById('caminho');
     const sanidadeMaxInput = document.getElementById('sanidade-max');
     const sanidadeCurrentInput = document.getElementById('sanidade-current');
     
-    if (!caminhoInput || !sanidadeMaxInput) return;
+    if (!caminhoSelect || !sanidadeMaxInput) return;
     
     // Verificar se Caminho foi preenchido pela primeira vez
-    const caminhoValue = caminhoInput.value.trim();
-    const wasEmpty = caminhoInput.dataset.wasEmpty === 'true';
+    const caminhoValue = caminhoSelect.value.trim();
+    const wasEmpty = caminhoSelect.dataset.wasEmpty === 'true';
     
-    if (caminhoValue && wasEmpty && caminhoInput.dataset.sanidadeReduced !== 'true') {
+    if (caminhoValue && wasEmpty && caminhoSelect.dataset.sanidadeReduced !== 'true') {
       // Reduzir 10% da sanidade máxima, arredondando para cima
       const ms = parseInt(sanidadeMaxInput.value, 10);
       const maxSanidade = Number.isNaN(ms) ? 0 : ms;
@@ -533,7 +573,7 @@
         }
         
         // Marcar que já foi reduzido
-        caminhoInput.dataset.sanidadeReduced = 'true';
+        caminhoSelect.dataset.sanidadeReduced = 'true';
         
         // Atualizar status
         if (window.updateStatus) {
@@ -543,7 +583,7 @@
     }
     
     // Atualizar flag
-    caminhoInput.dataset.wasEmpty = caminhoValue ? 'false' : 'true';
+    caminhoSelect.dataset.wasEmpty = caminhoValue ? 'false' : 'true';
   }
 
   // Escutar mudanças nos atributos usando event delegation única e global
@@ -623,7 +663,7 @@
           updateHeaderValues();
         } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp') {
           updateHeaderValues(true);
-        } else if (id === 'nivel') {
+        } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
         }
       }, { passive: true, capture: true });
@@ -637,18 +677,17 @@
           updateHeaderValues();
         } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp') {
           updateHeaderValues(true);
-        } else if (id === 'nivel') {
+        } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
         }
       }, { passive: true, capture: true });
     }
 
     // Escutar mudanças no Caminho para reduzir sanidade
-    const caminhoInput = document.getElementById('caminho');
-    if (caminhoInput) {
-      caminhoInput.dataset.wasEmpty = caminhoInput.value.trim() ? 'false' : 'true';
-      caminhoInput.addEventListener('input', handleCaminhoChange);
-      caminhoInput.addEventListener('change', handleCaminhoChange);
+    const caminhoSelect = document.getElementById('caminho');
+    if (caminhoSelect) {
+      caminhoSelect.dataset.wasEmpty = caminhoSelect.value.trim() ? 'false' : 'true';
+      caminhoSelect.addEventListener('change', handleCaminhoChange);
     }
 
     // Escutar mudanças de status
