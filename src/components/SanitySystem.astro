@@ -15,6 +15,7 @@
         <div class="sanity-insanidades-header">
           <span class="sanity-col-label">Tipo</span>
           <span class="sanity-col-label">Descrição</span>
+          <span></span>
         </div>
         <div id="sanity-insanidades-container" class="sanity-list-container">
           <!-- Insanidades serão adicionadas aqui -->
@@ -250,98 +251,133 @@
 
   .sanity-insanidades-header {
     display: grid;
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: 140px 1fr 40px;
     gap: 0.75rem;
-    padding: 0.5rem 0;
+    padding: 0.5rem 0.75rem;
     margin-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    align-items: center;
   }
 
   .sanity-col-label {
     font-family: var(--font-accent);
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
+    font-size: 0.7rem;
+    color: var(--color-text-accent);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 600;
+    opacity: 0.8;
   }
 
   .sanity-list-container {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     min-height: 60px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+  }
+
+  .sanity-list-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .sanity-list-container::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+    border-radius: 3px;
+  }
+
+  .sanity-list-container::-webkit-scrollbar-thumb {
+    background: var(--color-accent-primary);
+    border-radius: 3px;
   }
 
   .sanity-row {
     display: grid;
-    grid-template-columns: 140px 1fr auto;
+    grid-template-columns: 140px 1fr 40px;
     gap: 0.75rem;
     align-items: start;
-    padding: 0.75rem;
+    padding: 0.5rem 0.75rem;
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .sanity-row:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 76, 141, 0.2);
   }
 
   .sanity-trauma-row {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 40px;
   }
 
   .sanity-type-select {
+    width: 100%;
     background: var(--color-bg-primary);
     border: 1px solid var(--color-border);
-    border-radius: 6px;
-    padding: 0.5rem;
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
     color: var(--color-text-primary);
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
+    transition: all 0.3s ease;
   }
 
   .sanity-type-select:focus {
     outline: none;
     border-color: var(--color-accent-primary);
+    box-shadow: 0 0 5px rgba(139, 76, 141, 0.3);
   }
 
   .sanity-desc-field {
     width: 100%;
     background: var(--color-bg-primary);
     border: 1px solid var(--color-border);
-    border-radius: 6px;
-    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
     color: var(--color-text-primary);
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     resize: vertical;
-    min-height: 44px;
+    min-height: 40px;
+    transition: all 0.3s ease;
   }
 
   .sanity-desc-field:focus {
     outline: none;
     border-color: var(--color-accent-primary);
+    box-shadow: 0 0 5px rgba(139, 76, 141, 0.3);
   }
 
   .sanity-remove-btn {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
     border: 1px solid var(--color-border);
-    background: var(--color-bg-primary);
+    background: var(--color-bg-secondary);
     color: var(--color-text-secondary);
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
+    flex-shrink: 0;
   }
 
   .sanity-remove-btn:hover {
-    border-color: #8b4c4c;
-    background: rgba(139, 76, 76, 0.2);
-    color: #ff9999;
+    background: #8b1a1a;
+    border-color: #cc2a2a;
+    color: var(--color-text-primary);
+    transform: scale(1.1);
   }
 
   .sanity-add-btn {
@@ -349,17 +385,20 @@
     padding: 0.75rem;
     background: var(--color-bg-tertiary);
     border: 2px dashed var(--color-border);
-    border-radius: 8px;
+    border-radius: 6px;
     color: var(--color-text-secondary);
-    font-family: var(--font-body);
-    font-size: 0.95rem;
+    font-family: var(--font-accent);
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .sanity-add-btn:hover {
     border-color: var(--color-accent-primary);
     color: var(--color-text-accent);
     background: rgba(139, 76, 141, 0.1);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
   }
 </style>

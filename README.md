@@ -38,12 +38,17 @@ Oferecer uma experiência de ficha online rápida (alvo de 1–1,5 s de navega
 - 🔁 **Salvamento Local Seguro**: tudo fica em `localStorage`, com import/export em JSON e auto-save a cada 2 segundos.
 - 📊 **Sistema de Nivelamento Dinâmico**: avisos contextuais nos setores relevantes quando você sobe de nível, com popups informativos.
 - 🎲 **Dice Roller Avançado**: seleção de dados, modificadores customizáveis, rolagem em lote e notificações empilhadas.
-- ⚠️ **Alertas Inteligentes**: aviso automático para atributos base e status responsivos ao nível (Machucado, Morrendo, Insano).
-- 🧩 **Seções Modulares**: habilidades, equipamentos, perícias e notas com o mesmo padrão visual.
+- ⚠️ **Alertas Inteligentes**: aviso automático para atributos base e status responsivos ao nível (Machucado, Morrendo).
+- 🧩 **Layout em Abas**: Perícias, Equipamentos, Habilidades e Anotações em abas (inspirado em D&D Beyond e CRIS Ordem Paranormal).
 - 📚 **Referência Rápida**: popup acessível via botão no topo da página com todas as regras essenciais (NDs 1-45, ações de combate, condições, etc.).
 - 🌓 **Tema Claro/Escuro**: alternância entre temas com persistência de preferência.
 - 🧠 **Lore Integrado**: páginas "Página Inicial", "Criação de Ficha" e "Cálculos" com narrativa e guias detalhados.
 - ⚡ **Performance Otimizada**: uso de `requestAnimationFrame`, debounce e delegação de eventos.
+- 🛡️ **Modo Combate**: página dedicada para mestres com ordem de iniciativa, anotações por personagem/monstro, passar/voltar turno e export/import JSON.
+- ❤️ **Calculadoras de Dano e Cura**: aplicação rápida de dano ou cura em Vida, Mana e Sanidade com feedback visual (toast vermelho/verde).
+- 🧠 **Sistema de Sanidade**: popup para insanidades (temporária/definitiva) e traumas, com persistência no JSON da ficha.
+- 📈 **Barras de Progresso**: indicadores visuais para Vida, Mana e Sanidade.
+- ⌨️ **Atalhos de Teclado**: Enter para rolar atributos/perícias, Esc para fechar popups.
 
 ---
 
@@ -103,11 +108,13 @@ Acesse `http://localhost:4321`.
 
 ### Principais componentes
 
-- `Header.astro`: informações gerais, status, valores dinâmicos.
+- `Header.astro`: informações gerais, status, valores dinâmicos, calculadoras de dano/cura, botões de descanso, barras de progresso.
 - `Attributes.astro`: atributos + aviso para rolagens base.
-- `Abilities.astro`, `Equipment.astro`, `Notes.astro`: blocos editáveis com título padrão.
+- `Skills.astro`, `Equipment.astro`, `Abilities.astro`, `Notes.astro`: blocos editáveis organizados em abas na ficha principal.
+- `SanitySystem.astro`: popup para insanidades e traumas (estilo equipamento/habilidades).
 - `DiceRoller.astro`: seletor de dados, popups e lógica de rolagem.
-- `SaveLoad.astro`: coleta de dados, salvamento no `localStorage`, export/import.
+- `SaveLoad.astro`: coleta de dados, salvamento no `localStorage`, export/import, indicador "Salvo há X min".
+- `Toast.astro`: notificações visuais (dano, cura, descanso, sucesso).
 
 ---
 
@@ -188,11 +195,18 @@ O site estará disponível em:
 
 ## 🛣️ Roadmap
 
+- [x] Layout em abas (Perícias, Equipamentos, Habilidades, Anotações).
+- [x] Modo Combate com ordem de iniciativa e anotações.
+- [x] Calculadoras de dano e cura com feedback visual.
+- [x] Sistema de sanidade (insanidades e traumas).
+- [x] Barras de progresso para Vida, Mana e Sanidade.
+- [x] Atalhos de teclado (Enter, Esc).
+- [x] Indicador "Salvo há X min".
+- [x] Deploy automatizado via GitHub Actions.
 - [ ] Tabela automática de nivelamento (atributos + treinamentos por nível 1–20).
 - [ ] Histórico de rolagens persistente.
 - [ ] Temas alternativos (alto contraste / visão noturna).
 - [ ] Internacionalização (pt-BR → en-US).
-- [x] Deploy automatizado via GitHub Actions.
 
 Sugestões? Abra uma issue!
 

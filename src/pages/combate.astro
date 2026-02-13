@@ -38,7 +38,13 @@ const getUrl = (path: string) => {
       </div>
 
       <div class="combat-list-section">
-        <h3 class="combate-subtitle">Ordem de Iniciativa</h3>
+        <div class="combat-list-header-row">
+          <h3 class="combate-subtitle">Ordem de Iniciativa</h3>
+          <div class="combat-turn-controls" id="combat-turn-controls">
+            <button type="button" id="prev-turn-btn" class="turn-btn prev-turn-btn" aria-label="Voltar turno" title="Voltar turno">◀ Voltar</button>
+            <button type="button" id="next-turn-btn" class="turn-btn next-turn-btn" aria-label="Passar turno" title="Passar turno">Passar ▶</button>
+          </div>
+        </div>
         <div id="combat-list" class="combat-list">
           <!-- Entradas serão adicionadas aqui -->
         </div>
@@ -61,6 +67,7 @@ const getUrl = (path: string) => {
   let combatEntries = [];
   let selectedEntryId = null;
   let combatStarted = false;
+  let currentTurnIndex = 0;
 
   function loadFromStorage() {
     try {
@@ -69,13 +76,16 @@ const getUrl = (path: string) => {
         const data = JSON.parse(saved);
         combatEntries = data.entries || [];
         combatStarted = data.combatStarted || false;
+        currentTurnIndex = Math.min(data.currentTurnIndex ?? 0, Math.max(0, (data.entries?.length || 1) - 1));
       } else {
         combatEntries = [];
         combatStarted = false;
+        currentTurnIndex = 0;
       }
     } catch (e) {
       combatEntries = [];
       combatStarted = false;
+      currentTurnIndex = 0;
     }
   }
 
@@ -83,6 +93,7 @@ const getUrl = (path: string) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       entries: combatEntries,
       combatStarted,
+      currentTurnIndex,
     }));
   }
 
@@ -105,10 +116,11 @@ const getUrl = (path: string) => {
     if (emptyMsg) emptyMsg.style.display = 'none';
 
     const sorted = [...combatEntries].sort((a, b) => (b.initiative || 0) - (a.initiative || 0));
+    if (currentTurnIndex >= sorted.length && sorted.length > 0) currentTurnIndex = 0;
     sorted.forEach((entry, index) => {
       const item = document.createElement('div');
       const isClickable = combatStarted;
-      const isCurrentTurn = combatStarted && index === 0;
+      const isCurrentTurn = combatStarted && index === currentTurnIndex;
       item.className = `combat-list-item ${selectedEntryId === entry.id ? 'selected' : ''} ${isCurrentTurn ? 'current-turn' : ''} ${isClickable ? 'clickable' : ''}`;
       item.dataset.id = entry.id;
       item.setAttribute('role', isClickable ? 'button' : 'listitem');
@@ -133,6 +145,11 @@ const getUrl = (path: string) => {
     });
   }
 
+  function updateTurnControls() {
+    const controls = document.getElementById('combat-turn-controls');
+    if (controls) controls.style.display = combatStarted && combatEntries.length > 0 ? 'flex' : 'none';
+  }
+
   function updateStartButton() {
     const btn = document.getElementById('start-combat-btn');
     if (btn) {
@@ -144,6 +161,7 @@ const getUrl = (path: string) => {
   document.addEventListener('DOMContentLoaded', () => {
     loadFromStorage();
     updateStartButton();
+    updateTurnControls();
     renderList();
 
     document.getElementById('add-initiative-btn')?.addEventListener('click', () => {
@@ -161,6 +179,7 @@ const getUrl = (path: string) => {
       if (nameInput) nameInput.value = '';
       if (initInput) initInput.value = '';
       saveToStorage();
+      updateTurnControls();
       renderList();
     });
 
@@ -172,6 +191,7 @@ const getUrl = (path: string) => {
       }
       saveToStorage();
       updateStartButton();
+      updateTurnControls();
       renderList();
     });
 
@@ -180,14 +200,31 @@ const getUrl = (path: string) => {
       combatEntries = [];
       combatStarted = false;
       selectedEntryId = null;
+      currentTurnIndex = 0;
       document.getElementById('combat-detail-panel').style.display = 'none';
       saveToStorage();
       updateStartButton();
+      updateTurnControls();
+      renderList();
+    });
+
+    document.getElementById('prev-turn-btn')?.addEventListener('click', () => {
+      if (!combatStarted || combatEntries.length === 0) return;
+      currentTurnIndex = (currentTurnIndex - 1 + combatEntries.length) % combatEntries.length;
+      saveToStorage();
+      updateTurnControls();
+      renderList();
+    });
+    document.getElementById('next-turn-btn')?.addEventListener('click', () => {
+      if (!combatStarted || combatEntries.length === 0) return;
+      currentTurnIndex = (currentTurnIndex + 1) % combatEntries.length;
+      saveToStorage();
+      updateTurnControls();
       renderList();
     });
 
     document.getElementById('export-combat-btn')?.addEventListener('click', () => {
-      const json = JSON.stringify({ entries: combatEntries, combatStarted }, null, 2);
+      const json = JSON.stringify({ entries: combatEntries, combatStarted, currentTurnIndex }, null, 2);
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -205,10 +242,12 @@ const getUrl = (path: string) => {
       reader.onload = (ev) => {
         try {
           const data = JSON.parse(ev.target?.result);
-          combatEntries = data.entries || [];
-          combatStarted = data.combatStarted || false;
-          saveToStorage();
+        combatEntries = data.entries || [];
+        combatStarted = data.combatStarted || false;
+        currentTurnIndex = Math.min(data.currentTurnIndex ?? 0, Math.max(0, (data.entries?.length || 1) - 1));
+        saveToStorage();
           updateStartButton();
+          updateTurnControls();
           renderList();
           if (typeof window.showToast === 'function') window.showToast('Combate importado', 'success');
         } catch (err) {
@@ -407,6 +446,39 @@ const getUrl = (path: string) => {
     padding: 1.5rem;
   }
 
+  .combat-list-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .combat-turn-controls {
+    display: none;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .turn-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.2);
+    color: var(--color-text-accent);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .turn-btn:hover {
+    background: rgba(139, 76, 141, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(139, 76, 141, 0.3);
+  }
+
   .combat-list {
     display: flex;
     flex-direction: column;
@@ -460,25 +532,26 @@ const getUrl = (path: string) => {
   .combat-list-item.current-turn {
     border-left-color: #4caf50;
     font-weight: 600;
-    box-shadow: 0 2px 15px rgba(76, 175, 80, 0.3);
-    background: linear-gradient(90deg, rgba(76, 175, 80, 0.12) 0%, var(--color-bg-primary) 15%);
+    box-shadow: 0 2px 20px rgba(76, 175, 80, 0.4);
+    background: linear-gradient(90deg, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0.08) 30%, var(--color-bg-primary) 60%);
+    border-color: rgba(76, 175, 80, 0.5);
   }
 
   .combat-list-item.current-turn .combat-item-name {
-    color: var(--color-accent-primary);
+    color: #7dccb5;
     font-weight: 700;
   }
 
   .combat-turn-indicator {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #4caf50;
-    margin-right: 0.25rem;
-    animation: pulse-turn 2s ease-in-out infinite;
+    margin-right: 0.35rem;
+    animation: combat-pulse-turn 1.5s ease-in-out infinite;
   }
 
-  @keyframes pulse-turn {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+  @keyframes combat-pulse-turn {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
   }
 
   .combat-item-order {

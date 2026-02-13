@@ -152,6 +152,19 @@
         </div>
         <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn-inline" aria-label="Aplicar dano aos valores">Aplicar</button>
       </div>
+      <label class="damage-calc-label heal-label">Aplicar Cura</label>
+      <div class="damage-calc-inline-grid heal-grid">
+        <div class="damage-calc-inline-item">
+          <input type="number" id="cura-vida" class="heal-input-inline" placeholder="Vida" min="0" aria-label="Cura em Vida" title="Valor de cura a adicionar à Vida" />
+        </div>
+        <div class="damage-calc-inline-item">
+          <input type="number" id="cura-mana" class="heal-input-inline" placeholder="Mana" min="0" aria-label="Cura em Mana" title="Valor de cura a adicionar à Mana" />
+        </div>
+        <div class="damage-calc-inline-item">
+          <input type="number" id="cura-sanidade" class="heal-input-inline" placeholder="San" min="0" aria-label="Cura em Sanidade" title="Valor de cura a adicionar à Sanidade" />
+        </div>
+        <button type="button" id="aplicar-cura-btn" class="aplicar-cura-btn-inline" aria-label="Aplicar cura aos valores">Aplicar</button>
+      </div>
     </div>
   </div>
 
@@ -818,7 +831,41 @@
       if (danoSanidadeEl) danoSanidadeEl.value = '';
       if (typeof window.updateInlineStatus === 'function') window.updateInlineStatus();
       if (typeof updateHeaderValues === 'function') updateHeaderValues(true);
-      if (typeof window.showToast === 'function') window.showToast('Dano aplicado', 'success');
+      if (typeof window.showToast === 'function') window.showToast('Dano aplicado', 'damage');
+    });
+
+    document.getElementById('aplicar-cura-btn')?.addEventListener('click', () => {
+      const curaVida = parseInt(document.getElementById('cura-vida')?.value || '0', 10) || 0;
+      const curaMana = parseInt(document.getElementById('cura-mana')?.value || '0', 10) || 0;
+      const curaSanidade = parseInt(document.getElementById('cura-sanidade')?.value || '0', 10) || 0;
+      const vidaCur = document.getElementById('vida-current');
+      const manaCur = document.getElementById('mana-current');
+      const sanidadeCur = document.getElementById('sanidade-current');
+      const vidaMax = parseInt(document.getElementById('vida-max')?.value || '0', 10);
+      const manaMax = parseInt(document.getElementById('mana-max')?.value || '0', 10);
+      const sanidadeMax = parseInt(document.getElementById('sanidade-max')?.value || '0', 10);
+      if (vidaCur && curaVida > 0) {
+        const v = parseInt(vidaCur.value, 10) || 0;
+        vidaCur.value = String(Math.min(vidaMax, v + curaVida));
+      }
+      if (manaCur && curaMana > 0) {
+        const m = parseInt(manaCur.value, 10) || 0;
+        manaCur.value = String(Math.min(manaMax, m + curaMana));
+      }
+      if (sanidadeCur && curaSanidade > 0) {
+        const s = parseInt(sanidadeCur.value, 10) || 0;
+        sanidadeCur.value = String(Math.min(sanidadeMax, s + curaSanidade));
+      }
+      const curaVidaEl = document.getElementById('cura-vida');
+      const curaManaEl = document.getElementById('cura-mana');
+      const curaSanidadeEl = document.getElementById('cura-sanidade');
+      if (curaVidaEl) curaVidaEl.value = '';
+      if (curaManaEl) curaManaEl.value = '';
+      if (curaSanidadeEl) curaSanidadeEl.value = '';
+      if (typeof window.updateInlineStatus === 'function') window.updateInlineStatus();
+      if (typeof updateHeaderValues === 'function') updateHeaderValues(true);
+      if (typeof window.updateProgressBars === 'function') window.updateProgressBars();
+      if (typeof window.showToast === 'function') window.showToast('Cura aplicada', 'healing');
     });
 
     // Escutar mudanças no Caminho para reduzir sanidade
@@ -1231,6 +1278,46 @@
     background: linear-gradient(135deg, rgba(139, 76, 76, 0.4), rgba(139, 76, 76, 0.3));
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(139, 76, 76, 0.3);
+  }
+
+  .heal-label { margin-top: 0.75rem; }
+  .heal-grid { margin-top: 0.25rem; }
+  .heal-input-inline {
+    width: 55px;
+    padding: 0.4rem 0.3rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    border-radius: 4px;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+  .heal-input-inline::-webkit-outer-spin-button,
+  .heal-input-inline::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .heal-input-inline:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+  }
+  .aplicar-cura-btn-inline {
+    padding: 0.4rem 0.9rem;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(76, 175, 80, 0.2));
+    border: 1px solid rgba(76, 175, 80, 0.6);
+    border-radius: 6px;
+    color: #a5d6a7;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-end;
+  }
+  .aplicar-cura-btn-inline:hover {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.4), rgba(76, 175, 80, 0.3));
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
   }
 
   .stat-progress-bar {
