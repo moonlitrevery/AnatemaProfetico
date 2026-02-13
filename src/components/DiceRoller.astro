@@ -23,6 +23,10 @@
       <button class="dice-option-btn" data-dice="d100">d100</button>
     </div>
     <div id="selected-dice-display" class="selected-dice-display"></div>
+    <div class="bonus-input-group">
+      <label for="dice-bonus-input" class="bonus-label">Bônus:</label>
+      <input type="number" id="dice-bonus-input" class="bonus-input" value="0" min="-99" max="99" />
+    </div>
     <button id="roll-all-dice-btn" class="roll-all-dice-btn" type="button">Rodar Dados</button>
   </div>
 </div>
@@ -112,6 +116,7 @@
   const closeMenuBtn = document.getElementById('close-dice-menu');
   const selectedDiceDisplay = document.getElementById('selected-dice-display');
   const rollAllBtn = document.getElementById('roll-all-dice-btn');
+  const bonusInput = document.getElementById('dice-bonus-input');
 
   function rollDice(sides) {
     return Math.floor(Math.random() * sides) + 1;
@@ -211,17 +216,26 @@
         rollDetails.push(`${count}${diceType}: [${rolls.join(', ')}] = ${diceTotal}`);
       });
       
+      // Obter bônus do input
+      const bonus = bonusInput ? parseInt(bonusInput.value) || 0 : 0;
+      const finalTotal = total + bonus;
+      
       const combinedRoll = {
         result: total,
-        modifier: 0,
-        total: total,
+        modifier: bonus,
+        total: finalTotal,
         critical: false,
         fumble: false,
       };
       
-      createDicePopup(combinedRoll, `Total (${rollDetails.join(' + ')})`, 'Total');
+      const label = bonus !== 0 
+        ? `Total (${rollDetails.join(' + ')} + ${bonus > 0 ? '+' : ''}${bonus})`
+        : `Total (${rollDetails.join(' + ')})`;
+      
+      createDicePopup(combinedRoll, label, 'Total');
       
       selectedDice = [];
+      if (bonusInput) bonusInput.value = '0';
       updateSelectedDiceDisplay();
       closeDiceMenu();
     });
@@ -432,6 +446,48 @@
     font-family: var(--font-heading);
     font-size: 0.9rem;
     font-weight: 600;
+  }
+
+  .bonus-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .bonus-label {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .bonus-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .bonus-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.3);
+  }
+
+  .bonus-input:hover {
+    border-color: var(--color-border-glow);
   }
 
   .roll-all-dice-btn {

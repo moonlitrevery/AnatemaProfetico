@@ -34,6 +34,11 @@ const getUrl = (path: string) => {
   </head>
   <body>
     <Navigation />
+    <div id="theme-toggle-container" class="theme-toggle-container">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Alternar tema">
+        <span class="theme-icon" id="theme-icon">🌙</span>
+      </button>
+    </div>
     <slot />
   </body>
 </html>
@@ -54,6 +59,20 @@ const getUrl = (path: string) => {
     --font-heading: 'Cinzel', serif;
     --font-body: 'Inter', sans-serif;
     --font-accent: 'Playfair Display', serif;
+  }
+
+  [data-theme="light"] {
+    --color-bg-primary: #f5f5f5;
+    --color-bg-secondary: #ffffff;
+    --color-bg-tertiary: #e8e8e8;
+    --color-border: #d0d0d0;
+    --color-border-glow: #8b4c8d;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #4a4a4a;
+    --color-text-accent: #6b3c6d;
+    --color-accent-primary: #8b4c8d;
+    --color-accent-secondary: #6b3c6d;
+    --color-accent-glow: #ab6cad;
   }
 
   * {
@@ -174,5 +193,73 @@ const getUrl = (path: string) => {
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  .theme-toggle-container {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 10000;
+  }
+
+  .theme-toggle {
+    width: 50px;
+    height: 50px;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    box-shadow: 0 0 15px rgba(139, 76, 141, 0.3);
+    transform: scale(1.1);
+  }
+
+  .theme-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .theme-toggle:hover .theme-icon {
+    transform: rotate(15deg);
+  }
 </style>
+
+<script type="module">
+  // Sistema de tema claro/escuro
+  (function() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const html = document.documentElement;
+    
+    // Carregar tema salvo ou usar padrão (dark)
+    const savedTheme = localStorage.getItem('anathema-theme') || 'dark';
+    html.setAttribute('data-theme', savedTheme);
+    updateIcon(savedTheme);
+    
+    function updateIcon(theme) {
+      if (themeIcon) {
+        themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+    
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('anathema-theme', newTheme);
+        updateIcon(newTheme);
+      });
+    }
+  })();
+</script>
 

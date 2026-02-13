@@ -139,9 +139,15 @@ const getUrl = (path: string) => {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto auto auto;
     gap: 1.5rem;
-    aspect-ratio: 16 / 9;
     min-height: 0;
-    max-height: calc(100vh - 300px);
+    width: 100%;
+  }
+
+  @media (min-width: 1201px) {
+    .home-grid {
+      aspect-ratio: 16 / 9;
+      max-height: calc(100vh - 300px);
+    }
   }
 
   /* Hero Card - Full Width */
@@ -192,7 +198,10 @@ const getUrl = (path: string) => {
     flex-direction: column;
     transition: all 0.3s ease;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+    overflow: auto;
+    min-height: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .home-card:hover {
@@ -224,6 +233,9 @@ const getUrl = (path: string) => {
     line-height: 1.6;
     margin: 0.5rem 0;
     flex: 1;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
   }
 
   .card-text strong {
