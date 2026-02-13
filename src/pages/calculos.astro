@@ -1,0 +1,632 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title="[AP] - Cálculos">
+  <div class="container">
+    <Logo />
+    
+    <div class="logo-subtitle-custom">
+      <h2>Cálculos da Ficha</h2>
+    </div>
+
+    <section class="sheet-section">
+      <!-- Sumário -->
+      <div class="guide-summary">
+        <h3 class="summary-title">📋 Sumário</h3>
+        <div class="summary-list">
+          <button class="summary-item" data-section="atributos">
+            <span class="summary-icon">💪</span>
+            <span class="summary-text">Atributos e Modificadores</span>
+          </button>
+          <button class="summary-item" data-section="calculos-header">
+            <span class="summary-icon">🧮</span>
+            <span class="summary-text">Cálculos do Header</span>
+          </button>
+          <button class="summary-item" data-section="pericias">
+            <span class="summary-icon">🎯</span>
+            <span class="summary-text">Cálculos de Perícias</span>
+          </button>
+          <button class="summary-item" data-section="status-automaticos">
+            <span class="summary-icon">⚡</span>
+            <span class="summary-text">Status Automáticos</span>
+          </button>
+          <button class="summary-item" data-section="sistema-nivelamento">
+            <span class="summary-icon">⬆️</span>
+            <span class="summary-text">Sistema de Nivelamento</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="guide-content">
+        <div class="guide-section accordion-section" id="atributos">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">💪 Atributos e Modificadores</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Os atributos são as características fundamentais do personagem. Cada atributo varia de 0 a 30 e possui um modificador calculado pela fórmula:</p>
+              <div class="formula-box">
+                <strong>Modificador = (Valor do Atributo - 10) ÷ 2</strong> (arredondado para baixo)
+              </div>
+              <p><strong>Exemplo:</strong> Se um atributo tem valor 14, o modificador será: (14 - 10) ÷ 2 = 4 ÷ 2 = +2</p>
+              <p><strong>Exemplo:</strong> Se um atributo tem valor 8, o modificador será: (8 - 10) ÷ 2 = -2 ÷ 2 = -1</p>
+              
+              <h4>Atributos Principais</h4>
+              <ul>
+                <li><strong>Brutalidade (FOR):</strong> Representa a força física e capacidade de causar dano em combate corpo a corpo. Usado para perícias como Atletismo e Luta.</li>
+                <li><strong>Destreza (DEX):</strong> Representa agilidade, coordenação e reflexos. Usado para perícias como Acrobacia, Esquiva, Furtividade e Tiro.</li>
+                <li><strong>Compleição (CON):</strong> Representa resistência física e saúde. Usado para perícias como Escutar e afeta a resistência a dano.</li>
+                <li><strong>Mente (MEN):</strong> Representa inteligência, sabedoria e carisma. Usado para perícias sociais e mentais como Charme, Convencimento, Intimidação, Investigação, Percepção, Psicoanalisar e Refletir.</li>
+                <li><strong>Sobrenatural (POD):</strong> Representa conexão com forças místicas e capacidade de usar magia. Usado para perícias como Conjuração e Mitos.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="calculos-header">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🧮 Cálculos Automáticos do Header</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <h4>Vida Máxima</h4>
+              <div class="formula-box">
+                <strong>Vida Máxima = Brutalidade + Compleição + Bônus Temporário</strong>
+              </div>
+              <p>Representa os pontos de vida totais do personagem. O valor atual pode ser ajustado manualmente, mas não pode exceder o máximo. Você pode adicionar pontos temporários de vida usando o campo pequeno ao lado do título "Vida" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+              <p><strong>Exemplo:</strong> Se Brutalidade = 12, Compleição = 14 e Bônus Temporário = 5, então Vida Máxima = 12 + 14 + 5 = 31</p>
+
+              <h4>Mana Máxima</h4>
+              <div class="formula-box">
+                <strong>Mana Máxima = Sobrenatural × 2 + Bônus Temporário</strong>
+              </div>
+              <p>Representa os pontos de mana totais, usados para lançar feitiços e usar habilidades mágicas. Você pode adicionar pontos temporários de mana usando o campo pequeno ao lado do título "Mana" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+              <p><strong>Exemplo:</strong> Se Sobrenatural = 15 e Bônus Temporário = 3, então Mana Máxima = 15 × 2 + 3 = 30 + 3 = 33</p>
+
+              <h4>Sanidade Máxima</h4>
+              <div class="formula-box">
+                <strong>Sanidade Máxima = Mente × 2 + Bônus Temporário</strong>
+              </div>
+              <p>Representa a saúde mental do personagem, afetada por encontros com o sobrenatural e eventos traumáticos. Você pode adicionar pontos temporários de sanidade usando o campo pequeno ao lado do título "Sanidade" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+              <p><strong>Importante:</strong> Quando você preencher o campo "Caminho" pela primeira vez, sua sanidade máxima será reduzida em 10% (arredondado para cima). Esta redução acontece apenas uma vez.</p>
+              <p><strong>Exemplo:</strong> Se Mente = 13 e Bônus Temporário = 2, então Sanidade Máxima = 13 × 2 + 2 = 26 + 2 = 28. Se depois você escolher um Caminho, a sanidade será reduzida em 10%: 28 × 0.1 = 2.8 → arredondado para cima = 3. Nova Sanidade Máxima = 28 - 3 = 25</p>
+
+              <h4>Resistência a Dano Físico</h4>
+              <div class="formula-box">
+                <strong>Resistência = Modificador de Compleição + (Modificador de Brutalidade ÷ 2)</strong>
+              </div>
+              <p>Reduz o dano físico recebido. O segundo termo é arredondado para baixo.</p>
+              <p><strong>Exemplo:</strong> Se Compleição = 14 (mod +2) e Brutalidade = 12 (mod +1), então Resistência = 2 + (1 ÷ 2) = 2 + 0 = 2</p>
+
+              <h4>Movimento</h4>
+              <div class="formula-box">
+                <strong>Movimento Base = Destreza ÷ 2</strong> (em metros, arredondado para baixo)
+              </div>
+              <p>Representa a distância que o personagem pode se mover em um turno. O movimento pode ser modificado por:</p>
+              <ul>
+                <li><strong>Movimentação Extra:</strong> Um campo permite adicionar movimento extra (usado para habilidades que aumentam movimento).</li>
+                <li><strong>Sobrecarga:</strong> Se o peso carregado exceder o máximo, o movimento é reduzido pela metade.</li>
+                <li><strong>Status Machucado:</strong> Se a vida atual for menor que 50% da máxima, o movimento é reduzido pela metade.</li>
+                <li><strong>Status Morrendo:</strong> Se a vida atual for igual a 0, o movimento é zerado.</li>
+              </ul>
+              <p>O movimento final é calculado aplicando todas as modificações na ordem: base, depois sobrecarga/machucado, depois morrendo, e por último extra.</p>
+              <p><strong>Exemplo:</strong> Se Destreza = 16, Movimento Base = 16 ÷ 2 = 8m. Se estiver machucado: 8 ÷ 2 = 4m. Se adicionar +2 de movimento extra: 4 + 2 = 6m</p>
+
+              <h4>DT para Projéteis (Receber)</h4>
+              <div class="formula-box">
+                <strong>DT = 8 + Modificador de Destreza</strong>
+              </div>
+              <p>Dificuldade de Teste para evitar ser atingido por projéteis. Quanto maior, mais difícil de ser acertado.</p>
+              <p><strong>Exemplo:</strong> Se Destreza = 14 (mod +2), então DT = 8 + 2 = 10</p>
+
+              <h4>Nível e Sequência</h4>
+              <p>O <strong>Nível</strong> do personagem começa em 0 e pode ser aumentado conforme o personagem ganha experiência. Quando o nível for maior ou igual a 1, o campo "Caminho" fica disponível para edição.</p>
+              <p>A <strong>Sequência</strong> é calculada automaticamente baseada no nível do personagem e exibida como "9ª sequência", "8ª sequência", etc.:</p>
+              <ul>
+                <li>Nível 1-2: 9ª sequência</li>
+                <li>Nível 3-4: 8ª sequência</li>
+                <li>Nível 5-6: 7ª sequência</li>
+                <li>Nível 7-8: 6ª sequência</li>
+                <li>Nível 9-10: 5ª sequência</li>
+                <li>Nível 11-12: 4ª sequência</li>
+                <li>Nível 13-14: 3ª sequência</li>
+                <li>Nível 15-16: 2ª sequência</li>
+                <li>Nível 17-20: 1ª sequência</li>
+              </ul>
+              <p><strong>Nota:</strong> Quando o nível for 0, o Prestígio em Sociedades Secretas fica desabilitado e mostra "--". Quando o nível for maior ou igual a 1, o Prestígio fica disponível para seleção.</p>
+
+              <h4>Prestígio em Sociedades Secretas</h4>
+              <p>O prestígio é selecionado através de um dropdown com as seguintes opções (indicadas por símbolos):</p>
+              <ul>
+                <li>◇ <strong>Muito baixo</strong></li>
+                <li>◇◇ <strong>Baixo</strong></li>
+                <li>◇◇◇ <strong>Médio</strong></li>
+                <li>◇◇◇◇ <strong>Alto</strong></li>
+                <li>◇◇◇◇◇ <strong>Muito alto</strong></li>
+                <li>◆ <strong>Supremo</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="pericias">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🎯 Cálculos de Perícias</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>As perícias representam habilidades específicas do personagem. O modificador de uma perícia é calculado da seguinte forma:</p>
+              <div class="formula-box">
+                <strong>Modificador de Perícia = (Modificador do Atributo Base ÷ 2) + Bônus de Treinamento + Valor Extra</strong>
+              </div>
+              <p>Onde:</p>
+              <ul>
+                <li><strong>Modificador do Atributo Base ÷ 2:</strong> O modificador do atributo escolhido é dividido por 2 e arredondado para baixo.</li>
+                <li><strong>Bônus de Treinamento:</strong> Depende do nível de treinamento escolhido:
+                  <ul>
+                    <li>Nenhum: +0</li>
+                    <li>Básico: +2</li>
+                    <li>Médio: +4</li>
+                    <li>Avançado: +6</li>
+                    <li>Expert: +8</li>
+                    <li>Aterrorizante: +10</li>
+                  </ul>
+                </li>
+                <li><strong>Valor Extra:</strong> Um bônus adicional de 0 a 20 que pode ser adicionado manualmente.</li>
+              </ul>
+              <p><strong>Exemplo:</strong> Se o atributo base é Destreza com valor 16 (mod +3), Treinamento Médio (+4) e Valor Extra de 2, então:</p>
+              <p>Modificador = (3 ÷ 2) + 4 + 2 = 1 + 4 + 2 = +7</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="status-automaticos">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">⚡ Status Automáticos</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Os status são ativados automaticamente conforme as condições do personagem. Eles aparecem discretamente no Header quando ativos e não podem ser marcados manualmente.</p>
+              
+              <h4>Machucado</h4>
+              <div class="formula-box">
+                <strong>Condição: Vida Atual < (Vida Máxima ÷ 2) E Vida Atual > 0</strong>
+              </div>
+              <p><strong>Efeito:</strong> O movimento do personagem é reduzido pela metade.</p>
+
+              <h4>Morrendo</h4>
+              <div class="formula-box">
+                <strong>Condição: Vida Atual = 0</strong>
+              </div>
+              <p><strong>Efeito:</strong> O movimento do personagem é zerado e aparecem os "Testes de Salvamento". O personagem precisa fazer testes de salvamento (3 sucessos para estabilizar, 3 falhas para morrer).</p>
+              <p>Os testes de salvamento aparecem automaticamente quando o status está ativo, com 3 checkboxes para sucessos (verde) e 3 para fracassos (vermelho).</p>
+
+              <h4>Insano</h4>
+              <div class="formula-box">
+                <strong>Condição: Sanidade Atual < (Sanidade Máxima ÷ 2)</strong>
+              </div>
+              <p><strong>Efeito:</strong> Indica que o personagem está com a sanidade mental comprometida.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="sistema-nivelamento">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">⬆️ Sistema de Nivelamento</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>O sistema de nivelamento calcula automaticamente os bônus baseados nos valores atuais dos atributos. Todos os valores são <strong>arredondados para cima</strong>.</p>
+              
+              <h4>Fórmulas de Bônus por Nível</h4>
+              
+              <h4>Nível 1</h4>
+              <ul>
+                <li>Escolha de caminho e de uma habilidade desse caminho</li>
+                <li><strong>Treinamentos Básicos = 3 + MODMente</strong> (MODMente = modificador de Mente)</li>
+              </ul>
+              <p><strong>Exemplo:</strong> Se Mente = 13 (mod +1), então Treinamentos = 3 + 1 = 4 treinamentos básicos</p>
+
+              <h4>Níveis 2-5</h4>
+              <ul>
+                <li>1 ponto em um atributo à sua escolha</li>
+                <li><strong>Vida = ⌈MAX(Brutalidade, Compleição) ÷ 2⌉</strong> (arredondado para cima)</li>
+                <li><strong>Mana = ⌈Sobrenatural ÷ 2⌉</strong> (arredondado para cima)</li>
+                <li><strong>Sanidade = ⌈Mente ÷ 3⌉</strong> (arredondado para cima)</li>
+                <li>Escolha ENTRE: Uma habilidade de sua sequência equivalente ou superior OU um treinamento básico em uma perícia</li>
+              </ul>
+              <p><strong>Exemplo:</strong> Se Brutalidade = 12, Compleição = 14, Sobrenatural = 15, Mente = 13:</p>
+              <p>Vida = ⌈14 ÷ 2⌉ = ⌈7⌉ = 7</p>
+              <p>Mana = ⌈15 ÷ 2⌉ = ⌈7.5⌉ = 8</p>
+              <p>Sanidade = ⌈13 ÷ 3⌉ = ⌈4.33⌉ = 5</p>
+
+              <h4>Níveis 6-9</h4>
+              <ul>
+                <li>1 ponto em um atributo à sua escolha</li>
+                <li><strong>Vida = ⌈MAX(Brutalidade, Compleição) ÷ 2⌉</strong></li>
+                <li><strong>Mana = ⌈Sobrenatural ÷ 2⌉</strong></li>
+                <li><strong>Sanidade = ⌈Mente ÷ 3⌉</strong></li>
+                <li>Escolha ENTRE: Uma habilidade de sua sequência equivalente ou superior OU um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+              </ul>
+
+              <h4>Níveis 10-11</h4>
+              <ul>
+                <li>2 pontos em um atributo (ou 1 em dois atributos diferentes)</li>
+                <li><strong>Vida = MAX(Brutalidade, Compleição)</strong> (valor completo, sem divisão)</li>
+                <li><strong>Mana = Sobrenatural</strong> (valor completo, sem divisão)</li>
+                <li><strong>Sanidade = ⌈Mente ÷ 2⌉</strong> (arredondado para cima)</li>
+                <li>Escolha ENTRE: Uma habilidade de sua sequência equivalente ou superior OU um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+              </ul>
+              <p><strong>Exemplo:</strong> Se Brutalidade = 12, Compleição = 14, Sobrenatural = 15, Mente = 13:</p>
+              <p>Vida = 14 (valor completo)</p>
+              <p>Mana = 15 (valor completo)</p>
+              <p>Sanidade = ⌈13 ÷ 2⌉ = ⌈6.5⌉ = 7</p>
+
+              <h4>Níveis 12-14</h4>
+              <ul>
+                <li>2 pontos em um atributo (ou 1 em dois atributos diferentes)</li>
+                <li><strong>Vida = MAX(Brutalidade, Compleição)</strong></li>
+                <li><strong>Mana = Sobrenatural</strong></li>
+                <li><strong>Sanidade = ⌈Mente ÷ 2⌉</strong></li>
+                <li>Escolha ENTRE: Uma habilidade de sua sequência equivalente ou superior OU um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+              </ul>
+
+              <h4>Níveis 15-20</h4>
+              <ul>
+                <li>3 pontos em um atributo (ou 1 em dois atributos diferentes)</li>
+                <li><strong>Vida = MAX(Brutalidade, Compleição)</strong></li>
+                <li><strong>Mana = Sobrenatural</strong></li>
+                <li><strong>Sanidade = ⌈Mente ÷ 2⌉</strong></li>
+                <li>Escolha ENTRE: Uma habilidade de sua sequência equivalente ou superior OU um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+              </ul>
+
+              <div class="info-box" style="margin-top: 1.5rem;">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Nota:</strong> O símbolo ⌈⌉ representa arredondamento para cima (teto). MAX() retorna o maior valor entre os dois atributos.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script type="module">
+  // Sistema de accordion
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionSections = document.querySelectorAll('.accordion-section');
+    
+    accordionSections.forEach(section => {
+      const header = section.querySelector('.accordion-header');
+      const content = section.querySelector('.accordion-content');
+      const icon = section.querySelector('.accordion-icon');
+      
+      if (!header || !content) return;
+      
+      // Inicializar: primeira seção aberta, outras fechadas
+      if (section.id === 'atributos') {
+        section.classList.add('active');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        if (icon) icon.textContent = '▲';
+      } else {
+        content.style.maxHeight = '0px';
+        if (icon) icon.textContent = '▼';
+      }
+      
+      header.addEventListener('click', () => {
+        const isActive = section.classList.contains('active');
+        
+        // Fechar todas as outras seções
+        accordionSections.forEach(s => {
+          if (s !== section) {
+            s.classList.remove('active');
+            const sContent = s.querySelector('.accordion-content');
+            const sIcon = s.querySelector('.accordion-icon');
+            if (sContent) sContent.style.maxHeight = '0px';
+            if (sIcon) sIcon.textContent = '▼';
+          }
+        });
+        
+        // Toggle da seção atual
+        if (isActive) {
+          section.classList.remove('active');
+          content.style.maxHeight = '0px';
+          if (icon) icon.textContent = '▼';
+        } else {
+          section.classList.add('active');
+          content.style.maxHeight = content.scrollHeight + 'px';
+          if (icon) icon.textContent = '▲';
+          
+          // Scroll suave para a seção
+          setTimeout(() => {
+            section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        }
+      });
+    });
+    
+    // Sumário - clicar em item abre a seção correspondente
+    const summaryItems = document.querySelectorAll('.summary-item');
+    summaryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const sectionId = item.getAttribute('data-section');
+        const section = document.getElementById(sectionId);
+        
+        if (section) {
+          const header = section.querySelector('.accordion-header');
+          if (header) {
+            header.click();
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .logo-subtitle-custom {
+    text-align: center;
+    margin: -1rem 0 2rem 0;
+  }
+
+  .logo-subtitle-custom h2 {
+    font-family: var(--font-accent);
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  .guide-summary {
+    background: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .summary-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .summary-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+  }
+
+  .summary-item:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(139, 76, 141, 0.2);
+  }
+
+  .summary-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .summary-text {
+    flex: 1;
+  }
+
+  .guide-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .guide-section {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .guide-section:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2);
+  }
+
+  .guide-section.active {
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(139, 76, 141, 0.3);
+  }
+
+  .accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+  }
+
+  .accordion-header:hover {
+    background: rgba(139, 76, 141, 0.05);
+  }
+
+  .guide-section.active .accordion-header {
+    background: rgba(139, 76, 141, 0.1);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .guide-section-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin: 0;
+    text-transform: none;
+  }
+
+  .accordion-icon {
+    font-size: 1rem;
+    color: var(--color-text-accent);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .guide-text {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.8;
+    font-size: 1rem;
+    padding: 0 2rem 2rem 2rem;
+  }
+
+  .guide-text p {
+    margin-bottom: 1rem;
+  }
+
+  .guide-text h4 {
+    font-family: var(--font-heading);
+    color: var(--color-text-accent);
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .guide-text ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .guide-text li {
+    margin-bottom: 0.5rem;
+  }
+
+  .formula-box {
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    font-family: var(--font-heading);
+    color: var(--color-text-accent);
+    text-align: center;
+    box-shadow: 
+      0 0 15px rgba(139, 76, 141, 0.3),
+      inset 0 0 10px rgba(139, 76, 141, 0.1);
+  }
+
+  .guide-text strong {
+    color: var(--color-text-accent);
+    font-weight: 600;
+  }
+
+  .info-box {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid #4caf50;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+  }
+
+  .info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .info-content {
+    flex: 1;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .guide-summary {
+      padding: 1.5rem;
+    }
+
+    .summary-list {
+      grid-template-columns: 1fr;
+    }
+
+    .guide-section {
+      padding: 0;
+    }
+
+    .accordion-header {
+      padding: 1rem 1.5rem;
+    }
+
+    .guide-section-title {
+      font-size: 1.2rem;
+    }
+
+    .guide-text {
+      padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+  }
+</style>
+

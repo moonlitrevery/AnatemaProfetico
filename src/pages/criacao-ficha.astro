@@ -1,0 +1,831 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title="[AP] - Criação de Ficha">
+  <div class="container">
+    <Logo />
+    
+    <div class="logo-subtitle-custom">
+      <h2>Criação de Ficha</h2>
+    </div>
+
+    <section class="sheet-section">
+      <!-- Introdução -->
+      <div class="intro-section">
+        <div class="intro-content">
+          <h3 class="intro-title">👋 Bem-vindo à Criação de Ficha!</h3>
+          <p class="intro-text">
+            Criar um personagem no Anátema Profético pode parecer complexo à primeira vista, mas não se preocupe! 
+            Este guia vai te acompanhar passo a passo, nível por nível, para que você possa criar seu personagem 
+            de forma tranquila e intuitiva.
+          </p>
+          <p class="intro-text">
+            <strong>Não precisa ter pressa.</strong> Você pode voltar a qualquer momento e continuar de onde parou. 
+            A ficha salva automaticamente seu progresso, então você não vai perder nada.
+          </p>
+          <p class="intro-text">
+            Vamos começar? Siga os passos abaixo na ordem, e quando chegar em cada nível, você saberá exatamente 
+            o que fazer e o que ganhar. É mais simples do que parece! 😊
+          </p>
+        </div>
+      </div>
+
+      <!-- Sumário -->
+      <div class="guide-summary">
+        <h3 class="summary-title">📋 Sumário</h3>
+        <div class="summary-list">
+          <button class="summary-item" data-section="consideracoes-iniciais">
+            <span class="summary-icon">🎯</span>
+            <span class="summary-text">Considerações Iniciais</span>
+          </button>
+          <button class="summary-item" data-section="nivel-0">
+            <span class="summary-icon">0️⃣</span>
+            <span class="summary-text">Nível 0 - Base</span>
+          </button>
+          <button class="summary-item" data-section="nivel-1">
+            <span class="summary-icon">1️⃣</span>
+            <span class="summary-text">Nível 1 - Primeiro Passo</span>
+          </button>
+          <button class="summary-item" data-section="niveis-2-5">
+            <span class="summary-icon">2️⃣-5️⃣</span>
+            <span class="summary-text">Níveis 2-5 - Desenvolvimento</span>
+          </button>
+          <button class="summary-item" data-section="niveis-6-9">
+            <span class="summary-icon">6️⃣-9️⃣</span>
+            <span class="summary-text">Níveis 6-9 - Especialização</span>
+          </button>
+          <button class="summary-item" data-section="niveis-10-11">
+            <span class="summary-icon">🔟-1️⃣1️⃣</span>
+            <span class="summary-text">Níveis 10-11 - Poder</span>
+          </button>
+          <button class="summary-item" data-section="niveis-12-14">
+            <span class="summary-icon">1️⃣2️⃣-1️⃣4️⃣</span>
+            <span class="summary-text">Níveis 12-14 - Maestria</span>
+          </button>
+          <button class="summary-item" data-section="niveis-15-20">
+            <span class="summary-icon">1️⃣5️⃣-2️⃣0️⃣</span>
+            <span class="summary-text">Níveis 15-20 - Lenda</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="guide-content">
+        <div class="guide-section accordion-section" id="consideracoes-iniciais">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🎯 Considerações Iniciais</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Antes de começar a preencher a ficha, você precisa ter algumas informações básicas do seu personagem:</p>
+              
+              <h4>1. Informações Básicas</h4>
+              <ul>
+                <li><strong>Nome do Personagem:</strong> Como seu personagem se chama?</li>
+                <li><strong>Idade:</strong> Quantos anos ele tem?</li>
+                <li><strong>Profissão:</strong> Qual é a profissão ou ocupação dele?</li>
+                <li><strong>Pronomes:</strong> Selecione os pronomes que seu personagem usa (pode escolher múltiplos: Ele/Dele, Ela/Dela, Elu/Delu ou Todos)</li>
+                <li><strong>Foto (Opcional):</strong> Se quiser, você pode adicionar uma foto do personagem usando uma URL de imagem (recomendamos usar Imgur para hospedar a imagem)</li>
+              </ul>
+
+              <h4>2. Rolagem de Atributos</h4>
+              <p>Você precisa rolar os atributos no Discord ou com seu mestre. Os atributos são:</p>
+              <ul>
+                <li><strong>Brutalidade (FOR):</strong> Força física</li>
+                <li><strong>Destreza (DEX):</strong> Agilidade e reflexos</li>
+                <li><strong>Compleição (CON):</strong> Resistência e saúde</li>
+                <li><strong>Mente (MEN):</strong> Inteligência, sabedoria e carisma</li>
+                <li><strong>Sobrenatural (POD):</strong> Conexão mística e poder mágico</li>
+              </ul>
+              <p>Depois de rolar, anote os valores e vamos preenchê-los na ficha!</p>
+
+              <div class="info-box">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Dica:</strong> Não se preocupe se não souber tudo de uma vez. Você pode voltar e ajustar as informações básicas a qualquer momento!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="nivel-0">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">0️⃣ Nível 0 - Ficha Base</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>O <strong>Nível 0</strong> é onde você começa. É a ficha base, sem nenhum bônus de nivelamento ainda.</p>
+              
+              <h4>O que fazer:</h4>
+              <ol>
+                <li>Preencha as <strong>Informações Básicas</strong> do personagem (nome, idade, profissão, pronomes)</li>
+                <li>Preencha os <strong>Atributos</strong> com os valores que você rolou (Brutalidade, Destreza, Compleição, Mente, Sobrenatural)</li>
+                <li>Os valores de <strong>Vida, Mana e Sanidade</strong> serão calculados automaticamente baseados nos seus atributos</li>
+                <li>Você pode começar a preencher <strong>Perícias</strong> (mas ainda não recebeu treinamentos básicos)</li>
+                <li>Você pode adicionar <strong>Equipamentos</strong> e <strong>Anotações</strong> se quiser</li>
+              </ol>
+
+              <h4>O que você tem:</h4>
+              <ul>
+                <li>Atributos básicos (valores rolados)</li>
+                <li>Vida = Brutalidade + Compleição</li>
+                <li>Mana = Sobrenatural × 2</li>
+                <li>Sanidade = Mente × 2</li>
+                <li>Acesso a todas as perícias (mas sem treinamentos ainda)</li>
+              </ul>
+
+              <div class="info-box">
+                <div class="info-icon">📝</div>
+                <div class="info-content">
+                  <p><strong>Nota:</strong> No Nível 0, você ainda não escolheu um Caminho nem recebeu habilidades. Isso acontece quando você subir para o Nível 1!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="nivel-1">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">1️⃣ Nível 1 - Primeiro Passo</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Quando você sobe para o <strong>Nível 1</strong>, é aqui que seu personagem realmente começa a se desenvolver!</p>
+              
+              <h4>O que fazer:</h4>
+              <ol>
+                <li><strong>Escolha um Caminho:</strong> Selecione um dos 16 caminhos disponíveis no dropdown. Esta escolha define a identidade mística do seu personagem.</li>
+                <li><strong>Escolha uma Habilidade:</strong> Selecione uma habilidade do caminho escolhido. Adicione ela na seção de Habilidades da ficha.</li>
+                <li><strong>Receba Treinamentos Básicos:</strong> Você ganha <strong>3 + MODMente</strong> treinamentos básicos. Onde MODMente é o modificador de Mente (calculado automaticamente).</li>
+                <li><strong>Aplique os Treinamentos:</strong> Vá na seção de Perícias e escolha as perícias onde você quer aplicar os treinamentos básicos. Selecione "Básico" no nível de treinamento de cada uma.</li>
+              </ol>
+
+              <h4>O que você ganha:</h4>
+              <ul>
+                <li>✅ Um <strong>Caminho</strong> escolhido (isso reduz sua Sanidade Máxima em 10% - acontece automaticamente)</li>
+                <li>✅ Uma <strong>Habilidade</strong> do seu caminho</li>
+                <li>✅ <strong>3 + MODMente</strong> treinamentos básicos em perícias de sua escolha</li>
+              </ul>
+
+              <div class="info-box">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Exemplo:</strong> Se sua Mente tem valor 13, o modificador é +1. Então você ganha 3 + 1 = 4 treinamentos básicos!</p>
+                </div>
+              </div>
+
+              <div class="warning-box">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-content">
+                  <p><strong>Atenção:</strong> Quando você escolher um Caminho pela primeira vez, sua Sanidade Máxima será reduzida em 10% (arredondado para cima). Isso acontece apenas uma vez e é automático!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="niveis-2-5">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">2️⃣-5️⃣ Níveis 2-5 - Desenvolvimento</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Nos <strong>Níveis 2 a 5</strong>, seu personagem continua se desenvolvendo de forma consistente.</p>
+              
+              <h4>O que fazer (a cada nível):</h4>
+              <ol>
+                <li><strong>Adicione 1 ponto em um atributo:</strong> Escolha qual atributo você quer melhorar e adicione 1 ponto nele.</li>
+                <li><strong>Receba bônus automáticos:</strong> A ficha calcula e aplica automaticamente:
+                  <ul>
+                    <li>Vida: +1/2 do maior valor entre Brutalidade e Compleição (arredondado para cima)</li>
+                    <li>Mana: +1/2 do valor de Sobrenatural (arredondado para cima)</li>
+                    <li>Sanidade: +1/3 do valor de Mente (arredondado para cima)</li>
+                  </ul>
+                </li>
+                <li><strong>Escolha ENTRE:</strong>
+                  <ul>
+                    <li><strong>Opção A:</strong> Uma habilidade de sua sequência equivalente ou superior (adicione na seção de Habilidades)</li>
+                    <li><strong>Opção B:</strong> Um treinamento básico em uma perícia de sua escolha (vá em Perícias e selecione "Básico")</li>
+                  </ul>
+                </li>
+              </ol>
+
+              <h4>O que você ganha (a cada nível):</h4>
+              <ul>
+                <li>✅ +1 ponto em um atributo à sua escolha</li>
+                <li>✅ Vida, Mana e Sanidade aumentam automaticamente (valores calculados pela ficha)</li>
+                <li>✅ Uma habilidade OU um treinamento básico</li>
+              </ul>
+
+              <div class="info-box">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Exemplo:</strong> Se Brutalidade = 12, Compleição = 14, Sobrenatural = 15, Mente = 13:</p>
+                  <ul>
+                    <li>Vida: +⌈14 ÷ 2⌉ = +7</li>
+                    <li>Mana: +⌈15 ÷ 2⌉ = +8</li>
+                    <li>Sanidade: +⌈13 ÷ 3⌉ = +5</li>
+                  </ul>
+                  <p>Esses valores são aplicados automaticamente quando você sobe de nível!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="niveis-6-9">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">6️⃣-9️⃣ Níveis 6-9 - Especialização</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Nos <strong>Níveis 6 a 9</strong>, você começa a especializar seu personagem ainda mais!</p>
+              
+              <h4>O que fazer (a cada nível):</h4>
+              <ol>
+                <li><strong>Adicione 1 ponto em um atributo:</strong> Escolha qual atributo você quer melhorar e adicione 1 ponto nele.</li>
+                <li><strong>Receba bônus automáticos:</strong> A ficha calcula e aplica automaticamente:
+                  <ul>
+                    <li>Vida: +1/2 do maior valor entre Brutalidade e Compleição (arredondado para cima)</li>
+                    <li>Mana: +1/2 do valor de Sobrenatural (arredondado para cima)</li>
+                    <li>Sanidade: +1/3 do valor de Mente (arredondado para cima)</li>
+                  </ul>
+                </li>
+                <li><strong>Escolha ENTRE:</strong>
+                  <ul>
+                    <li><strong>Opção A:</strong> Uma habilidade de sua sequência equivalente ou superior</li>
+                    <li><strong>Opção B:</strong> Um treinamento em uma perícia:
+                      <ul>
+                        <li>Treinamento Básico (se a perícia não tiver treinamento)</li>
+                        <li>OU mudar uma perícia de Básico → Médio</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ol>
+
+              <h4>O que você ganha (a cada nível):</h4>
+              <ul>
+                <li>✅ +1 ponto em um atributo à sua escolha</li>
+                <li>✅ Vida, Mana e Sanidade aumentam automaticamente</li>
+                <li>✅ Uma habilidade OU um treinamento (Básico ou Básico → Médio)</li>
+              </ul>
+
+              <div class="info-box">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Dica:</strong> Agora você pode melhorar perícias que já têm treinamento básico para médio! Isso é perfeito para especializar seu personagem em áreas específicas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="niveis-10-11">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🔟-1️⃣1️⃣ Níveis 10-11 - Poder</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Nos <strong>Níveis 10 e 11</strong>, seu personagem ganha poder significativo!</p>
+              
+              <h4>O que fazer (a cada nível):</h4>
+              <ol>
+                <li><strong>Adicione 2 pontos em atributos:</strong> Você pode colocar 2 pontos em um atributo OU 1 ponto em dois atributos diferentes.</li>
+                <li><strong>Receba bônus automáticos maiores:</strong> A ficha calcula e aplica automaticamente:
+                  <ul>
+                    <li>Vida: +o valor COMPLETO do maior entre Brutalidade e Compleição (sem divisão!)</li>
+                    <li>Mana: +o valor COMPLETO de Sobrenatural (sem divisão!)</li>
+                    <li>Sanidade: +1/2 do valor de Mente (arredondado para cima)</li>
+                  </ul>
+                </li>
+                <li><strong>Escolha ENTRE:</strong>
+                  <ul>
+                    <li><strong>Opção A:</strong> Uma habilidade de sua sequência equivalente ou superior</li>
+                    <li><strong>Opção B:</strong> Um treinamento (Básico ou Básico → Médio) em uma perícia</li>
+                  </ul>
+                </li>
+              </ol>
+
+              <h4>O que você ganha (a cada nível):</h4>
+              <ul>
+                <li>✅ +2 pontos em atributos (ou 1 em dois diferentes)</li>
+                <li>✅ Vida e Mana aumentam com valores COMPLETOS (muito mais!)</li>
+                <li>✅ Sanidade aumenta automaticamente</li>
+                <li>✅ Uma habilidade OU um treinamento</li>
+              </ul>
+
+              <div class="info-box">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Exemplo:</strong> Se Brutalidade = 12, Compleição = 14, Sobrenatural = 15, Mente = 13:</p>
+                  <ul>
+                    <li>Vida: +14 (valor completo!)</li>
+                    <li>Mana: +15 (valor completo!)</li>
+                    <li>Sanidade: +⌈13 ÷ 2⌉ = +7</li>
+                  </ul>
+                  <p>Note que Vida e Mana agora recebem o valor COMPLETO, não mais metade!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="niveis-12-14">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">1️⃣2️⃣-1️⃣4️⃣ Níveis 12-14 - Maestria</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Nos <strong>Níveis 12 a 14</strong>, você alcança níveis de maestria!</p>
+              
+              <h4>O que fazer (a cada nível):</h4>
+              <ol>
+                <li><strong>Adicione 2 pontos em atributos:</strong> Você pode colocar 2 pontos em um atributo OU 1 ponto em dois atributos diferentes.</li>
+                <li><strong>Receba bônus automáticos:</strong> A ficha calcula e aplica automaticamente:
+                  <ul>
+                    <li>Vida: +o valor COMPLETO do maior entre Brutalidade e Compleição</li>
+                    <li>Mana: +o valor COMPLETO de Sobrenatural</li>
+                    <li>Sanidade: +1/2 do valor de Mente (arredondado para cima)</li>
+                  </ul>
+                </li>
+                <li><strong>Escolha ENTRE:</strong>
+                  <ul>
+                    <li><strong>Opção A:</strong> Uma habilidade de sua sequência equivalente ou superior</li>
+                    <li><strong>Opção B:</strong> Um treinamento em uma perícia:
+                      <ul>
+                        <li>Treinamento Básico</li>
+                        <li>OU mudar uma de Básico → Médio</li>
+                        <li>OU mudar uma de Médio → Avançado</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ol>
+
+              <h4>O que você ganha (a cada nível):</h4>
+              <ul>
+                <li>✅ +2 pontos em atributos (ou 1 em dois diferentes)</li>
+                <li>✅ Vida e Mana aumentam com valores COMPLETOS</li>
+                <li>✅ Sanidade aumenta automaticamente</li>
+                <li>✅ Uma habilidade OU um treinamento (agora pode chegar a Avançado!)</li>
+              </ul>
+
+              <div class="info-box">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Dica:</strong> Agora você pode elevar perícias a nível Avançado! Isso é perfeito para criar um personagem verdadeiramente especializado em áreas específicas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section accordion-section" id="niveis-15-20">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">1️⃣5️⃣-2️⃣0️⃣ Níveis 15-20 - Lenda</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Nos <strong>Níveis 15 a 20</strong>, seu personagem alcança níveis lendários!</p>
+              
+              <h4>O que fazer (a cada nível):</h4>
+              <ol>
+                <li><strong>Adicione 3 pontos em atributos:</strong> Você pode colocar 3 pontos em um atributo OU 1 ponto em dois atributos diferentes.</li>
+                <li><strong>Receba bônus automáticos:</strong> A ficha calcula e aplica automaticamente:
+                  <ul>
+                    <li>Vida: +o valor COMPLETO do maior entre Brutalidade e Compleição</li>
+                    <li>Mana: +o valor COMPLETO de Sobrenatural</li>
+                    <li>Sanidade: +1/2 do valor de Mente (arredondado para cima)</li>
+                  </ul>
+                </li>
+                <li><strong>Escolha ENTRE:</strong>
+                  <ul>
+                    <li><strong>Opção A:</strong> Uma habilidade de sua sequência equivalente ou superior</li>
+                    <li><strong>Opção B:</strong> Um treinamento em uma perícia:
+                      <ul>
+                        <li>Treinamento Básico</li>
+                        <li>OU mudar uma de Básico → Médio</li>
+                        <li>OU mudar uma de Médio → Avançado</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ol>
+
+              <h4>O que você ganha (a cada nível):</h4>
+              <ul>
+                <li>✅ +3 pontos em atributos (ou 1 em dois diferentes)</li>
+                <li>✅ Vida e Mana aumentam com valores COMPLETOS</li>
+                <li>✅ Sanidade aumenta automaticamente</li>
+                <li>✅ Uma habilidade OU um treinamento (até Avançado)</li>
+              </ul>
+
+              <div class="info-box">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Parabéns!</strong> Você chegou aos níveis mais altos! Seu personagem agora é uma verdadeira lenda no mundo do Anátema Profético. Continue desenvolvendo e aproveitando todas as possibilidades!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script type="module">
+  // Sistema de accordion
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionSections = document.querySelectorAll('.accordion-section');
+    
+    accordionSections.forEach(section => {
+      const header = section.querySelector('.accordion-header');
+      const content = section.querySelector('.accordion-content');
+      const icon = section.querySelector('.accordion-icon');
+      
+      if (!header || !content) return;
+      
+      // Inicializar: primeira seção aberta, outras fechadas
+      if (section.id === 'consideracoes-iniciais') {
+        section.classList.add('active');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        if (icon) icon.textContent = '▲';
+      } else {
+        content.style.maxHeight = '0px';
+        if (icon) icon.textContent = '▼';
+      }
+      
+      header.addEventListener('click', () => {
+        const isActive = section.classList.contains('active');
+        
+        // Fechar todas as outras seções
+        accordionSections.forEach(s => {
+          if (s !== section) {
+            s.classList.remove('active');
+            const sContent = s.querySelector('.accordion-content');
+            const sIcon = s.querySelector('.accordion-icon');
+            if (sContent) sContent.style.maxHeight = '0px';
+            if (sIcon) sIcon.textContent = '▼';
+          }
+        });
+        
+        // Toggle da seção atual
+        if (isActive) {
+          section.classList.remove('active');
+          content.style.maxHeight = '0px';
+          if (icon) icon.textContent = '▼';
+        } else {
+          section.classList.add('active');
+          content.style.maxHeight = content.scrollHeight + 'px';
+          if (icon) icon.textContent = '▲';
+          
+          // Scroll suave para a seção
+          setTimeout(() => {
+            section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        }
+      });
+    });
+    
+    // Sumário - clicar em item abre a seção correspondente
+    const summaryItems = document.querySelectorAll('.summary-item');
+    summaryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const sectionId = item.getAttribute('data-section');
+        const section = document.getElementById(sectionId);
+        
+        if (section) {
+          const header = section.querySelector('.accordion-header');
+          if (header) {
+            header.click();
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .logo-subtitle-custom {
+    text-align: center;
+    margin: -1rem 0 2rem 0;
+  }
+
+  .logo-subtitle-custom h2 {
+    font-family: var(--font-accent);
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  .intro-section {
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.1) 0%, rgba(139, 76, 141, 0.05) 100%);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(139, 76, 141, 0.2),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .intro-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .intro-text {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.8;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .intro-text strong {
+    color: var(--color-text-accent);
+    font-weight: 600;
+  }
+
+  .guide-summary {
+    background: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
+  }
+
+  .summary-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .summary-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+  }
+
+  .summary-item:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(139, 76, 141, 0.2);
+  }
+
+  .summary-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .summary-text {
+    flex: 1;
+  }
+
+  .guide-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .guide-section {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .guide-section:hover {
+    border-color: var(--color-border-glow);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(139, 76, 141, 0.2);
+  }
+
+  .guide-section.active {
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(139, 76, 141, 0.3);
+  }
+
+  .accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+  }
+
+  .accordion-header:hover {
+    background: rgba(139, 76, 141, 0.05);
+  }
+
+  .guide-section.active .accordion-header {
+    background: rgba(139, 76, 141, 0.1);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .guide-section-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin: 0;
+    text-transform: none;
+  }
+
+  .accordion-icon {
+    font-size: 1rem;
+    color: var(--color-text-accent);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .guide-text {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.8;
+    font-size: 1rem;
+    padding: 0 2rem 2rem 2rem;
+  }
+
+  .guide-text p {
+    margin-bottom: 1rem;
+  }
+
+  .guide-text h4 {
+    font-family: var(--font-heading);
+    color: var(--color-text-accent);
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .guide-text ol, .guide-text ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .guide-text li {
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-text strong {
+    color: var(--color-text-accent);
+    font-weight: 600;
+  }
+
+  .info-box {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid #4caf50;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+  }
+
+  .info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .info-content {
+    flex: 1;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+  }
+
+  .warning-box {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid #ff9800;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+  }
+
+  .warning-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .warning-content {
+    flex: 1;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .intro-section {
+      padding: 1.5rem;
+    }
+
+    .intro-title {
+      font-size: 1.5rem;
+    }
+
+    .intro-text {
+      font-size: 1rem;
+    }
+
+    .guide-summary {
+      padding: 1.5rem;
+    }
+
+    .summary-list {
+      grid-template-columns: 1fr;
+    }
+
+    .guide-section {
+      padding: 0;
+    }
+
+    .accordion-header {
+      padding: 1rem 1.5rem;
+    }
+
+    .guide-section-title {
+      font-size: 1.2rem;
+    }
+
+    .guide-text {
+      padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+  }
+</style>
+

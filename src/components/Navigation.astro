@@ -27,20 +27,26 @@ const getUrl = (path: string) => {
     <ul class="menu-list">
       <li class="menu-item">
         <a href={getUrl('sistema/')} class="menu-link" data-page="sistema">
-          <span class="menu-link-icon">◊</span>
-          <span class="menu-link-text">Sistema</span>
+          <span class="menu-link-icon">🏠</span>
+          <span class="menu-link-text">Página Inicial</span>
         </a>
       </li>
       <li class="menu-item">
         <a href={getUrl('')} class="menu-link" data-page="personagem">
-          <span class="menu-link-icon">◉</span>
-          <span class="menu-link-text">Ficha de personagem</span>
+          <span class="menu-link-icon">📝</span>
+          <span class="menu-link-text">Ficha de Personagem</span>
         </a>
       </li>
       <li class="menu-item">
-        <a href={getUrl('definicoes/')} class="menu-link" data-page="definicoes">
-          <span class="menu-link-icon">◈</span>
-          <span class="menu-link-text">Informações - Ficha</span>
+        <a href={getUrl('criacao-ficha/')} class="menu-link" data-page="criacao-ficha">
+          <span class="menu-link-icon">✨</span>
+          <span class="menu-link-text">Criação de Ficha</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href={getUrl('calculos/')} class="menu-link" data-page="calculos">
+          <span class="menu-link-icon">🧮</span>
+          <span class="menu-link-text">Cálculos</span>
         </a>
       </li>
     </ul>
@@ -248,37 +254,53 @@ const getUrl = (path: string) => {
   .menu-link {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.25rem 2rem;
+    gap: 1.25rem;
+    padding: 1.5rem 2rem;
     color: var(--color-text-primary);
     text-decoration: none;
     transition: all 0.3s ease;
-    border-left: 3px solid transparent;
+    border-left: 4px solid transparent;
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 1.05rem;
+    background: var(--color-bg-primary);
+    margin: 0.5rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .menu-link:hover {
-    background: rgba(139, 76, 141, 0.1);
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.15), rgba(139, 76, 141, 0.05));
     border-left-color: var(--color-accent-primary);
     color: var(--color-text-accent);
+    transform: translateX(5px);
+    box-shadow: 
+      0 4px 15px rgba(0, 0, 0, 0.2),
+      0 0 20px rgba(139, 76, 141, 0.2);
   }
 
   .menu-link.active {
-    background: rgba(139, 76, 141, 0.15);
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.2), rgba(139, 76, 141, 0.1));
     border-left-color: var(--color-accent-primary);
     color: var(--color-text-accent);
     font-weight: 600;
+    box-shadow: 
+      0 4px 15px rgba(0, 0, 0, 0.2),
+      0 0 25px rgba(139, 76, 141, 0.3),
+      inset 0 0 10px rgba(139, 76, 141, 0.1);
   }
 
   .menu-link-icon {
-    font-size: 1.5rem;
-    width: 30px;
+    font-size: 1.75rem;
+    width: 35px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .menu-link-text {
     flex: 1;
+    font-weight: 500;
   }
 
   @media (max-width: 768px) {
