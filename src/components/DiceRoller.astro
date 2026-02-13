@@ -3,30 +3,9 @@
 
 <div id="dice-roll-popups-container" class="dice-roll-popups-container"></div>
 
-<button id="roll-history-button" class="roll-history-button" type="button" title="Histórico de Rolagens">📜</button>
 <button id="custom-dice-button" class="custom-dice-button" type="button" title="Rolar Dados">
   <span class="dice-icon">◉</span>
 </button>
-
-<div id="roll-history-popup" class="roll-history-popup" style="display: none;">
-  <div class="roll-history-overlay"></div>
-  <div class="roll-history-content">
-    <div class="roll-history-header">
-      <h3>Histórico de Rolagens</h3>
-      <button type="button" class="roll-history-close">✕</button>
-    </div>
-    <div class="roll-history-filters">
-      <button type="button" class="filter-btn active" data-filter="">Todos</button>
-      <button type="button" class="filter-btn" data-filter="atributo">Atributo</button>
-      <button type="button" class="filter-btn" data-filter="pericia">Perícia</button>
-      <button type="button" class="filter-btn" data-filter="ataque">Ataque</button>
-      <button type="button" class="filter-btn" data-filter="salvamento">Salvamento</button>
-      <button type="button" class="filter-btn" data-filter="custom">Custom</button>
-      <button type="button" id="clear-history-btn" class="clear-history-btn">Limpar</button>
-    </div>
-    <div id="roll-history-list" class="roll-history-list"></div>
-  </div>
-</div>
 
 <div id="custom-dice-menu" class="custom-dice-menu">
   <div class="dice-menu-header">
@@ -53,13 +32,10 @@
 </div>
 
 <script type="module">
-  import { addRollEntry, getRollHistory, clearRollHistory } from '../utils/rollHistory';
-
   const popupsContainer = document.getElementById('dice-roll-popups-container');
   let popupStack = [];
   let popupIdCounter = 0;
   let selectedDice = [];
-  let currentHistoryFilter = '';
 
   function createDicePopup(roll, label, diceType = 'd20', rollType = 'custom') {
     const popupId = `dice-popup-${popupIdCounter++}`;
@@ -103,7 +79,6 @@
       removePopup(popupId);
     });
     
-    addRollEntry({ label, type: rollType, diceType, result: roll.result, modifier: roll.modifier || 0, total: roll.total, critical: roll.critical, fumble: roll.fumble });
     reorganizePopups();
     
     return popupId;
@@ -135,61 +110,6 @@
   window.showDiceRollPopup = function(roll, label, diceType = 'd20', rollType = 'custom') {
     createDicePopup(roll, label, diceType, rollType);
   };
-
-  function renderRollHistory() {
-    const list = document.getElementById('roll-history-list');
-    if (!list) return;
-    const entries = getRollHistory(currentHistoryFilter || undefined);
-    list.innerHTML = entries.length === 0
-      ? '<p class="roll-history-empty">Nenhuma rolagem registrada.</p>'
-      : entries.map(e => {
-          const time = new Date(e.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-          const typeLabels = { atributo: 'Atributo', pericia: 'Perícia', ataque: 'Ataque', salvamento: 'Salvamento', custom: 'Custom' };
-          const badge = e.critical ? ' critical' : e.fumble ? ' fumble' : '';
-          return `<div class="roll-history-item${badge}">
-            <span class="rh-time">${time}</span>
-            <span class="rh-type">${typeLabels[e.type] || e.type}</span>
-            <span class="rh-label">${e.label}</span>
-            <span class="rh-result">${e.total}${e.critical ? ' [CRÍTICO]' : ''}${e.fumble ? ' [FALHA]' : ''}</span>
-          </div>`;
-        }).join('');
-  }
-
-  document.getElementById('roll-history-button')?.addEventListener('click', () => {
-    const popup = document.getElementById('roll-history-popup');
-    if (popup) {
-      popup.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      renderRollHistory();
-    }
-  });
-
-  document.querySelector('.roll-history-overlay')?.addEventListener('click', () => {
-    document.getElementById('roll-history-popup').style.display = 'none';
-    document.body.style.overflow = '';
-  });
-
-  document.querySelector('.roll-history-close')?.addEventListener('click', () => {
-    document.getElementById('roll-history-popup').style.display = 'none';
-    document.body.style.overflow = '';
-  });
-
-  document.querySelectorAll('.roll-history-filters .filter-btn').forEach(btn => {
-    if (btn.id === 'clear-history-btn') return;
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentHistoryFilter = btn.dataset.filter || '';
-      renderRollHistory();
-    });
-  });
-
-  document.getElementById('clear-history-btn')?.addEventListener('click', () => {
-    if (confirm('Limpar todo o histórico de rolagens?')) {
-      clearRollHistory();
-      renderRollHistory();
-    }
-  });
 
   const diceButton = document.getElementById('custom-dice-button');
   const diceMenu = document.getElementById('custom-dice-menu');
@@ -367,181 +287,6 @@
     box-shadow: 
       0 4px 20px rgba(0, 0, 0, 0.4),
       0 0 30px rgba(139, 76, 141, 0.5);
-  }
-
-  .roll-history-button {
-    position: fixed;
-    bottom: 20px;
-    right: 90px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--color-bg-secondary);
-    border: 2px solid var(--color-border);
-    color: var(--color-text-accent);
-    font-size: 1.3rem;
-    cursor: pointer;
-    z-index: 99996;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  }
-
-  .roll-history-button:hover {
-    border-color: var(--color-accent-primary);
-    background: rgba(139, 76, 141, 0.2);
-    transform: scale(1.05);
-  }
-
-  .roll-history-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 100003;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
-
-  .roll-history-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-  }
-
-  .roll-history-content {
-    position: relative;
-    background: var(--color-bg-secondary);
-    border: 2px solid var(--color-accent-primary);
-    border-radius: 16px;
-    max-width: 500px;
-    width: 100%;
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
-  }
-
-  .roll-history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .roll-history-header h3 {
-    margin: 0;
-    font-family: var(--font-heading);
-    color: var(--color-text-accent);
-  }
-
-  .roll-history-close {
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--color-border);
-    background: transparent;
-    color: var(--color-text-secondary);
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  .roll-history-close:hover {
-    border-color: var(--color-accent-primary);
-    color: var(--color-text-accent);
-  }
-
-  .roll-history-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .filter-btn {
-    padding: 0.4rem 0.75rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-tertiary);
-    color: var(--color-text-secondary);
-    border-radius: 6px;
-    font-size: 0.8rem;
-    cursor: pointer;
-  }
-
-  .filter-btn:hover, .filter-btn.active {
-    border-color: var(--color-accent-primary);
-    color: var(--color-text-accent);
-    background: rgba(139, 76, 141, 0.15);
-  }
-
-  .clear-history-btn {
-    margin-left: auto;
-    color: #cc7d7d;
-  }
-
-  .roll-history-list {
-    padding: 1rem;
-    overflow-y: auto;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .roll-history-empty {
-    color: var(--color-text-secondary);
-    font-style: italic;
-    text-align: center;
-    margin: 1rem 0;
-  }
-
-  .roll-history-item {
-    display: grid;
-    grid-template-columns: 60px 70px 1fr auto;
-    gap: 0.75rem;
-    align-items: center;
-    padding: 0.5rem 0.75rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    font-size: 0.9rem;
-  }
-
-  .roll-history-item.critical {
-    border-left: 3px solid #4caf50;
-  }
-
-  .roll-history-item.fumble {
-    border-left: 3px solid #f44336;
-  }
-
-  .rh-time {
-    color: var(--color-text-secondary);
-    font-size: 0.75rem;
-  }
-
-  .rh-type {
-    color: var(--color-accent-primary);
-    font-weight: 600;
-  }
-
-  .rh-label {
-    color: var(--color-text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .rh-result {
-    font-weight: 700;
-    color: var(--color-text-accent);
   }
 
   .custom-dice-button {

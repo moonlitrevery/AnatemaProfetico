@@ -11,7 +11,7 @@
       <div class="header-item-label-row">
         <label for="vida-current">Vida</label>
         <div class="bonus-inputs-row">
-          <input type="number" id="vida-temp" name="vida-temp" class="temp-value-small" placeholder="Nível" min="0" title="Bônus de nível à Vida Máxima" />
+          <input type="number" id="vida-temp" name="vida-temp" class="temp-value-small" placeholder="Nível" min="0" readonly title="Bônus de nível à Vida Máxima (alterado pelo sistema de nivelamento)" />
           <input type="number" id="vida-extra" name="vida-extra" class="temp-value-small extra" placeholder="Extra" min="0" title="Bônus extra à Vida Máxima (itens, buffs)" />
         </div>
       </div>
@@ -25,7 +25,7 @@
       <div class="header-item-label-row">
         <label for="mana-current">Mana</label>
         <div class="bonus-inputs-row">
-          <input type="number" id="mana-temp" name="mana-temp" class="temp-value-small" placeholder="Nível" min="0" title="Bônus de nível à Mana Máxima" />
+          <input type="number" id="mana-temp" name="mana-temp" class="temp-value-small" placeholder="Nível" min="0" readonly title="Bônus de nível à Mana Máxima (alterado pelo sistema de nivelamento)" />
           <input type="number" id="mana-extra" name="mana-extra" class="temp-value-small extra" placeholder="Extra" min="0" title="Bônus extra à Mana Máxima (itens, buffs)" />
         </div>
       </div>
@@ -39,7 +39,7 @@
       <div class="header-item-label-row header-item-sanidade-row">
         <label for="sanidade-current">Sanidade</label>
         <div class="bonus-inputs-row">
-          <input type="number" id="sanidade-temp" name="sanidade-temp" class="temp-value-small" placeholder="Nível" min="0" title="Bônus de nível à Sanidade Máxima" />
+          <input type="number" id="sanidade-temp" name="sanidade-temp" class="temp-value-small" placeholder="Nível" min="0" readonly title="Bônus de nível à Sanidade Máxima (alterado pelo sistema de nivelamento)" />
           <input type="number" id="sanidade-extra" name="sanidade-extra" class="temp-value-small extra" placeholder="Extra" min="0" title="Bônus extra à Sanidade Máxima (itens, buffs)" />
         </div>
         <button type="button" id="sanity-popup-btn" class="sanity-popup-btn" title="Sanidade mental - Insanidades e traumas">🧠</button>
@@ -125,9 +125,30 @@
         <input type="number" id="movimento-extra" name="movimento-extra" class="movement-extra" placeholder="+0" min="0" title="Movimentação extra" />
       </div>
     </div>
-    <div class="header-item">
-      <label for="dt-projeteis">DT para projéteis (Receber)</label>
-      <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" />
+    <div class="header-item dt-damage-row">
+      <div class="dt-damage-cell">
+        <label for="dt-projeteis">DT para projéteis (Receber)</label>
+        <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" />
+      </div>
+      <div class="dt-damage-divider"></div>
+      <div class="dt-damage-cell damage-calc-inline">
+        <h4 class="damage-calc-inline-title">Aplicar Dano</h4>
+        <div class="damage-calc-inline-grid">
+          <div class="damage-calc-inline-item">
+            <label for="dano-vida">Vida</label>
+            <input type="number" id="dano-vida" class="damage-input-inline" placeholder="0" min="0" />
+          </div>
+          <div class="damage-calc-inline-item">
+            <label for="dano-mana">Mana</label>
+            <input type="number" id="dano-mana" class="damage-input-inline" placeholder="0" min="0" />
+          </div>
+          <div class="damage-calc-inline-item">
+            <label for="dano-sanidade">Sanidade</label>
+            <input type="number" id="dano-sanidade" class="damage-input-inline" placeholder="0" min="0" />
+          </div>
+          <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn-inline">Aplicar</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -142,25 +163,6 @@
     </div>
   </div>
 
-  <!-- Calculadora de Dano -->
-  <div class="damage-calc-section">
-    <h3 class="damage-calc-title">Aplicar Dano</h3>
-    <div class="damage-calc-grid">
-      <div class="damage-calc-item">
-        <label for="dano-vida">Vida</label>
-        <input type="number" id="dano-vida" class="damage-input" placeholder="0" min="0" />
-      </div>
-      <div class="damage-calc-item">
-        <label for="dano-mana">Mana</label>
-        <input type="number" id="dano-mana" class="damage-input" placeholder="0" min="0" />
-      </div>
-      <div class="damage-calc-item">
-        <label for="dano-sanidade">Sanidade</label>
-        <input type="number" id="dano-sanidade" class="damage-input" placeholder="0" min="0" />
-      </div>
-      <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn">Aplicar</button>
-    </div>
-  </div>
   
   <div class="status-container-inline" id="status-container-inline">
     <!-- Status será inserido aqui -->
@@ -739,32 +741,32 @@
       bom: { vida: 1/2, mana: 1/2, sanidade: 1/3 },
       magico: { vida: 1, mana: 1, sanidade: 1 }
     };
-    document.querySelectorAll('.rest-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tipo = btn.dataset.rest;
-        const ratios = REST_VALUES[tipo];
-        if (!ratios) return;
-        const vidaMax = parseInt(document.getElementById('vida-max')?.value || '0', 10);
-        const manaMax = parseInt(document.getElementById('mana-max')?.value || '0', 10);
-        const sanidadeMax = parseInt(document.getElementById('sanidade-max')?.value || '0', 10);
-        const vidaCur = document.getElementById('vida-current');
-        const manaCur = document.getElementById('mana-current');
-        const sanidadeCur = document.getElementById('sanidade-current');
-        if (vidaCur) {
-          const v = parseInt(vidaCur.value, 10) || 0;
-          vidaCur.value = String(Math.min(vidaMax, Math.floor(v + vidaMax * ratios.vida)));
-        }
-        if (manaCur) {
-          const m = parseInt(manaCur.value, 10) || 0;
-          manaCur.value = String(Math.min(manaMax, Math.floor(m + manaMax * ratios.mana)));
-        }
-        if (sanidadeCur) {
-          const s = parseInt(sanidadeCur.value, 10) || 0;
-          sanidadeCur.value = String(Math.min(sanidadeMax, Math.floor(s + sanidadeMax * ratios.sanidade)));
-        }
-        updateInlineStatus();
-        updateHeaderValues(true);
-      });
+    document.addEventListener('click', (e) => {
+      const btn = e.target?.closest('.rest-btn');
+      if (!btn) return;
+      const tipo = btn.dataset.rest;
+      const ratios = REST_VALUES[tipo];
+      if (!ratios) return;
+      const vidaMax = parseInt(document.getElementById('vida-max')?.value || '0', 10);
+      const manaMax = parseInt(document.getElementById('mana-max')?.value || '0', 10);
+      const sanidadeMax = parseInt(document.getElementById('sanidade-max')?.value || '0', 10);
+      const vidaCur = document.getElementById('vida-current');
+      const manaCur = document.getElementById('mana-current');
+      const sanidadeCur = document.getElementById('sanidade-current');
+      if (vidaCur) {
+        const v = parseInt(vidaCur.value, 10) || 0;
+        vidaCur.value = String(Math.min(vidaMax, Math.floor(v + vidaMax * ratios.vida)));
+      }
+      if (manaCur) {
+        const m = parseInt(manaCur.value, 10) || 0;
+        manaCur.value = String(Math.min(manaMax, Math.floor(m + manaMax * ratios.mana)));
+      }
+      if (sanidadeCur) {
+        const s = parseInt(sanidadeCur.value, 10) || 0;
+        sanidadeCur.value = String(Math.min(sanidadeMax, Math.floor(s + sanidadeMax * ratios.sanidade)));
+      }
+      if (typeof window.updateInlineStatus === 'function') window.updateInlineStatus();
+      if (typeof updateHeaderValues === 'function') updateHeaderValues(true);
     });
 
     // Calculadora de Dano
@@ -787,11 +789,14 @@
         const s = parseInt(sanidadeCur.value, 10) || 0;
         sanidadeCur.value = String(Math.max(0, s - danoSanidade));
       }
-      document.getElementById('dano-vida').value = '';
-      document.getElementById('dano-mana').value = '';
-      document.getElementById('dano-sanidade').value = '';
-      updateInlineStatus();
-      updateHeaderValues(true);
+      const danoVidaEl = document.getElementById('dano-vida');
+      const danoManaEl = document.getElementById('dano-mana');
+      const danoSanidadeEl = document.getElementById('dano-sanidade');
+      if (danoVidaEl) danoVidaEl.value = '';
+      if (danoManaEl) danoManaEl.value = '';
+      if (danoSanidadeEl) danoSanidadeEl.value = '';
+      if (typeof window.updateInlineStatus === 'function') window.updateInlineStatus();
+      if (typeof updateHeaderValues === 'function') updateHeaderValues(true);
     });
 
     // Escutar mudanças no Caminho para reduzir sanidade
@@ -1098,9 +1103,9 @@
   }
 
   .sanity-popup-btn {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
+    width: 50px;
+    height: 28px;
+    min-width: 50px;
     background: rgba(139, 76, 141, 0.2);
     border: 1px solid var(--color-accent-primary);
     border-radius: 6px;
@@ -1115,8 +1120,124 @@
 
   .sanity-popup-btn:hover {
     background: rgba(139, 76, 141, 0.35);
-    transform: scale(1.05);
     box-shadow: 0 0 10px rgba(139, 76, 141, 0.4);
+  }
+
+  .dt-damage-row {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .dt-damage-cell {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .dt-damage-cell label {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+
+  .dt-damage-divider {
+    width: 1px;
+    min-width: 1px;
+    background: var(--color-border);
+    margin: 0 1rem;
+    align-self: stretch;
+  }
+
+  @media (max-width: 600px) {
+    .dt-damage-row {
+      flex-direction: column;
+    }
+    .dt-damage-divider {
+      width: 100%;
+      height: 1px;
+      margin: 0.75rem 0;
+    }
+  }
+
+  .damage-calc-inline {
+    min-width: 200px;
+  }
+
+  .damage-calc-inline-title {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .damage-calc-inline-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: flex-end;
+  }
+
+  .damage-calc-inline-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 55px;
+  }
+
+  .damage-calc-inline-item label {
+    font-size: 0.7rem;
+    opacity: 0.9;
+  }
+
+  .damage-input-inline {
+    width: 55px;
+    padding: 0.4rem 0.3rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+
+  .damage-input-inline::-webkit-outer-spin-button,
+  .damage-input-inline::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .damage-input-inline:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 6px rgba(139, 76, 141, 0.3);
+  }
+
+  .aplicar-dano-btn-inline {
+    padding: 0.4rem 0.9rem;
+    background: linear-gradient(135deg, rgba(139, 76, 76, 0.3), rgba(139, 76, 76, 0.2));
+    border: 1px solid rgba(139, 76, 76, 0.5);
+    border-radius: 6px;
+    color: #ff9999;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-end;
+  }
+
+  .aplicar-dano-btn-inline:hover {
+    background: linear-gradient(135deg, rgba(139, 76, 76, 0.4), rgba(139, 76, 76, 0.3));
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(139, 76, 76, 0.3);
   }
 
   .rest-buttons-section {
@@ -1165,84 +1286,6 @@
   .rest-mediano { border-left: 3px solid #8b7d4c; }
   .rest-bom { border-left: 3px solid #4c8b5e; }
   .rest-magico { border-left: 3px solid var(--color-accent-primary); }
-
-  .damage-calc-section {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .damage-calc-title {
-    font-family: var(--font-accent);
-    font-size: 1rem;
-    color: var(--color-text-secondary);
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .damage-calc-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    align-items: flex-end;
-  }
-
-  .damage-calc-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-width: 80px;
-  }
-
-  .damage-calc-item label {
-    font-size: 0.75rem;
-    opacity: 0.8;
-  }
-
-  .damage-input {
-    width: 70px;
-    padding: 0.5rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    color: var(--color-text-primary);
-    font-family: var(--font-body);
-    font-size: 1rem;
-    text-align: center;
-    -moz-appearance: textfield;
-  }
-
-  .damage-input::-webkit-outer-spin-button,
-  .damage-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  .damage-input:focus {
-    outline: none;
-    border-color: var(--color-accent-primary);
-    box-shadow: 0 0 8px rgba(139, 76, 141, 0.3);
-  }
-
-  .aplicar-dano-btn {
-    padding: 0.5rem 1.25rem;
-    background: linear-gradient(135deg, rgba(139, 76, 76, 0.3), rgba(139, 76, 76, 0.2));
-    border: 1px solid rgba(139, 76, 76, 0.5);
-    border-radius: 6px;
-    color: #ff9999;
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .aplicar-dano-btn:hover {
-    background: linear-gradient(135deg, rgba(139, 76, 76, 0.4), rgba(139, 76, 76, 0.3));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(139, 76, 76, 0.3);
-  }
 
   .movement-container {
     display: flex;
