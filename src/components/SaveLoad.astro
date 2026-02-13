@@ -26,6 +26,9 @@
       </button>
     </div>
     <div id="save-message" class="save-message"></div>
+    <div id="save-indicator" class="save-indicator" role="status" aria-live="polite">
+      <!-- Salvo há X min -->
+    </div>
   </div>
 </section>
 
@@ -474,6 +477,32 @@
     return window.loadCharacterData(data);
   }
 
+  function updateSaveIndicator() {
+    const el = document.getElementById('save-indicator');
+    if (!el) return;
+    const ts = localStorage.getItem('anatema-save-timestamp');
+    if (!ts) {
+      el.textContent = '';
+      el.style.display = 'none';
+      return;
+    }
+    const ms = parseInt(ts, 10);
+    if (Number.isNaN(ms)) return;
+    const diffMs = Date.now() - ms;
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffSec = Math.floor((diffMs % 60000) / 1000);
+    let text = '';
+    if (diffMin >= 1) {
+      text = diffMin === 1 ? 'Salvo há 1 minuto' : `Salvo há ${diffMin} minutos`;
+    } else if (diffSec >= 5) {
+      text = `Salvo há ${diffSec} segundos`;
+    } else {
+      text = 'Salvo agora';
+    }
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+
   function showMessage(message, type = 'success') {
     const messageDiv = document.getElementById('save-message');
     if (messageDiv) {
@@ -495,8 +524,10 @@
           
           // Salvar localmente
           localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
+          localStorage.setItem('anatema-save-timestamp', String(Date.now()));
           
           showMessage('Ficha salva localmente com sucesso!', 'success');
+          updateSaveIndicator();
         } catch (error) {
           console.error(error);
           showMessage('Erro ao salvar a ficha.', 'error');
@@ -578,8 +609,10 @@
 
           // Limpar localStorage
           localStorage.removeItem('anatema-profetico-character');
+          localStorage.removeItem('anatema-save-timestamp');
           
           showMessage('Ficha limpa com sucesso!', 'success');
+          updateSaveIndicator();
           
           setTimeout(() => {
             if (window.updateHeaderValues) window.updateHeaderValues();
@@ -588,6 +621,9 @@
         }
       });
     }
+
+    updateSaveIndicator();
+    setInterval(updateSaveIndicator, 30000);
 
     function loadSavedData() {
       try {
@@ -763,6 +799,14 @@
     background: rgba(139, 76, 76, 0.2);
     border: 1px solid #8b4c4c;
     color: #cc7d7d;
+  }
+
+  .save-indicator {
+    display: none;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
   }
 
   .validation-warning {

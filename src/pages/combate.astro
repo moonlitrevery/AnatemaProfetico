@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Logo from '../components/Logo.astro';
+import Toast from '../components/Toast.astro';
 
 const base = import.meta.env.BASE_URL;
 const getUrl = (path: string) => {
@@ -11,6 +12,7 @@ const getUrl = (path: string) => {
 ---
 
 <Layout title="[AP] - Modo Combate">
+  <Toast />
   <div class="container" data-page="combate">
     <Logo />
     <div class="logo-subtitle-custom">
@@ -27,8 +29,8 @@ const getUrl = (path: string) => {
           <button type="button" id="add-initiative-btn" class="add-initiative-btn">+ Adicionar</button>
         </div>
         <div class="combate-actions">
-          <button type="button" id="start-combat-btn" class="start-combat-btn">Iniciar Combate</button>
-          <button type="button" id="reset-combat-btn" class="reset-combat-btn">Reiniciar</button>
+          <button type="button" id="start-combat-btn" class="start-combat-btn" aria-label="Iniciar ou encerrar combate">Iniciar Combate</button>
+          <button type="button" id="reset-combat-btn" class="reset-combat-btn" aria-label="Reiniciar ordem de iniciativa">Reiniciar</button>
           <button type="button" id="export-combat-btn" class="export-combat-btn">Exportar JSON</button>
           <label for="import-combat-input" class="import-combat-btn">Importar JSON</label>
           <input type="file" id="import-combat-input" accept=".json" style="display: none;" />
@@ -106,10 +108,14 @@ const getUrl = (path: string) => {
     sorted.forEach((entry, index) => {
       const item = document.createElement('div');
       const isClickable = combatStarted;
-      item.className = `combat-list-item ${selectedEntryId === entry.id ? 'selected' : ''} ${combatStarted && index === 0 ? 'current-turn' : ''} ${isClickable ? 'clickable' : ''}`;
+      const isCurrentTurn = combatStarted && index === 0;
+      item.className = `combat-list-item ${selectedEntryId === entry.id ? 'selected' : ''} ${isCurrentTurn ? 'current-turn' : ''} ${isClickable ? 'clickable' : ''}`;
       item.dataset.id = entry.id;
+      item.setAttribute('role', isClickable ? 'button' : 'listitem');
+      item.setAttribute('aria-label', isCurrentTurn ? `${escapeHtml(entry.name)}, turno atual. Clique para anotações.` : escapeHtml(entry.name));
       item.innerHTML = `
         <span class="combat-item-order">${index + 1}º</span>
+        <span class="combat-turn-indicator" aria-hidden="true">${isCurrentTurn ? '⚔' : ''}</span>
         <span class="combat-item-name">${escapeHtml(entry.name)}</span>
         <span class="combat-item-initiative">${entry.initiative ?? '-'}</span>
       `;
@@ -127,8 +133,17 @@ const getUrl = (path: string) => {
     });
   }
 
+  function updateStartButton() {
+    const btn = document.getElementById('start-combat-btn');
+    if (btn) {
+      btn.textContent = combatStarted ? 'Encerrar Combate' : 'Iniciar Combate';
+      btn.classList.toggle('combat-active', combatStarted);
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     loadFromStorage();
+    updateStartButton();
     renderList();
 
     document.getElementById('add-initiative-btn')?.addEventListener('click', () => {
@@ -150,17 +165,24 @@ const getUrl = (path: string) => {
     });
 
     document.getElementById('start-combat-btn')?.addEventListener('click', () => {
-      combatStarted = true;
+      combatStarted = !combatStarted;
+      if (!combatStarted) {
+        document.getElementById('combat-detail-panel').style.display = 'none';
+        selectedEntryId = null;
+      }
       saveToStorage();
+      updateStartButton();
       renderList();
     });
 
     document.getElementById('reset-combat-btn')?.addEventListener('click', () => {
+      if (!confirm('Tem certeza que deseja reiniciar? Isso removerá todos os personagens e monstros da ordem de iniciativa.')) return;
       combatEntries = [];
       combatStarted = false;
       selectedEntryId = null;
       document.getElementById('combat-detail-panel').style.display = 'none';
       saveToStorage();
+      updateStartButton();
       renderList();
     });
 
@@ -173,6 +195,7 @@ const getUrl = (path: string) => {
       a.download = `combate-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
+      if (typeof window.showToast === 'function') window.showToast('Combate exportado', 'success');
     });
 
     document.getElementById('import-combat-input')?.addEventListener('change', (e) => {
@@ -185,7 +208,9 @@ const getUrl = (path: string) => {
           combatEntries = data.entries || [];
           combatStarted = data.combatStarted || false;
           saveToStorage();
+          updateStartButton();
           renderList();
+          if (typeof window.showToast === 'function') window.showToast('Combate importado', 'success');
         } catch (err) {
           console.error(err);
           alert('Arquivo inválido.');
@@ -199,6 +224,17 @@ const getUrl = (path: string) => {
       document.getElementById('combat-detail-panel').style.display = 'none';
       selectedEntryId = null;
       renderList();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const panel = document.getElementById('combat-detail-panel');
+        if (panel && panel.style.display === 'flex') {
+          panel.style.display = 'none';
+          selectedEntryId = null;
+          renderList();
+        }
+      }
     });
 
     document.getElementById('combat-detail-notes')?.addEventListener('input', (e) => {
@@ -340,10 +376,21 @@ const getUrl = (path: string) => {
   .start-combat-btn {
     border-color: #4c8b5e;
     color: #7dccb5;
+    min-width: 160px;
   }
 
   .start-combat-btn:hover {
     background: rgba(76, 139, 94, 0.2);
+  }
+
+  .start-combat-btn.combat-active {
+    border-color: #c75c5c;
+    color: #ff9999;
+    background: rgba(199, 92, 92, 0.15);
+  }
+
+  .start-combat-btn.combat-active:hover {
+    background: rgba(199, 92, 92, 0.25);
   }
 
   .reset-combat-btn:hover,
@@ -377,7 +424,7 @@ const getUrl = (path: string) => {
 
   .combat-list-item {
     display: grid;
-    grid-template-columns: 56px 1fr 72px;
+    grid-template-columns: 56px auto 1fr 72px;
     gap: 1rem;
     align-items: center;
     padding: 0.85rem 1.25rem;
@@ -413,11 +460,25 @@ const getUrl = (path: string) => {
   .combat-list-item.current-turn {
     border-left-color: #4caf50;
     font-weight: 600;
-    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.2);
+    box-shadow: 0 2px 15px rgba(76, 175, 80, 0.3);
+    background: linear-gradient(90deg, rgba(76, 175, 80, 0.12) 0%, var(--color-bg-primary) 15%);
   }
 
   .combat-list-item.current-turn .combat-item-name {
     color: var(--color-accent-primary);
+    font-weight: 700;
+  }
+
+  .combat-turn-indicator {
+    font-size: 1.2rem;
+    color: #4caf50;
+    margin-right: 0.25rem;
+    animation: pulse-turn 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-turn {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
   }
 
   .combat-item-order {

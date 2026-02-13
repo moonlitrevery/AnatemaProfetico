@@ -9,20 +9,30 @@
   <div class="attributes-warning" id="attributes-warning">
     Para rodar o valor base de seus atributos, gire esse comando no bot do Discord: <strong>5#4d6d1</strong>, e distribua os valores rodados nos atributos que quiser.
   </div>
-  <div class="attributes-grid" id="attributes-grid">
-    <!-- Atributos serão adicionados via JavaScript -->
+  <div class="attributes-groups">
+    <div class="attributes-group" role="group" aria-labelledby="attr-physical-label">
+      <h3 id="attr-physical-label" class="attributes-group-title">Físicos</h3>
+      <div class="attributes-grid attributes-grid-physical" id="attributes-grid-physical"></div>
+    </div>
+    <div class="attributes-group" role="group" aria-labelledby="attr-mental-label">
+      <h3 id="attr-mental-label" class="attributes-group-title">Mentais</h3>
+      <div class="attributes-grid attributes-grid-mental" id="attributes-grid-mental"></div>
+    </div>
   </div>
 </section>
 
 <script type="module">
   // Lista de atributos principais
-  const mainAttributes = [
+  const physicalAttributes = [
     { name: 'Brutalidade', id: 'brutalidade', value: 10 },
     { name: 'Destreza', id: 'destreza', value: 10 },
     { name: 'Compleição', id: 'compleicao', value: 10 },
+  ];
+  const mentalAttributes = [
     { name: 'Mente', id: 'mente', value: 10 },
     { name: 'Sobrenatural', id: 'sobrenatural', value: 10 },
   ];
+  const mainAttributes = [...physicalAttributes, ...mentalAttributes];
   const attributeIds = mainAttributes.map(attr => attr.id);
 
   // Função para calcular modificador de atributo (JS puro)
@@ -95,7 +105,7 @@
         <span class="attribute-modifier-label">Mod:</span>
         <span class="attribute-modifier-value">+0</span>
       </div>
-      <button class="attribute-roll-btn" type="button" title="Rolar Teste de ${attr.name}">
+      <button class="attribute-roll-btn" type="button" title="Rolar Teste de ${attr.name} (ou Enter quando focado)" aria-label="Rolar d20 para ${attr.name}">
         Rolar
       </button>
     `;
@@ -128,12 +138,15 @@
       requestAnimationFrame(checkBaseAttributeValues);
     }, { passive: true });
 
-    rollBtn.addEventListener('click', () => {
+    const doRoll = () => {
       const value = parseInt(input.value) || 0;
       const modifier = getAttributeModifier(value);
       const roll = rollD20(modifier);
-      
       showDiceRollPopup(roll, attr.name);
+    };
+    rollBtn.addEventListener('click', doRoll);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); doRoll(); }
     });
 
     // Inicializa o mod visual após inserção
@@ -144,18 +157,45 @@
 
   // Inicializar atributos quando o DOM estiver pronto
   document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('attributes-grid');
+    const physicalContainer = document.getElementById('attributes-grid-physical');
+    const mentalContainer = document.getElementById('attributes-grid-mental');
 
-    if (container) {
-      mainAttributes.forEach(attr => {
-        container.appendChild(createAttributeCard(attr));
+    if (physicalContainer) {
+      physicalAttributes.forEach(attr => {
+        physicalContainer.appendChild(createAttributeCard(attr));
       });
-      requestAnimationFrame(checkBaseAttributeValues);
     }
+    if (mentalContainer) {
+      mentalAttributes.forEach(attr => {
+        mentalContainer.appendChild(createAttributeCard(attr));
+      });
+    }
+    requestAnimationFrame(checkBaseAttributeValues);
   });
 </script>
 
 <style is:global>
+  .attributes-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .attributes-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .attributes-group-title {
+    font-family: var(--font-accent);
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0;
+  }
+
   .attributes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

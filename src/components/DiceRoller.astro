@@ -3,7 +3,7 @@
 
 <div id="dice-roll-popups-container" class="dice-roll-popups-container"></div>
 
-<button id="custom-dice-button" class="custom-dice-button" type="button" title="Rolar Dados">
+<button id="custom-dice-button" class="custom-dice-button" type="button" title="Rolar Dados" aria-label="Abrir menu para rolar dados">
   <span class="dice-icon">◉</span>
 </button>
 
@@ -111,8 +111,29 @@
     createDicePopup(roll, label, diceType, rollType);
   };
 
+  function closeDiceMenu() {
+    if (diceMenu) {
+      diceMenu.classList.remove('show');
+      selectedDice = [];
+      updateSelectedDiceDisplay();
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (diceMenu && diceMenu.classList.contains('show')) {
+        closeDiceMenu();
+        e.preventDefault();
+      } else if (popupStack.length > 0) {
+        removePopup(popupStack[popupStack.length - 1].id);
+        e.preventDefault();
+      }
+    }
+  });
+
+  let diceMenu;
   const diceButton = document.getElementById('custom-dice-button');
-  const diceMenu = document.getElementById('custom-dice-menu');
+  diceMenu = document.getElementById('custom-dice-menu');
   const closeMenuBtn = document.getElementById('close-dice-menu');
   const selectedDiceDisplay = document.getElementById('selected-dice-display');
   const rollAllBtn = document.getElementById('roll-all-dice-btn');
@@ -146,14 +167,6 @@
   function openDiceMenu() {
     if (diceMenu) {
       diceMenu.classList.add('show');
-      selectedDice = [];
-      updateSelectedDiceDisplay();
-    }
-  }
-
-  function closeDiceMenu() {
-    if (diceMenu) {
-      diceMenu.classList.remove('show');
       selectedDice = [];
       updateSelectedDiceDisplay();
     }

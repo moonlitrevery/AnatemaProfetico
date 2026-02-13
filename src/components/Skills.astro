@@ -241,7 +241,7 @@
     // Armazenar função de atualização no elemento para atualização global
     row.updateModifierFn = updateModifier;
 
-    rollBtn.addEventListener('click', () => {
+    const doRoll = () => {
       // Calcular o modificador total (igual ao updateModifier)
       const attributeId = attrSelect.value;
       
@@ -266,6 +266,10 @@
       const rollLabel = attrName ? `${skillName} (${attrName})` : skillName;
       
       showDiceRollPopup(roll, rollLabel);
+    };
+    rollBtn.addEventListener('click', doRoll);
+    valueInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); doRoll(); }
     });
 
     // Atualizar modificador inicial
