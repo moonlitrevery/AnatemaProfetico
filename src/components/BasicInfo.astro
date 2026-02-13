@@ -69,19 +69,42 @@
   function updateCharacterImage() {
     const url = imageUrlInput?.value?.trim() || '';
     
-    if (url && (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.gif') || url.endsWith('.webp'))) {
-      if (characterImage) {
-        characterImage.src = url;
-        characterImage.style.display = 'block';
-        if (imagePlaceholder) {
-          imagePlaceholder.style.display = 'none';
+    if (url) {
+      // Validar se é uma URL válida
+      try {
+        new URL(url);
+        
+        if (characterImage) {
+          // Limpar erro anterior
+          characterImage.onerror = null;
+          
+          // Tentar carregar a imagem
+          characterImage.src = url;
+          characterImage.style.display = 'block';
+          if (imagePlaceholder) {
+            imagePlaceholder.style.display = 'none';
+          }
+          
+          // Tratar erro de carregamento (CORS, URL inválida, etc.)
+          characterImage.onerror = () => {
+            if (characterImage) characterImage.style.display = 'none';
+            if (imagePlaceholder) imagePlaceholder.style.display = 'flex';
+            console.warn('Erro ao carregar imagem:', url);
+          };
+          
+          // Confirmar que a imagem carregou com sucesso
+          characterImage.onload = () => {
+            if (characterImage) characterImage.style.display = 'block';
+            if (imagePlaceholder) imagePlaceholder.style.display = 'none';
+          };
         }
-        characterImage.onerror = () => {
-          if (characterImage) characterImage.style.display = 'none';
-          if (imagePlaceholder) imagePlaceholder.style.display = 'flex';
-        };
+      } catch (e) {
+        // URL inválida
+        if (characterImage) characterImage.style.display = 'none';
+        if (imagePlaceholder) imagePlaceholder.style.display = 'flex';
       }
     } else {
+      // URL vazia
       if (characterImage) characterImage.style.display = 'none';
       if (imagePlaceholder) imagePlaceholder.style.display = 'flex';
     }
