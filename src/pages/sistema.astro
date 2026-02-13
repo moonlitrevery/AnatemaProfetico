@@ -150,10 +150,17 @@ const getUrl = (path: string) => {
   .home-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(200px, 1fr);
     gap: 2rem;
     width: 100%;
     margin-bottom: 2rem;
-    align-items: start;
+    align-items: stretch;
+  }
+  
+  @media (min-width: 1400px) {
+    .home-grid {
+      grid-auto-rows: minmax(250px, auto);
+    }
   }
 
   /* Hero Card - Full Width */
@@ -206,11 +213,22 @@ const getUrl = (path: string) => {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     overflow: visible;
-    min-height: fit-content;
+    min-height: 200px;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    height: auto;
     position: relative;
+  }
+  
+  /* Cards menores ocupam altura mínima, cards maiores se expandem */
+  .warning-card,
+  .contribution-card {
+    min-height: 200px;
+  }
+  
+  .intro-card,
+  .question-card,
+  .contact-card {
+    min-height: 220px;
   }
 
   .home-card:hover {
@@ -281,14 +299,23 @@ const getUrl = (path: string) => {
   /* Intro Card - 2 columns */
   .intro-card {
     grid-column: span 2;
+    grid-row: span 1;
   }
 
   /* Question Card - 2 columns */
   .question-card {
     grid-column: span 2;
+    grid-row: span 1;
     background: linear-gradient(135deg, rgba(139, 76, 141, 0.1), rgba(107, 60, 109, 0.05));
     border-color: var(--color-accent-primary);
     justify-content: center;
+  }
+  
+  /* Warning e Contribution Cards - lado a lado */
+  .warning-card,
+  .contribution-card {
+    grid-column: span 1;
+    grid-row: span 1;
   }
 
   .question-quote {
@@ -315,12 +342,14 @@ const getUrl = (path: string) => {
   /* Contribution Card */
   .contribution-card {
     border-left: 4px solid #4caf50;
+    grid-column: span 1;
   }
 
   /* Contact Card */
   .contact-card {
     border-left: 4px solid #2196F3;
     grid-column: span 2;
+    grid-row: span 1;
   }
 
   .contact-info {
@@ -344,10 +373,12 @@ const getUrl = (path: string) => {
   /* Documentation Card - Full Width */
   .documentation-card {
     grid-column: 1 / -1;
+    grid-row: span 1;
     background: linear-gradient(135deg, rgba(139, 76, 141, 0.2), rgba(107, 60, 109, 0.15));
     border: 2px solid var(--color-accent-primary);
     padding: 2.5rem;
-    margin-top: 0.5rem;
+    min-height: auto;
+    margin-top: 0;
   }
 
   .doc-content {

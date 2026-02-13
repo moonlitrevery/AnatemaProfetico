@@ -257,11 +257,18 @@
 
   function saveCurrentCharacter(name = null) {
     const characters = getAllCharacters();
-    const currentId = getCurrentCharacterId() || generateCharacterId();
+    let currentId = getCurrentCharacterId();
+    
+    // Se não há ID atual, criar novo
+    if (!currentId) {
+      currentId = generateCharacterId();
+      setCurrentCharacterId(currentId);
+    }
+    
     const characterData = getCharacterData();
+    const characterName = name || characterData.basicInfo?.characterName || 'Ficha sem nome';
     
-    const characterName = name || characterData.basicInfo.characterName || 'Ficha sem nome';
-    
+    // Atualizar ou criar ficha
     characters[currentId] = {
       id: currentId,
       name: characterName,
@@ -270,11 +277,14 @@
     };
     
     saveAllCharacters(characters);
-    setCurrentCharacterId(currentId);
     renderCharactersList();
     
     return currentId;
   }
+  
+  // Exportar função para uso externo
+  window.saveCurrentCharacter = saveCurrentCharacter;
+  window.renderCharactersList = renderCharactersList;
 
   function loadCharacter(id) {
     const characters = getAllCharacters();
@@ -356,30 +366,60 @@
     
     if (newCharBtn) {
       newCharBtn.addEventListener('click', () => {
-        const name = prompt('Digite um nome para a nova ficha:', 'Nova Ficha');
-        if (name && name.trim()) {
-          const id = saveCurrentCharacter(name.trim());
-          alert(`Ficha "${name.trim()}" criada com sucesso!`);
+        // Salvar ficha atual antes de criar nova (se houver ID ativo)
+        const currentId = getCurrentCharacterId();
+        if (currentId) {
+          try {
+            saveCurrentCharacter();
+          } catch (e) {
+            console.warn('Erro ao salvar ficha atual:', e);
+          }
         }
+        
+        // Limpar campos da ficha primeiro
+        const clearBtn = document.getElementById('clear-btn');
+        if (clearBtn) {
+          // Simular clique no botão clear (que já limpa o ID)
+          clearBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        } else {
+          // Fallback: limpar ID manualmente
+          setCurrentCharacterId(null);
+        }
+        
+        // Aguardar um pouco para garantir que a limpeza foi feita
+        setTimeout(() => {
+          const name = prompt('Digite um nome para a nova ficha:', 'Nova Ficha');
+          if (name && name.trim()) {
+            // Criar nova ficha com novo ID único
+            let newId = generateCharacterId();
+            
+            // Garantir que o ID seja único
+            const characters = getAllCharacters();
+            while (characters[newId]) {
+              newId = generateCharacterId();
+            }
+            
+            // Definir o novo ID como ativo
+            setCurrentCharacterId(newId);
+            
+            // Salvar ficha vazia com o nome
+            const characterData = getCharacterData();
+            characters[newId] = {
+              id: newId,
+              name: name.trim(),
+              data: characterData,
+              timestamp: Date.now(),
+            };
+            saveAllCharacters(characters);
+            renderCharactersList();
+            
+            alert(`Ficha "${name.trim()}" criada com sucesso!`);
+          }
+        }, 100);
       });
     }
     
     renderCharactersList();
-    
-    // Salvar automaticamente quando a ficha mudar
-    let saveTimeout = null;
-    const originalSave = () => {
-      if (saveTimeout) clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(() => {
-        const currentId = getCurrentCharacterId();
-        if (currentId) {
-          saveCurrentCharacter();
-        }
-      }, 2000);
-    };
-    
-    document.addEventListener('input', originalSave, { passive: true });
-    document.addEventListener('change', originalSave, { passive: true });
   });
 </script>
 
