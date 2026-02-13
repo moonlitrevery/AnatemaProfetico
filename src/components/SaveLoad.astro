@@ -30,9 +30,7 @@
 </section>
 
 <script type="module">
-  import { validateCharacterSheet, showValidationWarnings } from '../utils/validation.ts';
-  
-  function getAllCharacterData() {
+  window.getAllCharacterData = function getAllCharacterData() {
     const basicInfo = {
       playerName: document.getElementById('player-name')?.value || '',
       characterName: document.getElementById('character-name')?.value || '',
@@ -172,9 +170,13 @@
       notes,
       status,
     };
+  };
+  
+  function getAllCharacterData() {
+    return window.getAllCharacterData();
   }
 
-  function loadCharacterData(data) {
+  window.loadCharacterData = function loadCharacterData(data) {
     const playerNameInput = document.getElementById('player-name');
     const charNameInput = document.getElementById('character-name');
     const ageInput = document.getElementById('character-age');
@@ -450,6 +452,10 @@
         nivelSelect.dataset.lastLevel = String(currentLevel);
       }
     }, 300);
+  };
+  
+  function loadCharacterData(data) {
+    return window.loadCharacterData(data);
   }
 
   function showMessage(message, type = 'success') {
@@ -470,15 +476,6 @@
       saveBtn.addEventListener('click', () => {
         try {
           const data = getAllCharacterData();
-          
-          // Validar antes de salvar
-          const validation = validateCharacterSheet(data);
-          if (!validation.isValid) {
-            showValidationWarnings(validation);
-            showMessage('Corrija os erros antes de salvar.', 'error');
-            return;
-          }
-          
           localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
           showMessage('Ficha salva localmente com sucesso!', 'success');
         } catch (error) {
@@ -493,14 +490,6 @@
       exportBtn.addEventListener('click', () => {
         try {
           const data = getAllCharacterData();
-          
-          // Validar antes de exportar (mas não bloquear, apenas avisar)
-          const validation = validateCharacterSheet(data);
-          if (!validation.isValid) {
-            showValidationWarnings(validation);
-            // Continuar exportação mesmo com avisos
-          }
-          
           const json = JSON.stringify(data, null, 2);
           const blob = new Blob([json], { type: 'application/json' });
           const url = URL.createObjectURL(blob);

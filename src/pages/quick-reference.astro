@@ -1,0 +1,305 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title="[AP] - Referência Rápida">
+  <div class="container">
+    <Logo />
+    
+    <div class="logo-subtitle-custom">
+      <h2>Referência Rápida</h2>
+    </div>
+
+    <section class="reference-section">
+      <div class="reference-grid">
+        <!-- Tabela de Dificuldades -->
+        <div class="reference-card">
+          <h3 class="reference-title">🎯 Tabela de Dificuldades</h3>
+          <div class="reference-content">
+            <table class="reference-table">
+              <thead>
+                <tr>
+                  <th>Dificuldade</th>
+                  <th>DT</th>
+                  <th>Exemplo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Trivial</td>
+                  <td>5</td>
+                  <td>Abrir uma porta destrancada</td>
+                </tr>
+                <tr>
+                  <td>Fácil</td>
+                  <td>10</td>
+                  <td>Pular um buraco pequeno</td>
+                </tr>
+                <tr>
+                  <td>Médio</td>
+                  <td>15</td>
+                  <td>Escalar uma parede</td>
+                </tr>
+                <tr>
+                  <td>Difícil</td>
+                  <td>20</td>
+                  <td>Abordar uma fechadura complexa</td>
+                </tr>
+                <tr>
+                  <td>Muito Difícil</td>
+                  <td>25</td>
+                  <td>Convencer um guarda hostil</td>
+                </tr>
+                <tr>
+                  <td>Quase Impossível</td>
+                  <td>30</td>
+                  <td>Realizar uma ação sobre-humana</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Ações de Combate -->
+        <div class="reference-card">
+          <h3 class="reference-title">⚔️ Ações de Combate</h3>
+          <div class="reference-content">
+            <div class="action-item">
+              <strong>Ataque:</strong> Rode 1d20 + modificador de perícia. Se igual ou maior que a DT do alvo, acerta.
+            </div>
+            <div class="action-item">
+              <strong>Esquiva:</strong> Rode 1d20 + Esquiva. Se igual ou maior que o ataque, evita o dano.
+            </div>
+            <div class="action-item">
+              <strong>Defender:</strong> Use sua Resistência a Dano Físico para reduzir dano recebido.
+            </div>
+            <div class="action-item">
+              <strong>Movimento:</strong> Você pode se mover até seu valor de Movimento em metros por turno.
+            </div>
+            <div class="action-item">
+              <strong>Ação Bônus:</strong> Algumas habilidades permitem ações bônus. Consulte sua ficha.
+            </div>
+          </div>
+        </div>
+
+        <!-- Condições -->
+        <div class="reference-card">
+          <h3 class="reference-title">⚡ Condições</h3>
+          <div class="reference-content">
+            <div class="condition-item">
+              <strong>Machucado:</strong> Vida < 50% do máximo. Movimento reduzido pela metade.
+            </div>
+            <div class="condition-item">
+              <strong>Morrendo:</strong> Vida = 0. Movimento zerado. Faça testes de salvamento (3 sucessos ou 3 falhas).
+            </div>
+            <div class="condition-item">
+              <strong>Insano:</strong> Sanidade < 50% do máximo. Pode afetar testes sociais e mentais.
+            </div>
+            <div class="condition-item">
+              <strong>Sobrecarga:</strong> Peso > máximo. Movimento reduzido pela metade.
+            </div>
+          </div>
+        </div>
+
+        <!-- Cálculos Rápidos -->
+        <div class="reference-card">
+          <h3 class="reference-title">🧮 Cálculos Rápidos</h3>
+          <div class="reference-content">
+            <div class="calc-item">
+              <strong>Modificador de Atributo:</strong><br/>
+              (Valor - 10) ÷ 2 (arredondado para baixo)
+            </div>
+            <div class="calc-item">
+              <strong>Modificador de Perícia:</strong><br/>
+              (Mod. Atributo ÷ 2) + Treinamento + Extra
+            </div>
+            <div class="calc-item">
+              <strong>Vida Máxima:</strong><br/>
+              Brutalidade + Compleição + Bônus Temp
+            </div>
+            <div class="calc-item">
+              <strong>Mana Máxima:</strong><br/>
+              Sobrenatural × 2 + Bônus Temp
+            </div>
+            <div class="calc-item">
+              <strong>Sanidade Máxima:</strong><br/>
+              Mente × 2 + Bônus Temp (-10% ao escolher Caminho)
+            </div>
+          </div>
+        </div>
+
+        <!-- Sequências -->
+        <div class="reference-card">
+          <h3 class="reference-title">📊 Sequências por Nível</h3>
+          <div class="reference-content">
+            <table class="reference-table">
+              <thead>
+                <tr>
+                  <th>Nível</th>
+                  <th>Sequência</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1-2</td><td>9ª sequência</td></tr>
+                <tr><td>3-4</td><td>8ª sequência</td></tr>
+                <tr><td>5-6</td><td>7ª sequência</td></tr>
+                <tr><td>7-8</td><td>6ª sequência</td></tr>
+                <tr><td>9-10</td><td>5ª sequência</td></tr>
+                <tr><td>11-12</td><td>4ª sequência</td></tr>
+                <tr><td>13-14</td><td>3ª sequência</td></tr>
+                <tr><td>15-16</td><td>2ª sequência</td></tr>
+                <tr><td>17-20</td><td>1ª sequência</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Treinamentos -->
+        <div class="reference-card">
+          <h3 class="reference-title">🎓 Bônus de Treinamento</h3>
+          <div class="reference-content">
+            <table class="reference-table">
+              <thead>
+                <tr>
+                  <th>Nível</th>
+                  <th>Bônus</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Nenhum</td><td>+0</td></tr>
+                <tr><td>Básico</td><td>+2</td></tr>
+                <tr><td>Médio</td><td>+4</td></tr>
+                <tr><td>Avançado</td><td>+6</td></tr>
+                <tr><td>Expert</td><td>+8</td></tr>
+                <tr><td>Aterrorizante</td><td>+10</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .logo-subtitle-custom {
+    text-align: center;
+    margin: -1rem 0 2rem 0;
+  }
+
+  .logo-subtitle-custom h2 {
+    font-family: var(--font-accent);
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  .reference-section {
+    width: 100%;
+  }
+
+  .reference-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .reference-card {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .reference-card:hover {
+    border-color: var(--color-accent-primary);
+    transform: translateY(-3px);
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.3),
+      0 0 25px rgba(139, 76, 141, 0.2);
+  }
+
+  .reference-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-text-accent);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .reference-content {
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+  }
+
+  .reference-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+  }
+
+  .reference-table th {
+    background: var(--color-bg-primary);
+    padding: 0.75rem;
+    text-align: left;
+    font-family: var(--font-heading);
+    color: var(--color-text-accent);
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .reference-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .reference-table tr:hover {
+    background: rgba(139, 76, 141, 0.05);
+  }
+
+  .action-item,
+  .condition-item,
+  .calc-item {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    background: var(--color-bg-primary);
+    border-left: 3px solid var(--color-accent-primary);
+    border-radius: 6px;
+    line-height: 1.6;
+  }
+
+  .action-item strong,
+  .condition-item strong,
+  .calc-item strong {
+    color: var(--color-text-accent);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .reference-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
