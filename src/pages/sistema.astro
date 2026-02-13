@@ -1,6 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Logo from '../components/Logo.astro';
+
+const base = import.meta.env.BASE_URL;
+const getUrl = (path: string) => {
+  const basePath = base.endsWith('/') ? base.slice(0, -1) : base;
+  if (!path || path === '') {
+    return `${basePath}/`;
+  }
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${basePath}/${cleanPath}`;
+};
 ---
 
 <Layout title="[AP] - Sistema">
@@ -250,71 +260,109 @@ import Logo from '../components/Logo.astro';
         </div>
 
         <div class="system-block leveling-block">
-          <h3 class="system-block-title">Sistema de Nivelamento</h3>
+          <h3 class="system-block-title">⬆️ Sistema de Nivelamento</h3>
           <div class="system-block-content">
-            <p>
-              Conforme o personagem ganha experiência e sobe de nível, ele recebe bônus automáticos que são calculados 
-              dinamicamente pela ficha. O sistema mostra avisos nos setores relevantes quando você sobe de nível, 
-              indicando exatamente o que você pode adicionar.
+            <p class="leveling-intro">
+              Conforme o personagem ganha experiência e sobe de nível, ele recebe <strong>bônus automáticos</strong> que são 
+              calculados dinamicamente pela ficha. Os bônus de Vida, Mana e Sanidade são <strong>aplicados automaticamente</strong> 
+              quando você sobe de nível.
             </p>
             
-            <h4>Nível 1</h4>
-            <ul>
-              <li>Escolha de caminho e de uma habilidade desse caminho</li>
-              <li><strong>3 + MODMente</strong> de treinamentos básicos</li>
-            </ul>
+            <div class="leveling-grid">
+              <div class="leveling-card">
+                <div class="leveling-card-header">
+                  <span class="leveling-level-badge">Nível 1</span>
+                </div>
+                <div class="leveling-card-content">
+                  <ul class="leveling-bonus-list">
+                    <li>✨ Escolha de caminho e de uma habilidade desse caminho</li>
+                    <li>📚 <strong>3 + MODMente</strong> de treinamentos básicos</li>
+                  </ul>
+                </div>
+              </div>
 
-            <h4>Níveis 2-5</h4>
-            <ul>
-              <li><strong>1 ponto</strong> em um atributo à sua escolha</li>
-              <li><strong>+1/2 do valor</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li><strong>+1/2 do valor</strong> de Sobrenatural em Mana</li>
-              <li><strong>+1/3 do valor</strong> de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento básico em uma perícia de sua escolha</li>
-            </ul>
+              <div class="leveling-card">
+                <div class="leveling-card-header">
+                  <span class="leveling-level-badge">Níveis 2-5</span>
+                </div>
+                <div class="leveling-card-content">
+                  <ul class="leveling-bonus-list">
+                    <li>💪 <strong>1 ponto</strong> em um atributo à sua escolha</li>
+                    <li>❤️ <strong>+1/2</strong> do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                    <li>🔮 <strong>+1/2</strong> do valor de Sobrenatural em Mana</li>
+                    <li>🧠 <strong>+1/3</strong> do valor de Mente em Sanidade</li>
+                    <li>⚖️ <strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento básico em uma perícia</li>
+                  </ul>
+                </div>
+              </div>
 
-            <h4>Níveis 6-9</h4>
-            <ul>
-              <li><strong>1 ponto</strong> em um atributo à sua escolha</li>
-              <li><strong>+1/2 do valor</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li><strong>+1/2 do valor</strong> de Sobrenatural em Mana</li>
-              <li><strong>+1/3 do valor</strong> de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Treinamento Básico ou Mudar uma de Básico → Médio) em uma perícia de sua escolha</li>
-            </ul>
+              <div class="leveling-card">
+                <div class="leveling-card-header">
+                  <span class="leveling-level-badge">Níveis 6-9</span>
+                </div>
+                <div class="leveling-card-content">
+                  <ul class="leveling-bonus-list">
+                    <li>💪 <strong>1 ponto</strong> em um atributo à sua escolha</li>
+                    <li>❤️ <strong>+1/2</strong> do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                    <li>🔮 <strong>+1/2</strong> do valor de Sobrenatural em Mana</li>
+                    <li>🧠 <strong>+1/3</strong> do valor de Mente em Sanidade</li>
+                    <li>⚖️ <strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+                  </ul>
+                </div>
+              </div>
 
-            <h4>Níveis 10-11</h4>
-            <ul>
-              <li><strong>2 pontos</strong> em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
-              <li><strong>+o valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li><strong>+o valor completo</strong> de Sobrenatural em Mana</li>
-              <li><strong>+1/2 do valor</strong> de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Treinamento Básico ou Mudar uma de Básico → Médio) em uma perícia de sua escolha</li>
-            </ul>
+              <div class="leveling-card">
+                <div class="leveling-card-header">
+                  <span class="leveling-level-badge">Níveis 10-11</span>
+                </div>
+                <div class="leveling-card-content">
+                  <ul class="leveling-bonus-list">
+                    <li>💪 <strong>2 pontos</strong> em um atributo (ou 1 em dois atributos diferentes)</li>
+                    <li>❤️ <strong>+valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                    <li>🔮 <strong>+valor completo</strong> de Sobrenatural em Mana</li>
+                    <li>🧠 <strong>+1/2</strong> do valor de Mente em Sanidade</li>
+                    <li>⚖️ <strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+                  </ul>
+                </div>
+              </div>
 
-            <h4>Níveis 12-14</h4>
-            <ul>
-              <li><strong>2 pontos</strong> em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
-              <li><strong>+o valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li><strong>+o valor completo</strong> de Sobrenatural em Mana</li>
-              <li><strong>+1/2 do valor</strong> de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Treinamento Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia de sua escolha</li>
-            </ul>
+              <div class="leveling-card">
+                <div class="leveling-card-header">
+                  <span class="leveling-level-badge">Níveis 12-14</span>
+                </div>
+                <div class="leveling-card-content">
+                  <ul class="leveling-bonus-list">
+                    <li>💪 <strong>2 pontos</strong> em um atributo (ou 1 em dois atributos diferentes)</li>
+                    <li>❤️ <strong>+valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                    <li>🔮 <strong>+valor completo</strong> de Sobrenatural em Mana</li>
+                    <li>🧠 <strong>+1/2</strong> do valor de Mente em Sanidade</li>
+                    <li>⚖️ <strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+                  </ul>
+                </div>
+              </div>
 
-            <h4>Níveis 15-20</h4>
-            <ul>
-              <li><strong>3 pontos</strong> em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
-              <li><strong>+o valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li><strong>+o valor completo</strong> de Sobrenatural em Mana</li>
-              <li><strong>+1/2 do valor</strong> de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Treinamento Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia de sua escolha</li>
-            </ul>
+              <div class="leveling-card">
+                <div class="leveling-card-header">
+                  <span class="leveling-level-badge">Níveis 15-20</span>
+                </div>
+                <div class="leveling-card-content">
+                  <ul class="leveling-bonus-list">
+                    <li>💪 <strong>3 pontos</strong> em um atributo (ou 1 em dois atributos diferentes)</li>
+                    <li>❤️ <strong>+valor completo</strong> de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                    <li>🔮 <strong>+valor completo</strong> de Sobrenatural em Mana</li>
+                    <li>🧠 <strong>+1/2</strong> do valor de Mente em Sanidade</li>
+                    <li>⚖️ <strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
-            <div class="info-box">
+            <div class="info-box leveling-note">
               <div class="info-icon">💡</div>
               <div class="info-content">
                 <p><strong>Nota:</strong> Todos os valores são arredondados para cima. Quando você sobe de nível, 
-                a ficha mostra automaticamente avisos nos setores relevantes (Atributos, Vida/Mana/Sanidade, Habilidades e Perícias) 
-                indicando exatamente o que você pode adicionar. Você também receberá um popup de confirmação com todos os bônus ganhos.</p>
+                a ficha mostra automaticamente avisos nos setores relevantes e aplica os bônus de Vida, Mana e Sanidade 
+                automaticamente. Você também receberá um popup de confirmação com todos os bônus ganhos.</p>
               </div>
             </div>
           </div>
@@ -325,7 +373,7 @@ import Logo from '../components/Logo.astro';
         </div>
 
         <div class="system-block documentation-block">
-          <h3 class="system-block-title">Documentação Completa</h3>
+          <h3 class="system-block-title">📚 Documentação Completa</h3>
           <div class="system-block-content">
             <p>
               Para informações detalhadas sobre cada Caminho, suas habilidades, regras completas do sistema, bestiário, 
@@ -338,6 +386,22 @@ import Logo from '../components/Logo.astro';
                  class="system-link">
                 <span class="system-link-icon">◊</span>
                 <span class="system-link-text">Acessar Documentação Completa</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="system-block monster-block" style="display: none;" id="monster-block">
+          <h3 class="system-block-title">👹 Ficha de Monstro</h3>
+          <div class="system-block-content">
+            <p>
+              A ficha de monstro está disponível para uso em campanhas. Para acessá-la, clique no botão abaixo:
+            </p>
+            <div class="system-link-box">
+              <a href={getUrl('monstro/')} 
+                 class="system-link monster-link">
+                <span class="system-link-icon">👹</span>
+                <span class="system-link-text">Acessar Ficha de Monstro</span>
               </a>
             </div>
           </div>
@@ -688,6 +752,96 @@ import Logo from '../components/Logo.astro';
     font-size: 1.5rem;
   }
 
+  .leveling-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(139, 76, 141, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid var(--color-accent-primary);
+  }
+
+  .leveling-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .leveling-card {
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .leveling-card:hover {
+    border-color: var(--color-accent-primary);
+    transform: translateY(-5px);
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.3),
+      0 0 25px rgba(139, 76, 141, 0.2);
+  }
+
+  .leveling-card-header {
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.2), rgba(107, 60, 109, 0.15));
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .leveling-level-badge {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .leveling-card-content {
+    padding: 1.5rem;
+  }
+
+  .leveling-bonus-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .leveling-bonus-list li {
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-tertiary);
+    border-left: 3px solid var(--color-accent-primary);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    transition: all 0.2s ease;
+  }
+
+  .leveling-bonus-list li:hover {
+    background: rgba(139, 76, 141, 0.1);
+    transform: translateX(5px);
+  }
+
+  .leveling-note {
+    margin-top: 2rem;
+  }
+
+  .monster-block {
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.15), rgba(107, 60, 109, 0.1));
+    border: 2px dashed var(--color-accent-primary);
+  }
+
+  .monster-link {
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.3), rgba(107, 60, 109, 0.2));
+  }
+
   @media (max-width: 768px) {
     .container {
       padding: 1rem;
@@ -716,5 +870,64 @@ import Logo from '../components/Logo.astro';
     .paths-list {
       grid-template-columns: 1fr;
     }
+
+    .leveling-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .leveling-card {
+      margin-bottom: 1rem;
+    }
   }
 </style>
+
+<script type="module">
+  // Botão para mostrar ficha de monstro (escondido por padrão, só aparece com botão específico)
+  // Adicionar botão secreto na página sistema
+  document.addEventListener('DOMContentLoaded', () => {
+    // Criar botão secreto (pode ser um clique em algum lugar específico ou combinação de teclas)
+    let clickCount = 0;
+    const secretButton = document.createElement('button');
+    secretButton.textContent = '👹';
+    secretButton.className = 'monster-secret-button';
+    secretButton.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background: var(--color-bg-secondary);
+      border: 2px solid var(--color-border);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 9999;
+      opacity: 0.3;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+    `;
+    
+    secretButton.addEventListener('mouseenter', () => {
+      secretButton.style.opacity = '0.7';
+      secretButton.style.transform = 'scale(1.1)';
+    });
+    
+    secretButton.addEventListener('mouseleave', () => {
+      secretButton.style.opacity = '0.3';
+      secretButton.style.transform = 'scale(1)';
+    });
+    
+    secretButton.addEventListener('click', () => {
+      clickCount++;
+      if (clickCount >= 3) {
+        const monsterBlock = document.getElementById('monster-block');
+        if (monsterBlock) {
+          monsterBlock.style.display = 'block';
+          monsterBlock.scrollIntoView({ behavior: 'smooth' });
+          clickCount = 0;
+        }
+      }
+    });
+    
+    document.body.appendChild(secretButton);
+  });
+</script>

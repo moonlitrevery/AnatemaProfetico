@@ -23,7 +23,6 @@ const getUrl = (path: string) => {
   <div class="menu-drawer" id="menu-drawer">
     <div class="menu-header">
       <h2 class="menu-title">Menu</h2>
-      <button class="menu-close" id="menu-close" type="button" aria-label="Fechar menu">✕</button>
     </div>
     <ul class="menu-list">
       <li class="menu-item">
@@ -41,13 +40,7 @@ const getUrl = (path: string) => {
       <li class="menu-item">
         <a href={getUrl('definicoes/')} class="menu-link" data-page="definicoes">
           <span class="menu-link-icon">◈</span>
-          <span class="menu-link-text">Definições</span>
-        </a>
-      </li>
-      <li class="menu-item">
-        <a href={getUrl('monstro/')} class="menu-link" data-page="monstro">
-          <span class="menu-link-icon">◊</span>
-          <span class="menu-link-text">Ficha de monstro</span>
+          <span class="menu-link-text">Informações - Ficha</span>
         </a>
       </li>
     </ul>
@@ -58,7 +51,6 @@ const getUrl = (path: string) => {
   const menuToggle = document.getElementById('menu-toggle');
   const menuDrawer = document.getElementById('menu-drawer');
   const menuOverlay = document.getElementById('menu-overlay');
-  const menuClose = document.getElementById('menu-close');
 
   function openMenu() {
     menuDrawer.classList.add('active');
@@ -73,16 +65,28 @@ const getUrl = (path: string) => {
   }
 
   if (menuToggle) {
-    menuToggle.addEventListener('click', openMenu);
-  }
-
-  if (menuClose) {
-    menuClose.addEventListener('click', closeMenu);
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (menuDrawer.classList.contains('active')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
   }
 
   if (menuOverlay) {
     menuOverlay.addEventListener('click', closeMenu);
   }
+
+  // Fechar ao clicar fora do drawer
+  document.addEventListener('click', (e) => {
+    if (menuDrawer.classList.contains('active')) {
+      if (!menuDrawer.contains(e.target) && !menuToggle.contains(e.target)) {
+        closeMenu();
+      }
+    }
+  });
 
   // Fechar menu ao pressionar ESC
   document.addEventListener('keydown', (e) => {
@@ -216,7 +220,7 @@ const getUrl = (path: string) => {
 
   .menu-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 2rem;
     border-bottom: 1px solid var(--color-border);
@@ -230,26 +234,6 @@ const getUrl = (path: string) => {
     margin: 0;
   }
 
-  .menu-close {
-    width: 36px;
-    height: 36px;
-    background: transparent;
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    color: var(--color-text-primary);
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-
-  .menu-close:hover {
-    border-color: var(--color-accent-primary);
-    background: rgba(139, 76, 141, 0.1);
-    color: var(--color-text-accent);
-  }
 
   .menu-list {
     list-style: none;

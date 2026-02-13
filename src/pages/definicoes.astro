@@ -3,381 +3,486 @@ import Layout from '../layouts/Layout.astro';
 import Logo from '../components/Logo.astro';
 ---
 
-<Layout title="[AP] - Definições">
+<Layout title="[AP] - Informações - Ficha">
   <div class="container">
     <Logo />
     
     <div class="logo-subtitle-custom">
-      <h2>Definições das fichas de personagens</h2>
+      <h2>Informações - Ficha de Personagem</h2>
     </div>
 
     <section class="sheet-section">
+      <!-- Sumário -->
+      <div class="guide-summary">
+        <h3 class="summary-title">📋 Sumário</h3>
+        <div class="summary-list">
+          <button class="summary-item" data-section="como-utilizar">
+            <span class="summary-icon">📖</span>
+            <span class="summary-text">Como Utilizar a Ficha</span>
+          </button>
+          <button class="summary-item" data-section="atributos">
+            <span class="summary-icon">💪</span>
+            <span class="summary-text">Atributos</span>
+          </button>
+          <button class="summary-item" data-section="calculos-header">
+            <span class="summary-icon">🧮</span>
+            <span class="summary-text">Cálculos Automáticos do Header</span>
+          </button>
+          <button class="summary-item" data-section="status-automaticos">
+            <span class="summary-icon">⚡</span>
+            <span class="summary-text">Status Automáticos</span>
+          </button>
+          <button class="summary-item" data-section="pericias">
+            <span class="summary-icon">🎯</span>
+            <span class="summary-text">Perícias</span>
+          </button>
+          <button class="summary-item" data-section="equipamentos">
+            <span class="summary-icon">⚔️</span>
+            <span class="summary-text">Equipamentos</span>
+          </button>
+          <button class="summary-item" data-section="habilidades">
+            <span class="summary-icon">✨</span>
+            <span class="summary-text">Habilidades</span>
+          </button>
+          <button class="summary-item" data-section="rolagem-dados">
+            <span class="summary-icon">🎲</span>
+            <span class="summary-text">Rolagem de Dados</span>
+          </button>
+          <button class="summary-item" data-section="salvamento">
+            <span class="summary-icon">💾</span>
+            <span class="summary-text">Salvamento e Exportação</span>
+          </button>
+          <button class="summary-item" data-section="foto-personagem">
+            <span class="summary-icon">🖼️</span>
+            <span class="summary-text">Foto do Personagem</span>
+          </button>
+          <button class="summary-item" data-section="sistema-nivelamento">
+            <span class="summary-icon">⬆️</span>
+            <span class="summary-text">Sistema de Nivelamento</span>
+          </button>
+        </div>
+      </div>
 
       <div class="guide-content">
-        <div class="guide-section">
-          <h3 class="guide-section-title">Como Utilizar a Ficha</h3>
-          <div class="guide-text">
-            <p>A ficha de personagem do Anátema Profético foi desenvolvida para facilitar a criação e gerenciamento de seus personagens. Siga os passos abaixo:</p>
-            <ol class="guide-list">
-              <li><strong>Informações Gerais:</strong> Preencha o nome do jogador, nome do personagem, idade, profissão e pronomes (seleção múltipla: Ele/Dele, Ela/Dela, Elu/Delu ou Todos). Você pode adicionar uma foto do personagem usando uma URL de imagem (ex: Imgur).</li>
-              <li><strong>Informações do Personagem:</strong> Os valores de Vida, Mana, Sanidade e outras estatísticas são calculados automaticamente baseados nos atributos. Você pode adicionar valores temporários a Vida, Mana e Sanidade usando os campos pequenos ao lado dos títulos - estes valores somam aos máximos. O movimento extra também pode ser adicionado.</li>
-              <li><strong>Atributos:</strong> Defina os valores dos 5 atributos principais (Brutalidade, Destreza, Compleição, Mente e Sobrenatural). Os valores padrão começam em 10.</li>
-              <li><strong>Nível e Caminho:</strong> O nível começa em 0. Quando o nível for maior ou igual a 1, você pode preencher o Caminho e o Prestígio em Sociedades Secretas. A Sequência é calculada automaticamente baseada no nível e exibida como "9ª sequência", "8ª sequência", etc.</li>
-              <li><strong>Perícias:</strong> Selecione o atributo base de cada perícia e escolha o nível de treinamento (Básico, Médio, Avançado, Expert ou Aterrorizante). O modificador é calculado automaticamente: (Modificador do Atributo ÷ 2) + Bônus de Treinamento + Valor Extra.</li>
-              <li><strong>Equipamentos:</strong> Adicione armas (com tipo: Arma branca, Arma de Fogo ou Arma mágica) e itens (com peso de 1-9). O peso total afeta o movimento quando excede o máximo (Brutalidade ÷ 2).</li>
-              <li><strong>Habilidades:</strong> Adicione habilidades do personagem, indicando se são passivas ou ativas, o nome, a sequência (1ª a 9ª), o custo de mana (se ativa) e a descrição.</li>
-              <li><strong>Anotações:</strong> Use as seções (Sobre, Sessões, Aliados, Inimigos, Extras) para anotar informações importantes sobre o personagem e a campanha.</li>
-              <li><strong>Status:</strong> Os status (Machucado, Morrendo, Insano) são ativados automaticamente conforme as condições da ficha. Quando Morrendo, aparecem os testes de salvamento (3 sucessos ou 3 fracassos).</li>
-              <li><strong>Salvar:</strong> A ficha salva automaticamente a cada 30 segundos e após 2 segundos sem mudanças. Você também pode usar os botões para salvar, exportar ou importar manualmente.</li>
-            </ol>
+        <div class="guide-section accordion-section" id="como-utilizar">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">📖 Como Utilizar a Ficha</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>A ficha de personagem do Anátema Profético foi desenvolvida para facilitar a criação e gerenciamento de seus personagens. Siga os passos abaixo:</p>
+              <ol class="guide-list">
+                <li><strong>Informações Gerais:</strong> Preencha o nome do jogador, nome do personagem, idade, profissão e pronomes (seleção múltipla: Ele/Dele, Ela/Dela, Elu/Delu ou Todos). Você pode adicionar uma foto do personagem usando uma URL de imagem (ex: Imgur).</li>
+                <li><strong>Informações do Personagem:</strong> Os valores de Vida, Mana, Sanidade e outras estatísticas são calculados automaticamente baseados nos atributos. Você pode adicionar valores temporários a Vida, Mana e Sanidade usando os campos pequenos ao lado dos títulos - estes valores somam aos máximos. O movimento extra também pode ser adicionado.</li>
+                <li><strong>Atributos:</strong> Defina os valores dos 5 atributos principais (Brutalidade, Destreza, Compleição, Mente e Sobrenatural). Os valores padrão começam em 10.</li>
+                <li><strong>Nível e Caminho:</strong> O nível começa em 0. Quando o nível for maior ou igual a 1, você pode preencher o Caminho e o Prestígio em Sociedades Secretas. A Sequência é calculada automaticamente baseada no nível e exibida como "9ª sequência", "8ª sequência", etc.</li>
+                <li><strong>Perícias:</strong> Selecione o atributo base de cada perícia e escolha o nível de treinamento (Básico, Médio, Avançado, Expert ou Aterrorizante). O modificador é calculado automaticamente: (Modificador do Atributo ÷ 2) + Bônus de Treinamento + Valor Extra.</li>
+                <li><strong>Equipamentos:</strong> Adicione armas (com tipo: Arma branca, Arma de Fogo ou Arma mágica) e itens (com peso de 1-9). O peso total afeta o movimento quando excede o máximo (Brutalidade ÷ 2).</li>
+                <li><strong>Habilidades:</strong> Adicione habilidades do personagem, indicando se são passivas ou ativas, o nome, a sequência (1ª a 9ª), o custo de mana (se ativa) e a descrição.</li>
+                <li><strong>Anotações:</strong> Use as seções (Sobre, Sessões, Aliados, Inimigos, Extras) para anotar informações importantes sobre o personagem e a campanha.</li>
+                <li><strong>Status:</strong> Os status (Machucado, Morrendo, Insano) são ativados automaticamente conforme as condições da ficha. Quando Morrendo, aparecem os testes de salvamento (3 sucessos ou 3 fracassos).</li>
+                <li><strong>Salvar:</strong> A ficha salva automaticamente a cada 30 segundos e após 2 segundos sem mudanças. Você também pode usar os botões para salvar, exportar ou importar manualmente.</li>
+              </ol>
+            </div>
           </div>
         </div>
 
-        <div class="guide-section">
-          <h3 class="guide-section-title">Atributos</h3>
-          <div class="guide-text">
-            <p>Os atributos são as características fundamentais do personagem. Cada atributo varia de 0 a 30 e possui um modificador calculado pela fórmula:</p>
-            <div class="formula-box">
-              <strong>Modificador = (Valor do Atributo - 10) ÷ 2</strong> (arredondado para baixo)
+        <div class="guide-section accordion-section" id="atributos">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">💪 Atributos</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Os atributos são as características fundamentais do personagem. Cada atributo varia de 0 a 30 e possui um modificador calculado pela fórmula:</p>
+              <div class="formula-box">
+                <strong>Modificador = (Valor do Atributo - 10) ÷ 2</strong> (arredondado para baixo)
+              </div>
+              <ul>
+                <li><strong>Brutalidade (FOR):</strong> Representa a força física e capacidade de causar dano em combate corpo a corpo. Usado para perícias como Atletismo e Luta.</li>
+                <li><strong>Destreza (DEX):</strong> Representa agilidade, coordenação e reflexos. Usado para perícias como Acrobacia, Esquiva, Furtividade e Tiro.</li>
+                <li><strong>Compleição (CON):</strong> Representa resistência física e saúde. Usado para perícias como Escutar e afeta a resistência a dano.</li>
+                <li><strong>Mente (MEN):</strong> Representa inteligência, sabedoria e carisma. Usado para perícias sociais e mentais como Charme, Convencimento, Intimidação, Investigação, Percepção, Psicoanalisar e Refletir.</li>
+                <li><strong>Sobrenatural (POD):</strong> Representa conexão com forças místicas e capacidade de usar magia. Usado para perícias como Conjuração e Mitos.</li>
+              </ul>
             </div>
-            <ul>
-              <li><strong>Brutalidade (FOR):</strong> Representa a força física e capacidade de causar dano em combate corpo a corpo. Usado para perícias como Atletismo e Luta.</li>
-              <li><strong>Destreza (DEX):</strong> Representa agilidade, coordenação e reflexos. Usado para perícias como Acrobacia, Esquiva, Furtividade e Tiro.</li>
-              <li><strong>Compleição (CON):</strong> Representa resistência física e saúde. Usado para perícias como Escutar e afeta a resistência a dano.</li>
-              <li><strong>Mente (MEN):</strong> Representa inteligência, sabedoria e carisma. Usado para perícias sociais e mentais como Charme, Convencimento, Intimidação, Investigação, Percepção, Psicoanalisar e Refletir.</li>
-              <li><strong>Sobrenatural (POD):</strong> Representa conexão com forças místicas e capacidade de usar magia. Usado para perícias como Conjuração e Mitos.</li>
-            </ul>
           </div>
         </div>
 
-        <div class="guide-section">
-          <h3 class="guide-section-title">Cálculos Automáticos do Header</h3>
-          <div class="guide-text">
-            <h4>Vida Máxima</h4>
-            <div class="formula-box">
-              <strong>Vida Máxima = Brutalidade + Compleição</strong>
+        <div class="guide-section accordion-section" id="calculos-header">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🧮 Cálculos Automáticos do Header</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <h4>Vida Máxima</h4>
+              <div class="formula-box">
+                <strong>Vida Máxima = Brutalidade + Compleição</strong>
+              </div>
+              <p>Representa os pontos de vida totais do personagem. O valor atual pode ser ajustado manualmente, mas não pode exceder o máximo. Você pode adicionar pontos temporários de vida usando o campo pequeno ao lado do título "Vida" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+
+              <h4>Mana Máxima</h4>
+              <div class="formula-box">
+                <strong>Mana Máxima = Sobrenatural × 2</strong>
+              </div>
+              <p>Representa os pontos de mana totais, usados para lançar feitiços e usar habilidades mágicas. Você pode adicionar pontos temporários de mana usando o campo pequeno ao lado do título "Mana" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+
+              <h4>Sanidade Máxima</h4>
+              <div class="formula-box">
+                <strong>Sanidade Máxima = Mente × 2</strong>
+              </div>
+              <p>Representa a saúde mental do personagem, afetada por encontros com o sobrenatural e eventos traumáticos. Você pode adicionar pontos temporários de sanidade usando o campo pequeno ao lado do título "Sanidade" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+              <p><strong>Importante:</strong> Quando você preencher o campo "Caminho" pela primeira vez, sua sanidade máxima será reduzida em 10% (arredondado para cima). Esta redução acontece apenas uma vez.</p>
+
+              <h4>Resistência a Dano Físico</h4>
+              <div class="formula-box">
+                <strong>Resistência = Modificador de Compleição + (Modificador de Brutalidade ÷ 2)</strong>
+              </div>
+              <p>Reduz o dano físico recebido. O segundo termo é arredondado para baixo.</p>
+
+              <h4>Movimento</h4>
+              <div class="formula-box">
+                <strong>Movimento Base = Destreza ÷ 2</strong> (em metros, arredondado para baixo)
+              </div>
+              <p>Representa a distância que o personagem pode se mover em um turno. O movimento pode ser modificado por:</p>
+              <ul>
+                <li><strong>Movimentação Extra:</strong> Um campo permite adicionar movimento extra (usado para habilidades que aumentam movimento).</li>
+                <li><strong>Sobrecarga:</strong> Se o peso carregado exceder o máximo, o movimento é reduzido pela metade.</li>
+                <li><strong>Status Machucado:</strong> Se a vida atual for menor que 50% da máxima, o movimento é reduzido pela metade.</li>
+                <li><strong>Status Morrendo:</strong> Se a vida atual for igual a 0, o movimento é zerado.</li>
+              </ul>
+              <p>O movimento final é calculado aplicando todas as modificações na ordem: base, depois sobrecarga/machucado, depois morrendo, e por último extra.</p>
+
+              <h4>DT para Projéteis (Receber)</h4>
+              <div class="formula-box">
+                <strong>DT = 8 + Modificador de Destreza</strong>
+              </div>
+              <p>Dificuldade de Teste para evitar ser atingido por projéteis. Quanto maior, mais difícil de ser acertado.</p>
+
+              <h4>Nível e Sequência</h4>
+              <p>O <strong>Nível</strong> do personagem começa em 0 e pode ser aumentado conforme o personagem ganha experiência. Quando o nível for maior ou igual a 1, o campo "Caminho" fica disponível para edição.</p>
+              <p>A <strong>Sequência</strong> é calculada automaticamente baseada no nível do personagem e exibida como "9ª sequência", "8ª sequência", etc.:</p>
+              <ul>
+                <li>Nível 1-2: 9ª sequência</li>
+                <li>Nível 3-4: 8ª sequência</li>
+                <li>Nível 5-6: 7ª sequência</li>
+                <li>Nível 7-8: 6ª sequência</li>
+                <li>Nível 9-10: 5ª sequência</li>
+                <li>Nível 11-12: 4ª sequência</li>
+                <li>Nível 13-14: 3ª sequência</li>
+                <li>Nível 15-16: 2ª sequência</li>
+                <li>Nível 17-20: 1ª sequência</li>
+              </ul>
+              <p><strong>Nota:</strong> Quando o nível for 0, o Prestígio em Sociedades Secretas fica desabilitado e mostra "--". Quando o nível for maior ou igual a 1, o Prestígio fica disponível para seleção.</p>
+
+              <h4>Prestígio em Sociedades Secretas</h4>
+              <p>O prestígio é selecionado através de um dropdown com as seguintes opções (indicadas por símbolos):</p>
+              <ul>
+                <li>◇ <strong>Muito baixo</strong></li>
+                <li>◇◇ <strong>Baixo</strong></li>
+                <li>◇◇◇ <strong>Médio</strong></li>
+                <li>◇◇◇◇ <strong>Alto</strong></li>
+                <li>◇◇◇◇◇ <strong>Muito alto</strong></li>
+                <li>◆ <strong>Supremo</strong></li>
+              </ul>
             </div>
-            <p>Representa os pontos de vida totais do personagem. O valor atual pode ser ajustado manualmente, mas não pode exceder o máximo. Você pode adicionar pontos temporários de vida usando o campo pequeno ao lado do título "Vida" - estes valores <strong>somam</strong> aos máximos calculados.</p>
-
-            <h4>Mana Máxima</h4>
-            <div class="formula-box">
-              <strong>Mana Máxima = Sobrenatural × 2</strong>
-            </div>
-            <p>Representa os pontos de mana totais, usados para lançar feitiços e usar habilidades mágicas. Você pode adicionar pontos temporários de mana usando o campo pequeno ao lado do título "Mana" - estes valores <strong>somam</strong> aos máximos calculados.</p>
-
-            <h4>Sanidade Máxima</h4>
-            <div class="formula-box">
-              <strong>Sanidade Máxima = Mente × 2</strong>
-            </div>
-            <p>Representa a saúde mental do personagem, afetada por encontros com o sobrenatural e eventos traumáticos. Você pode adicionar pontos temporários de sanidade usando o campo pequeno ao lado do título "Sanidade" - estes valores <strong>somam</strong> aos máximos calculados.</p>
-            <p><strong>Importante:</strong> Quando você preencher o campo "Caminho" pela primeira vez, sua sanidade máxima será reduzida em 10% (arredondado para cima). Esta redução acontece apenas uma vez.</p>
-
-            <h4>Resistência a Dano Físico</h4>
-            <div class="formula-box">
-              <strong>Resistência = Modificador de Compleição + (Modificador de Brutalidade ÷ 2)</strong>
-            </div>
-            <p>Reduz o dano físico recebido. O segundo termo é arredondado para baixo.</p>
-
-            <h4>Movimento</h4>
-            <div class="formula-box">
-              <strong>Movimento Base = Destreza ÷ 2</strong> (em metros, arredondado para baixo)
-            </div>
-            <p>Representa a distância que o personagem pode se mover em um turno. O movimento pode ser modificado por:</p>
-            <ul>
-              <li><strong>Movimentação Extra:</strong> Um campo permite adicionar movimento extra (usado para habilidades que aumentam movimento).</li>
-              <li><strong>Sobrecarga:</strong> Se o peso carregado exceder o máximo, o movimento é reduzido pela metade.</li>
-              <li><strong>Status Machucado:</strong> Se a vida atual for menor que 50% da máxima, o movimento é reduzido pela metade.</li>
-              <li><strong>Status Morrendo:</strong> Se a vida atual for igual a 0, o movimento é zerado.</li>
-            </ul>
-            <p>O movimento final é calculado aplicando todas as modificações na ordem: base, depois sobrecarga/machucado, depois morrendo, e por último extra.</p>
-
-            <h4>DT para Projéteis (Receber)</h4>
-            <div class="formula-box">
-              <strong>DT = 8 + Modificador de Destreza</strong>
-            </div>
-            <p>Dificuldade de Teste para evitar ser atingido por projéteis. Quanto maior, mais difícil de ser acertado.</p>
-
-            <h4>Nível e Sequência</h4>
-            <p>O <strong>Nível</strong> do personagem começa em 0 e pode ser aumentado conforme o personagem ganha experiência. Quando o nível for maior ou igual a 1, o campo "Caminho" fica disponível para edição.</p>
-            <p>A <strong>Sequência</strong> é calculada automaticamente baseada no nível do personagem e exibida como "9ª sequência", "8ª sequência", etc.:</p>
-            <ul>
-              <li>Nível 1-2: 9ª sequência</li>
-              <li>Nível 3-4: 8ª sequência</li>
-              <li>Nível 5-6: 7ª sequência</li>
-              <li>Nível 7-8: 6ª sequência</li>
-              <li>Nível 9-10: 5ª sequência</li>
-              <li>Nível 11-12: 4ª sequência</li>
-              <li>Nível 13-14: 3ª sequência</li>
-              <li>Nível 15-16: 2ª sequência</li>
-              <li>Nível 17-20: 1ª sequência</li>
-            </ul>
-            <p><strong>Nota:</strong> Quando o nível for 0, o Prestígio em Sociedades Secretas fica desabilitado e mostra "--". Quando o nível for maior ou igual a 1, o Prestígio fica disponível para seleção.</p>
-
-            <h4>Prestígio em Sociedades Secretas</h4>
-            <p>O prestígio é selecionado através de um dropdown com as seguintes opções (indicadas por símbolos):</p>
-            <ul>
-              <li>◇ <strong>Muito baixo</strong></li>
-              <li>◇◇ <strong>Baixo</strong></li>
-              <li>◇◇◇ <strong>Médio</strong></li>
-              <li>◇◇◇◇ <strong>Alto</strong></li>
-              <li>◇◇◇◇◇ <strong>Muito alto</strong></li>
-              <li>◆ <strong>Supremo</strong></li>
-            </ul>
           </div>
         </div>
 
-        <div class="guide-section">
-          <h3 class="guide-section-title">Status Automáticos</h3>
-          <div class="guide-text">
-            <p>Os status são ativados automaticamente conforme as condições do personagem. Eles aparecem discretamente no Header quando ativos e não podem ser marcados manualmente.</p>
-            
-            <h4>Machucado</h4>
-            <p><strong>Condição:</strong> Vida atual menor que 50% da vida máxima (e vida atual maior que 0)</p>
-            <p><strong>Efeito:</strong> O movimento do personagem é reduzido pela metade.</p>
+        <div class="guide-section accordion-section" id="status-automaticos">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">⚡ Status Automáticos</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Os status são ativados automaticamente conforme as condições do personagem. Eles aparecem discretamente no Header quando ativos e não podem ser marcados manualmente.</p>
+              
+              <h4>Machucado</h4>
+              <p><strong>Condição:</strong> Vida atual menor que 50% da vida máxima (e vida atual maior que 0)</p>
+              <p><strong>Efeito:</strong> O movimento do personagem é reduzido pela metade.</p>
 
-            <h4>Morrendo</h4>
-            <p><strong>Condição:</strong> Vida atual igual a 0</p>
-            <p><strong>Efeito:</strong> O movimento do personagem é zerado e aparecem os "Testes de Salvamento". O personagem precisa fazer testes de salvamento (3 sucessos para estabilizar, 3 falhas para morrer).</p>
-            <p>Os testes de salvamento aparecem automaticamente quando o status está ativo, com 3 checkboxes para sucessos (verde) e 3 para fracassos (vermelho).</p>
+              <h4>Morrendo</h4>
+              <p><strong>Condição:</strong> Vida atual igual a 0</p>
+              <p><strong>Efeito:</strong> O movimento do personagem é zerado e aparecem os "Testes de Salvamento". O personagem precisa fazer testes de salvamento (3 sucessos para estabilizar, 3 falhas para morrer).</p>
+              <p>Os testes de salvamento aparecem automaticamente quando o status está ativo, com 3 checkboxes para sucessos (verde) e 3 para fracassos (vermelho).</p>
 
-            <h4>Insano</h4>
-            <p><strong>Condição:</strong> Sanidade atual menor que 50% da sanidade máxima</p>
-            <p><strong>Efeito:</strong> Indica que o personagem está com a sanidade mental comprometida.</p>
-          </div>
-        </div>
-
-        <div class="guide-section">
-          <h3 class="guide-section-title">Perícias</h3>
-          <div class="guide-text">
-            <p>As perícias representam habilidades específicas do personagem. O modificador de uma perícia é calculado da seguinte forma:</p>
-            <div class="formula-box">
-              <strong>Modificador de Perícia = (Modificador do Atributo Base ÷ 2) + Bônus de Treinamento + Valor Extra</strong>
+              <h4>Insano</h4>
+              <p><strong>Condição:</strong> Sanidade atual menor que 50% da sanidade máxima</p>
+              <p><strong>Efeito:</strong> Indica que o personagem está com a sanidade mental comprometida.</p>
             </div>
-            <p>Onde:</p>
-            <ul>
-              <li><strong>Modificador do Atributo Base ÷ 2:</strong> O modificador do atributo escolhido é dividido por 2 e arredondado para baixo.</li>
-              <li><strong>Bônus de Treinamento:</strong> Depende do nível de treinamento escolhido:
-                <ul>
-                  <li>Nenhum: +0</li>
-                  <li>Básico: +2</li>
-                  <li>Médio: +4</li>
-                  <li>Avançado: +6</li>
-                  <li>Expert: +8</li>
-                  <li>Aterrorizante: +10</li>
-                </ul>
-              </li>
-              <li><strong>Valor Extra:</strong> Um bônus adicional de 0 a 20 que pode ser adicionado manualmente.</li>
-            </ul>
-            <h4>Lista de Perícias</h4>
-            <ul>
-              <li><strong>Acrobacia:</strong> Base em Destreza. Habilidades acrobáticas, equilíbrio e manobras físicas.</li>
-              <li><strong>Atletismo:</strong> Base em Brutalidade. Corrida, salto, natação e outras atividades físicas.</li>
-              <li><strong>Charme:</strong> Base em Mente. Capacidade de ser carismático e agradável.</li>
-              <li><strong>Conjuração:</strong> Base em Sobrenatural. Lançar feitiços e usar magia.</li>
-              <li><strong>Convencimento:</strong> Base em Mente. Persuadir e convencer outros.</li>
-              <li><strong>Escutar:</strong> Base em Compleição. Percepção auditiva e atenção aos sons.</li>
-              <li><strong>Esquiva:</strong> Base em Destreza. Evitar ataques e se mover rapidamente.</li>
-              <li><strong>Furtividade:</strong> Base em Destreza. Mover-se silenciosamente e passar despercebido.</li>
-              <li><strong>Intimidação:</strong> Base em Mente. Assustar e intimidar outros.</li>
-              <li><strong>Investigação:</strong> Base em Mente. Analisar pistas e descobrir informações.</li>
-              <li><strong>Luta:</strong> Base em Brutalidade. Combate corpo a corpo.</li>
-              <li><strong>Mitos:</strong> Base em Sobrenatural. Conhecimento sobre o sobrenatural e mitos.</li>
-              <li><strong>Percepção:</strong> Base em Mente. Notar detalhes e observar o ambiente.</li>
-              <li><strong>Profissão:</strong> Sem atributo base. Habilidades específicas da profissão do personagem.</li>
-              <li><strong>Psicoanalisar:</strong> Base em Mente. Entender motivações e estados mentais.</li>
-              <li><strong>Refletir:</strong> Base em Mente. Pensar criticamente e resolver problemas.</li>
-              <li><strong>Tiro:</strong> Base em Destreza. Usar armas de longo alcance.</li>
-              <li><strong>Ext.1, Ext.2, Ext.3:</strong> Perícias extras personalizáveis. Você pode escolher o nome e o atributo base.</li>
-            </ul>
           </div>
         </div>
 
-        <div class="guide-section">
-          <h3 class="guide-section-title">Equipamentos</h3>
-          <div class="guide-text">
-            <h4>Armas</h4>
-            <p>As armas possuem os seguintes campos:</p>
-            <ul>
-              <li><strong>Nome da arma:</strong> Nome da arma.</li>
-              <li><strong>Tipo:</strong> Arma branca, Arma de Fogo ou Arma mágica.</li>
-              <li><strong>Dano:</strong> Dano causado pela arma (ex: "1d6+2", "2d4").</li>
-              <li><strong>Descrição:</strong> Propriedades especiais, modificadores ou notas sobre a arma.</li>
-            </ul>
-
-            <h4>Itens</h4>
-            <p>Os itens possuem os seguintes campos:</p>
-            <ul>
-              <li><strong>Nome do item:</strong> Nome do item.</li>
-              <li><strong>Descrição:</strong> Descrição e propriedades do item.</li>
-              <li><strong>Peso:</strong> Peso do item (1 a 9).</li>
-            </ul>
-
-            <h4>Sistema de Peso</h4>
-            <div class="formula-box">
-              <strong>Peso Máximo = Brutalidade ÷ 2</strong> (arredondado para baixo)
+        <div class="guide-section accordion-section" id="pericias">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🎯 Perícias</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>As perícias representam habilidades específicas do personagem. O modificador de uma perícia é calculado da seguinte forma:</p>
+              <div class="formula-box">
+                <strong>Modificador de Perícia = (Modificador do Atributo Base ÷ 2) + Bônus de Treinamento + Valor Extra</strong>
+              </div>
+              <p>Onde:</p>
+              <ul>
+                <li><strong>Modificador do Atributo Base ÷ 2:</strong> O modificador do atributo escolhido é dividido por 2 e arredondado para baixo.</li>
+                <li><strong>Bônus de Treinamento:</strong> Depende do nível de treinamento escolhido:
+                  <ul>
+                    <li>Nenhum: +0</li>
+                    <li>Básico: +2</li>
+                    <li>Médio: +4</li>
+                    <li>Avançado: +6</li>
+                    <li>Expert: +8</li>
+                    <li>Aterrorizante: +10</li>
+                  </ul>
+                </li>
+                <li><strong>Valor Extra:</strong> Um bônus adicional de 0 a 20 que pode ser adicionado manualmente.</li>
+              </ul>
+              <h4>Lista de Perícias</h4>
+              <ul>
+                <li><strong>Acrobacia:</strong> Base em Destreza. Habilidades acrobáticas, equilíbrio e manobras físicas.</li>
+                <li><strong>Atletismo:</strong> Base em Brutalidade. Corrida, salto, natação e outras atividades físicas.</li>
+                <li><strong>Charme:</strong> Base em Mente. Capacidade de ser carismático e agradável.</li>
+                <li><strong>Conjuração:</strong> Base em Sobrenatural. Lançar feitiços e usar magia.</li>
+                <li><strong>Convencimento:</strong> Base em Mente. Persuadir e convencer outros.</li>
+                <li><strong>Escutar:</strong> Base em Compleição. Percepção auditiva e atenção aos sons.</li>
+                <li><strong>Esquiva:</strong> Base em Destreza. Evitar ataques e se mover rapidamente.</li>
+                <li><strong>Furtividade:</strong> Base em Destreza. Mover-se silenciosamente e passar despercebido.</li>
+                <li><strong>Intimidação:</strong> Base em Mente. Assustar e intimidar outros.</li>
+                <li><strong>Investigação:</strong> Base em Mente. Analisar pistas e descobrir informações.</li>
+                <li><strong>Luta:</strong> Base em Brutalidade. Combate corpo a corpo.</li>
+                <li><strong>Mitos:</strong> Base em Sobrenatural. Conhecimento sobre o sobrenatural e mitos.</li>
+                <li><strong>Percepção:</strong> Base em Mente. Notar detalhes e observar o ambiente.</li>
+                <li><strong>Profissão:</strong> Sem atributo base. Habilidades específicas da profissão do personagem.</li>
+                <li><strong>Psicoanalisar:</strong> Base em Mente. Entender motivações e estados mentais.</li>
+                <li><strong>Refletir:</strong> Base em Mente. Pensar criticamente e resolver problemas.</li>
+                <li><strong>Tiro:</strong> Base em Destreza. Usar armas de longo alcance.</li>
+                <li><strong>Ext.1, Ext.2, Ext.3:</strong> Perícias extras personalizáveis. Você pode escolher o nome e o atributo base.</li>
+              </ul>
             </div>
-            <p>O peso máximo que o personagem pode carregar é calculado automaticamente baseado na Brutalidade. Se o peso total dos itens exceder o máximo:</p>
-            <ul>
-              <li>O peso atual fica destacado em vermelho.</li>
-              <li>O movimento do personagem é reduzido pela metade.</li>
-            </ul>
           </div>
         </div>
 
-        <div class="guide-section">
-          <h3 class="guide-section-title">Habilidades</h3>
-          <div class="guide-text">
-            <p>As habilidades representam poderes especiais, técnicas ou capacidades únicas do personagem. Cada habilidade possui os seguintes campos:</p>
-            <ul>
-              <li><strong>Tipo:</strong> Uma checkbox indica se a habilidade é "Passiva" (sempre ativa) ou "Ativa" (requer uso).</li>
-              <li><strong>Nome da habilidade:</strong> O nome da habilidade.</li>
-              <li><strong>Sequência:</strong> A sequência da habilidade (1ª a 9ª sequência), selecionada através de um dropdown. Indica em qual nível de poder a habilidade se encontra.</li>
-              <li><strong>Custo de mana:</strong> 
-                <ul>
-                  <li>Se a habilidade for <strong>Passiva</strong>, o custo de mana fica como "-" e não pode ser modificado.</li>
-                  <li>Se a habilidade for <strong>Ativa</strong>, você pode definir o custo de mana (número inteiro).</li>
-                </ul>
-              </li>
-              <li><strong>Descrição:</strong> Descrição detalhada da habilidade, seus efeitos e como utilizá-la.</li>
-            </ul>
-            <p>Você pode adicionar quantas habilidades quiser usando o botão "+ Adicionar Habilidade" e remover habilidades clicando no botão "✕" ao lado de cada uma.</p>
-          </div>
-        </div>
+        <div class="guide-section accordion-section" id="equipamentos">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">⚔️ Equipamentos</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <h4>Armas</h4>
+              <p>As armas possuem os seguintes campos:</p>
+              <ul>
+                <li><strong>Nome da arma:</strong> Nome da arma.</li>
+                <li><strong>Tipo:</strong> Arma branca, Arma de Fogo ou Arma mágica.</li>
+                <li><strong>Dano:</strong> Dano causado pela arma (ex: "1d6+2", "2d4").</li>
+                <li><strong>Descrição:</strong> Propriedades especiais, modificadores ou notas sobre a arma.</li>
+              </ul>
 
-        <div class="guide-section">
-          <h3 class="guide-section-title">Rolagem de Dados</h3>
-          <div class="guide-text">
-            <p>O sistema usa um d20 como dado base. Para rolar um teste:</p>
-            <ol>
-              <li>Clique no botão "Rolar" ao lado do atributo ou perícia desejada.</li>
-              <li>O sistema rola 1d20 e adiciona o modificador correspondente.</li>
-              <li>O resultado aparece em um popup no canto inferior direito da tela.</li>
-              <li>Se o resultado for 20, é um <strong>crítico</strong> (sucesso automático).</li>
-              <li>Se o resultado for 1, é uma <strong>falha crítica</strong> (falha automática).</li>
-            </ol>
-            <p>O modificador usado na rolagem é calculado automaticamente baseado no atributo ou perícia selecionada.</p>
-            <h4>Rolagem de Dados Customizados</h4>
-            <p>No canto inferior direito da tela há um botão que abre um menu para rolar outros tipos de dados:</p>
-            <ul>
-              <li>d4, d6, d8, d10, d12, d20, d100</li>
-            </ul>
-            <p>Você pode selecionar múltiplos dados e rolá-los ao mesmo tempo. Os resultados aparecem em cascata no canto inferior direito, permanecendo visíveis por 30 segundos ou até serem fechados manualmente.</p>
-          </div>
-        </div>
+              <h4>Itens</h4>
+              <p>Os itens possuem os seguintes campos:</p>
+              <ul>
+                <li><strong>Nome do item:</strong> Nome do item.</li>
+                <li><strong>Descrição:</strong> Descrição e propriedades do item.</li>
+                <li><strong>Peso:</strong> Peso do item (1 a 9).</li>
+              </ul>
 
-        <div class="guide-section">
-          <h3 class="guide-section-title">Salvamento e Exportação</h3>
-          <div class="guide-text">
-            <p>A ficha oferece várias opções para salvar seus dados:</p>
-            <ul>
-              <li><strong>Auto-Save:</strong> A ficha salva automaticamente a cada 30 segundos e também após 2 segundos sem mudanças. Os dados são salvos no navegador (localStorage) e são mantidos mesmo após fechar o navegador.</li>
-              <li><strong>Salvar Localmente:</strong> Salva manualmente os dados no navegador. Os dados são mantidos no mesmo dispositivo e navegador.</li>
-              <li><strong>Exportar JSON:</strong> Baixa um arquivo JSON com todos os dados da ficha. Você pode salvar este arquivo em qualquer lugar e importá-lo depois em outro dispositivo.</li>
-              <li><strong>Importar JSON:</strong> Carrega dados de um arquivo JSON exportado anteriormente. Útil para transferir ficha entre dispositivos ou fazer backup.</li>
-              <li><strong>Limpar Ficha:</strong> Remove todos os dados da ficha atual, incluindo o salvamento local (use com cuidado!).</li>
-            </ul>
-            <p><strong>Nota:</strong> A funcionalidade de salvamento está disponível apenas na página "Ficha de personagem". Todos os dados da ficha são salvos, incluindo foto, valores temporários, status, testes de salvamento, habilidades (com sequência), pronomes (seleção múltipla) e todas as seções de anotações.</p>
-          </div>
-        </div>
-
-        <div class="guide-section">
-          <h3 class="guide-section-title">Foto do Personagem</h3>
-          <div class="guide-text">
-            <p>Você pode adicionar uma foto do personagem na seção de Informações Básicas. A foto aparece ao lado das informações básicas.</p>
-            <ul>
-              <li>Cole o link da imagem (URL) no campo abaixo da foto.</li>
-              <li>A imagem deve estar hospedada online (ex: Imgur, Google Drive com link público).</li>
-              <li>Formatos suportados: PNG, JPG, JPEG, GIF, WEBP.</li>
-              <li>A URL da foto é salva automaticamente junto com os outros dados da ficha.</li>
-            </ul>
-            <p>O link da imagem fica visível abaixo da foto como uma forma de tooltip, permitindo fácil edição quando necessário.</p>
-          </div>
-        </div>
-
-        <div class="guide-section">
-          <h3 class="guide-section-title">Sistema de Nivelamento</h3>
-          <div class="guide-text">
-            <p>O sistema de nivelamento é totalmente automático e dinâmico. Quando você altera o nível do personagem, a ficha calcula automaticamente os bônus que você recebe e mostra avisos nos setores relevantes.</p>
-            
-            <h4>Como Funciona</h4>
-            <ol>
-              <li><strong>Altere o nível:</strong> Quando você muda o nível do personagem no dropdown "Nível" na seção de Informações do Personagem, o sistema detecta a mudança automaticamente. <strong>Importante:</strong> Você só pode alterar o nível para um nível adjacente (acima ou abaixo do nível atual), garantindo que a ficha seja criada nível a nível.</li>
-              <li><strong>Popup de confirmação:</strong> Se você subiu de nível, aparecerá um popup mostrando todos os bônus que você ganhou.</li>
-              <li><strong>Avisos dinâmicos:</strong> Avisos aparecem automaticamente nos setores relevantes da ficha:
-                <ul>
-                  <li><strong>Atributos:</strong> Mostra quantos pontos você pode adicionar em atributos</li>
-                  <li><strong>Vida/Mana/Sanidade:</strong> Mostra os bônus que você ganhou (use os campos temporários ao lado dos títulos para adicionar)</li>
-                  <li><strong>Habilidades:</strong> Lembra que você pode escolher uma habilidade de sua sequência</li>
-                  <li><strong>Perícias:</strong> Mostra as opções de treinamento disponíveis</li>
-                </ul>
-              </li>
-              <li><strong>Aplicar bônus:</strong> Você pode aplicar os bônus diretamente nos campos correspondentes. Os avisos desaparecem quando você altera o nível novamente.</li>
-            </ol>
-
-            <h4>Bônus por Nível</h4>
-            <p>Todos os valores são <strong>arredondados para cima</strong>. Os bônus são calculados automaticamente baseados nos valores atuais dos seus atributos.</p>
-            
-            <div class="formula-box">
-              <strong>Exemplo:</strong> Se você tem Brutalidade 12 e Compleição 14, o sistema usa 14 (o maior) para calcular os bônus de vida.
+              <h4>Sistema de Peso</h4>
+              <div class="formula-box">
+                <strong>Peso Máximo = Brutalidade ÷ 2</strong> (arredondado para baixo)
+              </div>
+              <p>O peso máximo que o personagem pode carregar é calculado automaticamente baseado na Brutalidade. Se o peso total dos itens exceder o máximo:</p>
+              <ul>
+                <li>O peso atual fica destacado em vermelho.</li>
+                <li>O movimento do personagem é reduzido pela metade.</li>
+              </ul>
             </div>
+          </div>
+        </div>
 
-            <h4>Nível 1</h4>
-            <ul>
-              <li>Escolha de caminho e de uma habilidade desse caminho</li>
-              <li><strong>3 + MODMente</strong> de treinamentos básicos (MODMente = modificador de Mente)</li>
-            </ul>
+        <div class="guide-section accordion-section" id="habilidades">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">✨ Habilidades</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>As habilidades representam poderes especiais, técnicas ou capacidades únicas do personagem. Cada habilidade possui os seguintes campos:</p>
+              <ul>
+                <li><strong>Tipo:</strong> Uma checkbox indica se a habilidade é "Passiva" (sempre ativa) ou "Ativa" (requer uso).</li>
+                <li><strong>Nome da habilidade:</strong> O nome da habilidade.</li>
+                <li><strong>Sequência:</strong> A sequência da habilidade (1ª a 9ª sequência), selecionada através de um dropdown. Indica em qual nível de poder a habilidade se encontra.</li>
+                <li><strong>Custo de mana:</strong> 
+                  <ul>
+                    <li>Se a habilidade for <strong>Passiva</strong>, o custo de mana fica como "-" e não pode ser modificado.</li>
+                    <li>Se a habilidade for <strong>Ativa</strong>, você pode definir o custo de mana (número inteiro).</li>
+                  </ul>
+                </li>
+                <li><strong>Descrição:</strong> Descrição detalhada da habilidade, seus efeitos e como utilizá-la.</li>
+              </ul>
+              <p>Você pode adicionar quantas habilidades quiser usando o botão "+ Adicionar Habilidade" e remover habilidades clicando no botão "✕" ao lado de cada uma.</p>
+            </div>
+          </div>
+        </div>
 
-            <h4>Níveis 2-5</h4>
-            <ul>
-              <li>1 ponto em um atributo à sua escolha</li>
-              <li>+1/2 do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li>+1/2 do valor de Sobrenatural em Mana</li>
-              <li>+1/3 do valor de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento básico em uma perícia</li>
-            </ul>
+        <div class="guide-section accordion-section" id="rolagem-dados">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🎲 Rolagem de Dados</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>O sistema usa um d20 como dado base. Para rolar um teste:</p>
+              <ol>
+                <li>Clique no botão "Rolar" ao lado do atributo ou perícia desejada.</li>
+                <li>O sistema rola 1d20 e adiciona o modificador correspondente.</li>
+                <li>O resultado aparece em um popup no canto inferior direito da tela.</li>
+                <li>Se o resultado for 20, é um <strong>crítico</strong> (sucesso automático).</li>
+                <li>Se o resultado for 1, é uma <strong>falha crítica</strong> (falha automática).</li>
+              </ol>
+              <p>O modificador usado na rolagem é calculado automaticamente baseado no atributo ou perícia selecionada.</p>
+              <h4>Rolagem de Dados Customizados</h4>
+              <p>No canto inferior direito da tela há um botão que abre um menu para rolar outros tipos de dados:</p>
+              <ul>
+                <li>d4, d6, d8, d10, d12, d20, d100</li>
+              </ul>
+              <p>Você pode selecionar múltiplos dados e rolá-los ao mesmo tempo. Os resultados aparecem em cascata no canto inferior direito, permanecendo visíveis por 30 segundos ou até serem fechados manualmente.</p>
+            </div>
+          </div>
+        </div>
 
-            <h4>Níveis 6-9</h4>
-            <ul>
-              <li>1 ponto em um atributo à sua escolha</li>
-              <li>+1/2 do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li>+1/2 do valor de Sobrenatural em Mana</li>
-              <li>+1/3 do valor de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
-            </ul>
+        <div class="guide-section accordion-section" id="salvamento">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">💾 Salvamento e Exportação</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>A ficha oferece várias opções para salvar seus dados:</p>
+              <ul>
+                <li><strong>Auto-Save:</strong> A ficha salva automaticamente a cada 30 segundos e também após 2 segundos sem mudanças. Os dados são salvos no navegador (localStorage) e são mantidos mesmo após fechar o navegador.</li>
+                <li><strong>Salvar Localmente:</strong> Salva manualmente os dados no navegador. Os dados são mantidos no mesmo dispositivo e navegador.</li>
+                <li><strong>Exportar JSON:</strong> Baixa um arquivo JSON com todos os dados da ficha. Você pode salvar este arquivo em qualquer lugar e importá-lo depois em outro dispositivo.</li>
+                <li><strong>Importar JSON:</strong> Carrega dados de um arquivo JSON exportado anteriormente. Útil para transferir ficha entre dispositivos ou fazer backup.</li>
+                <li><strong>Limpar Ficha:</strong> Remove todos os dados da ficha atual, incluindo o salvamento local (use com cuidado!).</li>
+              </ul>
+              <p><strong>Nota:</strong> A funcionalidade de salvamento está disponível apenas na página "Ficha de personagem". Todos os dados da ficha são salvos, incluindo foto, valores temporários, status, testes de salvamento, habilidades (com sequência), pronomes (seleção múltipla) e todas as seções de anotações.</p>
+            </div>
+          </div>
+        </div>
 
-            <h4>Níveis 10-11</h4>
-            <ul>
-              <li>2 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
-              <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li>+o valor completo de Sobrenatural em Mana</li>
-              <li>+1/2 do valor de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
-            </ul>
+        <div class="guide-section accordion-section" id="foto-personagem">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">🖼️ Foto do Personagem</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>Você pode adicionar uma foto do personagem na seção de Informações Básicas. A foto aparece ao lado das informações básicas.</p>
+              <ul>
+                <li>Cole o link da imagem (URL) no campo abaixo da foto.</li>
+                <li>A imagem deve estar hospedada online (ex: Imgur, Google Drive com link público).</li>
+                <li>Formatos suportados: PNG, JPG, JPEG, GIF, WEBP.</li>
+                <li>A URL da foto é salva automaticamente junto com os outros dados da ficha.</li>
+              </ul>
+              <p>O link da imagem fica visível abaixo da foto como uma forma de tooltip, permitindo fácil edição quando necessário.</p>
+            </div>
+          </div>
+        </div>
 
-            <h4>Níveis 12-14</h4>
-            <ul>
-              <li>2 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
-              <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li>+o valor completo de Sobrenatural em Mana</li>
-              <li>+1/2 do valor de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
-            </ul>
+        <div class="guide-section accordion-section" id="sistema-nivelamento">
+          <button class="accordion-header">
+            <h3 class="guide-section-title">⬆️ Sistema de Nivelamento</h3>
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="guide-text">
+              <p>O sistema de nivelamento é totalmente automático e dinâmico. Quando você altera o nível do personagem, a ficha calcula automaticamente os bônus que você recebe e mostra avisos nos setores relevantes.</p>
+              
+              <h4>Como Funciona</h4>
+              <ol>
+                <li><strong>Altere o nível:</strong> Quando você muda o nível do personagem no dropdown "Nível" na seção de Informações do Personagem, o sistema detecta a mudança automaticamente. <strong>Importante:</strong> Você só pode alterar o nível para um nível adjacente (acima ou abaixo do nível atual), garantindo que a ficha seja criada nível a nível.</li>
+                <li><strong>Popup de confirmação:</strong> Se você subiu de nível, aparecerá um popup mostrando todos os bônus que você ganhou.</li>
+                <li><strong>Avisos dinâmicos:</strong> Avisos aparecem automaticamente nos setores relevantes da ficha:
+                  <ul>
+                    <li><strong>Atributos:</strong> Mostra quantos pontos você pode adicionar em atributos</li>
+                    <li><strong>Vida/Mana/Sanidade:</strong> Mostra os bônus que você ganhou (aplicados automaticamente)</li>
+                    <li><strong>Habilidades:</strong> Lembra que você pode escolher uma habilidade de sua sequência</li>
+                    <li><strong>Perícias:</strong> Mostra as opções de treinamento disponíveis</li>
+                  </ul>
+                </li>
+                <li><strong>Aplicar bônus:</strong> Você pode aplicar os bônus diretamente nos campos correspondentes. Os avisos desaparecem quando você altera o nível novamente.</li>
+              </ol>
 
-            <h4>Níveis 15-20</h4>
-            <ul>
-              <li>3 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
-              <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
-              <li>+o valor completo de Sobrenatural em Mana</li>
-              <li>+1/2 do valor de Mente em Sanidade</li>
-              <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
-            </ul>
+              <h4>Bônus por Nível</h4>
+              <p>Todos os valores são <strong>arredondados para cima</strong>. Os bônus são calculados automaticamente baseados nos valores atuais dos seus atributos.</p>
+              
+              <div class="formula-box">
+                <strong>Exemplo:</strong> Se você tem Brutalidade 12 e Compleição 14, o sistema usa 14 (o maior) para calcular os bônus de vida.
+              </div>
 
-            <div class="info-box" style="margin-top: 1.5rem;">
-              <div class="info-icon">💡</div>
-              <div class="info-content">
-                <p><strong>Dica:</strong> Os avisos aparecem apenas quando você sobe de nível. Se você quiser ver os avisos novamente, 
-                altere o nível para um valor diferente e depois volte para o nível atual. Os bônus de Vida, Mana e Sanidade devem 
-                ser adicionados manualmente usando os campos temporários (os campos pequenos ao lado dos títulos "Vida", "Mana" e "Sanidade").</p>
+              <h4>Nível 1</h4>
+              <ul>
+                <li>Escolha de caminho e de uma habilidade desse caminho</li>
+                <li><strong>3 + MODMente</strong> de treinamentos básicos (MODMente = modificador de Mente)</li>
+              </ul>
+
+              <h4>Níveis 2-5</h4>
+              <ul>
+                <li>1 ponto em um atributo à sua escolha</li>
+                <li>+1/2 do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                <li>+1/2 do valor de Sobrenatural em Mana</li>
+                <li>+1/3 do valor de Mente em Sanidade</li>
+                <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento básico em uma perícia</li>
+              </ul>
+
+              <h4>Níveis 6-9</h4>
+              <ul>
+                <li>1 ponto em um atributo à sua escolha</li>
+                <li>+1/2 do valor de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                <li>+1/2 do valor de Sobrenatural em Mana</li>
+                <li>+1/3 do valor de Mente em Sanidade</li>
+                <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+              </ul>
+
+              <h4>Níveis 10-11</h4>
+              <ul>
+                <li>2 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+                <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                <li>+o valor completo de Sobrenatural em Mana</li>
+                <li>+1/2 do valor de Mente em Sanidade</li>
+                <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico ou Mudar uma de Básico → Médio) em uma perícia</li>
+              </ul>
+
+              <h4>Níveis 12-14</h4>
+              <ul>
+                <li>2 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+                <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                <li>+o valor completo de Sobrenatural em Mana</li>
+                <li>+1/2 do valor de Mente em Sanidade</li>
+                <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+              </ul>
+
+              <h4>Níveis 15-20</h4>
+              <ul>
+                <li>3 pontos em um atributo à sua escolha (ou 1 em dois atributos diferentes)</li>
+                <li>+o valor completo de Brutalidade ou Compleição (o que for maior) em Vida</li>
+                <li>+o valor completo de Sobrenatural em Mana</li>
+                <li>+1/2 do valor de Mente em Sanidade</li>
+                <li><strong>Escolha ENTRE:</strong> Uma habilidade de sua sequência equivalente ou superior <strong>OU</strong> um treinamento (Básico, Mudar uma de Básico → Médio ou de Médio → Avançado) em uma perícia</li>
+              </ul>
+
+              <div class="info-box" style="margin-top: 1.5rem;">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                  <p><strong>Dica:</strong> Os avisos aparecem apenas quando você sobe de nível. Se você quiser ver os avisos novamente, 
+                  altere o nível para um valor diferente e depois volte para o nível atual. Os bônus de Vida, Mana e Sanidade são 
+                  aplicados automaticamente quando você sobe de nível.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -386,6 +491,78 @@ import Logo from '../components/Logo.astro';
     </section>
   </div>
 </Layout>
+
+<script type="module">
+  // Sistema de accordion
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionSections = document.querySelectorAll('.accordion-section');
+    
+    accordionSections.forEach(section => {
+      const header = section.querySelector('.accordion-header');
+      const content = section.querySelector('.accordion-content');
+      const icon = section.querySelector('.accordion-icon');
+      
+      if (!header || !content) return;
+      
+      // Inicializar: primeira seção aberta, outras fechadas
+      if (section.id === 'como-utilizar') {
+        section.classList.add('active');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        if (icon) icon.textContent = '▲';
+      } else {
+        content.style.maxHeight = '0px';
+        if (icon) icon.textContent = '▼';
+      }
+      
+      header.addEventListener('click', () => {
+        const isActive = section.classList.contains('active');
+        
+        // Fechar todas as outras seções
+        accordionSections.forEach(s => {
+          if (s !== section) {
+            s.classList.remove('active');
+            const sContent = s.querySelector('.accordion-content');
+            const sIcon = s.querySelector('.accordion-icon');
+            if (sContent) sContent.style.maxHeight = '0px';
+            if (sIcon) sIcon.textContent = '▼';
+          }
+        });
+        
+        // Toggle da seção atual
+        if (isActive) {
+          section.classList.remove('active');
+          content.style.maxHeight = '0px';
+          if (icon) icon.textContent = '▼';
+        } else {
+          section.classList.add('active');
+          content.style.maxHeight = content.scrollHeight + 'px';
+          if (icon) icon.textContent = '▲';
+          
+          // Scroll suave para a seção
+          setTimeout(() => {
+            section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        }
+      });
+    });
+    
+    // Sumário - clicar em item abre a seção correspondente
+    const summaryItems = document.querySelectorAll('.summary-item');
+    summaryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const sectionId = item.getAttribute('data-section');
+        const section = document.getElementById(sectionId);
+        
+        if (section) {
+          const header = section.querySelector('.accordion-header');
+          if (header) {
+            header.click();
+          }
+        }
+      });
+    });
+  });
+</script>
 
 <style>
   .container {
@@ -413,79 +590,74 @@ import Logo from '../components/Logo.astro';
     font-weight: 400;
   }
 
-  .section-title {
-    display: none;
+  .guide-summary {
+    background: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(139, 76, 141, 0.1);
   }
 
-  .section-title-text {
+  .summary-title {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     color: var(--color-text-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 700;
-    text-shadow: 
-      0 0 20px rgba(139, 76, 141, 0.5),
-      0 2px 10px rgba(0, 0, 0, 0.5);
-    position: relative;
-    z-index: 1;
+    margin-bottom: 1.5rem;
+    text-align: center;
   }
 
-  .section-title-decoration {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--color-accent-primary) 20%,
-      var(--color-accent-primary) 80%,
-      transparent
-    );
-    box-shadow: 
-      0 0 10px rgba(139, 76, 141, 0.8),
-      0 0 20px rgba(139, 76, 141, 0.4);
-    opacity: 0.8;
-    transform: scaleX(0.8);
+  .summary-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
   }
 
-  .section-title-decoration::before,
-  .section-title-decoration::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    border: 2px solid var(--color-accent-primary);
-    border-radius: 50%;
-    box-shadow: 
-      0 0 10px rgba(139, 76, 141, 0.8),
-      inset 0 0 10px rgba(139, 76, 141, 0.3);
+  .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
   }
 
-  .section-title-decoration::before {
-    left: 10%;
-    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  .summary-item:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.1);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(139, 76, 141, 0.2);
   }
 
-  .section-title-decoration::after {
-    right: 10%;
-    background: radial-gradient(circle, var(--color-accent-primary) 30%, transparent 70%);
+  .summary-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .summary-text {
+    flex: 1;
   }
 
   .guide-content {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 1rem;
   }
 
   .guide-section {
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border);
     border-radius: 12px;
-    padding: 2rem;
+    overflow: hidden;
     transition: all 0.3s ease;
   }
 
@@ -496,13 +668,55 @@ import Logo from '../components/Logo.astro';
       0 0 20px rgba(139, 76, 141, 0.2);
   }
 
+  .guide-section.active {
+    border-color: var(--color-accent-primary);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(139, 76, 141, 0.3);
+  }
+
+  .accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+  }
+
+  .accordion-header:hover {
+    background: rgba(139, 76, 141, 0.05);
+  }
+
+  .guide-section.active .accordion-header {
+    background: rgba(139, 76, 141, 0.1);
+    border-bottom: 1px solid var(--color-border);
+  }
+
   .guide-section-title {
     font-family: var(--font-heading);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--color-text-accent);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--color-border);
+    margin: 0;
+    text-transform: none;
+  }
+
+  .accordion-icon {
+    font-size: 1rem;
+    color: var(--color-text-accent);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
   }
 
   .guide-text {
@@ -510,6 +724,7 @@ import Logo from '../components/Logo.astro';
     color: var(--color-text-primary);
     line-height: 1.8;
     font-size: 1rem;
+    padding: 0 2rem 2rem 2rem;
   }
 
   .guide-text p {
@@ -581,22 +796,56 @@ import Logo from '../components/Logo.astro';
     font-weight: 600;
   }
 
+  .info-box {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid #4caf50;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+  }
+
+  .info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .info-content {
+    flex: 1;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+  }
+
   @media (max-width: 768px) {
     .container {
       padding: 1rem;
     }
 
-    .section-title-text {
-      font-size: 1.8rem;
-    }
-
-    .guide-section {
+    .guide-summary {
       padding: 1.5rem;
     }
 
+    .summary-list {
+      grid-template-columns: 1fr;
+    }
+
+    .guide-section {
+      padding: 0;
+    }
+
+    .accordion-header {
+      padding: 1rem 1.5rem;
+    }
+
     .guide-section-title {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .guide-text {
+      padding: 0 1.5rem 1.5rem 1.5rem;
     }
   }
 </style>
-

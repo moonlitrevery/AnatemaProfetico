@@ -134,8 +134,37 @@
       }
     }
 
-    // Aviso em vida/mana/sanidade
+    // Aplicar bônus automaticamente em vida/mana/sanidade
     if (bonuses.vida > 0 || bonuses.mana > 0 || bonuses.sanidade > 0) {
+      // Aplicar bônus automaticamente nos campos temporários
+      if (bonuses.vida > 0) {
+        const vidaTempInput = document.getElementById('vida-temp');
+        if (vidaTempInput) {
+          const currentTemp = parseInt(vidaTempInput.value) || 0;
+          vidaTempInput.value = String(currentTemp + bonuses.vida);
+          vidaTempInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      
+      if (bonuses.mana > 0) {
+        const manaTempInput = document.getElementById('mana-temp');
+        if (manaTempInput) {
+          const currentTemp = parseInt(manaTempInput.value) || 0;
+          manaTempInput.value = String(currentTemp + bonuses.mana);
+          manaTempInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      
+      if (bonuses.sanidade > 0) {
+        const sanidadeTempInput = document.getElementById('sanidade-temp');
+        if (sanidadeTempInput) {
+          const currentTemp = parseInt(sanidadeTempInput.value) || 0;
+          sanidadeTempInput.value = String(currentTemp + bonuses.sanidade);
+          sanidadeTempInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      
+      // Mostrar aviso informativo
       const headerSection = document.querySelector('.header-section');
       if (headerSection) {
         const warning = document.createElement('div');
@@ -148,7 +177,7 @@
           <div class="leveling-warning-content">
             <span class="leveling-warning-icon">❤️</span>
             <span class="leveling-warning-text">
-              <strong>Nível ${level}:</strong> Você ganhou ${stats.join(', ')}! Use os campos temporários ao lado dos títulos para adicionar.
+              <strong>Nível ${level}:</strong> Você ganhou ${stats.join(', ')}! Os bônus foram aplicados automaticamente.
             </span>
           </div>
         `;
@@ -327,8 +356,8 @@
     content += `
           </ul>
           <p class="leveling-popup-note">
-            <strong>Nota:</strong> Os avisos aparecerão nos setores relevantes da ficha. 
-            Você pode aplicar os bônus diretamente nos campos correspondentes.
+            <strong>Nota:</strong> Os bônus de Vida, Mana e Sanidade foram aplicados automaticamente! 
+            Os avisos aparecerão nos setores relevantes da ficha para você aplicar os outros bônus (atributos, habilidades e perícias).
           </p>
         </div>
         <div class="leveling-popup-footer">
