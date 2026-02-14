@@ -48,6 +48,7 @@
           <input type="number" id="sanidade-temp" name="sanidade-temp" class="temp-value-small" placeholder="Nível" min="0" readonly aria-label="Bônus de nível Sanidade" title="Bônus de nível à Sanidade Máxima (alterado pelo sistema de nivelamento)" />
           <input type="number" id="sanidade-extra" name="sanidade-extra" class="temp-value-small extra" placeholder="Extra" min="0" aria-label="Bônus extra Sanidade" title="Bônus extra à Sanidade Máxima (itens, buffs)" />
           <button type="button" id="sanity-popup-btn" class="sanity-popup-btn" aria-label="Abrir insanidades e traumas" title="Insanidades e traumas - clique para gerenciar">🧠</button>
+          <button type="button" id="sanity-test-btn" class="sanity-test-btn" title="Teste de Sanidade: (mod Sobrenatural + mod Mente) ÷ 2" aria-label="Rolar teste de sanidade">🎲 Sanidade</button>
         </div>
       </div>
       <div class="hp-mana-container">
@@ -138,44 +139,70 @@
       <label for="dt-projeteis">DT para projéteis (Receber)</label>
       <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" aria-label="DT para projéteis receber" />
     </div>
-    <div class="header-item damage-calc-item">
-      <label class="damage-calc-label">Aplicar Dano</label>
-      <div class="damage-calc-inline-grid">
-        <div class="damage-calc-inline-item">
-          <input type="number" id="dano-vida" class="damage-input-inline" placeholder="Vida" min="0" aria-label="Dano em Vida" title="Valor de dano a subtrair da Vida" />
+    <div class="header-item damage-heal-calc-item">
+      <div class="damage-heal-row">
+        <div class="damage-heal-block">
+          <label class="damage-calc-label">Aplicar Dano</label>
+          <div class="damage-calc-inline-grid">
+            <div class="damage-calc-inline-item">
+              <input type="number" id="dano-vida" class="damage-input-inline" placeholder="Vida" min="0" aria-label="Dano em Vida" title="Valor de dano a subtrair da Vida" />
+            </div>
+            <div class="damage-calc-inline-item">
+              <input type="number" id="dano-mana" class="damage-input-inline" placeholder="Mana" min="0" aria-label="Dano em Mana" title="Valor de dano a subtrair da Mana" />
+            </div>
+            <div class="damage-calc-inline-item">
+              <input type="number" id="dano-sanidade" class="damage-input-inline" placeholder="San" min="0" aria-label="Dano em Sanidade" title="Valor de dano a subtrair da Sanidade" />
+            </div>
+            <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn-inline" aria-label="Aplicar dano aos valores">Aplicar</button>
+          </div>
         </div>
-        <div class="damage-calc-inline-item">
-          <input type="number" id="dano-mana" class="damage-input-inline" placeholder="Mana" min="0" aria-label="Dano em Mana" title="Valor de dano a subtrair da Mana" />
+        <div class="damage-heal-sep"></div>
+        <div class="damage-heal-block">
+          <label class="damage-calc-label">Aplicar Cura</label>
+          <div class="damage-calc-inline-grid">
+            <div class="damage-calc-inline-item">
+              <input type="number" id="cura-vida" class="heal-input-inline" placeholder="Vida" min="0" aria-label="Cura em Vida" title="Valor de cura a adicionar à Vida" />
+            </div>
+            <div class="damage-calc-inline-item">
+              <input type="number" id="cura-mana" class="heal-input-inline" placeholder="Mana" min="0" aria-label="Cura em Mana" title="Valor de cura a adicionar à Mana" />
+            </div>
+            <div class="damage-calc-inline-item">
+              <input type="number" id="cura-sanidade" class="heal-input-inline" placeholder="San" min="0" aria-label="Cura em Sanidade" title="Valor de cura a adicionar à Sanidade" />
+            </div>
+            <button type="button" id="aplicar-cura-btn" class="aplicar-cura-btn-inline" aria-label="Aplicar cura aos valores">Aplicar</button>
+          </div>
         </div>
-        <div class="damage-calc-inline-item">
-          <input type="number" id="dano-sanidade" class="damage-input-inline" placeholder="San" min="0" aria-label="Dano em Sanidade" title="Valor de dano a subtrair da Sanidade" />
-        </div>
-        <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn-inline" aria-label="Aplicar dano aos valores">Aplicar</button>
-      </div>
-      <label class="damage-calc-label heal-label">Aplicar Cura</label>
-      <div class="damage-calc-inline-grid heal-grid">
-        <div class="damage-calc-inline-item">
-          <input type="number" id="cura-vida" class="heal-input-inline" placeholder="Vida" min="0" aria-label="Cura em Vida" title="Valor de cura a adicionar à Vida" />
-        </div>
-        <div class="damage-calc-inline-item">
-          <input type="number" id="cura-mana" class="heal-input-inline" placeholder="Mana" min="0" aria-label="Cura em Mana" title="Valor de cura a adicionar à Mana" />
-        </div>
-        <div class="damage-calc-inline-item">
-          <input type="number" id="cura-sanidade" class="heal-input-inline" placeholder="San" min="0" aria-label="Cura em Sanidade" title="Valor de cura a adicionar à Sanidade" />
-        </div>
-        <button type="button" id="aplicar-cura-btn" class="aplicar-cura-btn-inline" aria-label="Aplicar cura aos valores">Aplicar</button>
       </div>
     </div>
   </div>
 
-  <!-- Botões de Descanso -->
+  <!-- Botões de Descanso e Condições -->
   <div class="rest-buttons-section">
     <h3 class="rest-buttons-title">Descanso</h3>
-    <div class="rest-buttons-grid">
+    <div class="rest-conditions-row">
+      <div class="rest-buttons-grid">
       <button type="button" class="rest-btn rest-ruim" data-rest="ruim" title="Vida 1/4, Mana 1/4, Sanidade 1/6" aria-label="Descanso ruim - recupera 1/4 Vida, 1/4 Mana, 1/6 Sanidade">Ruim</button>
       <button type="button" class="rest-btn rest-mediano" data-rest="mediano" title="Vida 1/3, Mana 1/3, Sanidade 1/4">Mediano</button>
       <button type="button" class="rest-btn rest-bom" data-rest="bom" title="Vida 1/2, Mana 1/2, Sanidade 1/3">Bom</button>
       <button type="button" class="rest-btn rest-magico" data-rest="magico" title="Recuperação total">Mágico</button>
+      </div>
+      <button type="button" id="conditions-btn" class="conditions-btn" title="Ver condições" aria-label="Abrir condições">⚡ Condições</button>
+    </div>
+  </div>
+
+  <div id="conditions-popup" class="conditions-popup" style="display: none;">
+    <div class="conditions-overlay"></div>
+    <div class="conditions-content">
+      <div class="conditions-header">
+        <h3>Condições</h3>
+        <button type="button" id="conditions-close" aria-label="Fechar">✕</button>
+      </div>
+      <div class="conditions-body">
+        <p class="conditions-desc">Marque as condições ativas no personagem. Machucado e Morrendo são aplicados automaticamente.</p>
+        <div id="conditions-list" class="conditions-list">
+          <!-- Preenchido via JS -->
+        </div>
+      </div>
     </div>
   </div>
 
@@ -246,10 +273,14 @@
     
     const isMachucado = vidaMax > 0 && vidaCurrent < vidaMax / 2 && vidaCurrent > 0;
     const isMorrendo = vidaCurrent === 0;
+    const isInsano = sanidadeMax > 0 && sanidadeCurrent < sanidadeMax / 2;
+    const activeConditions = Array.from(document.querySelectorAll('#conditions-list input.condition-check:checked')).map(cb => cb.value);
     
     container.innerHTML = '';
+    const hasAuto = isMachucado || isMorrendo || isInsano;
+    const hasManual = activeConditions.length > 0;
     
-    if (isMachucado || isMorrendo) {
+    if (hasAuto || hasManual) {
       container.style.display = 'flex';
       container.innerHTML = '<span class="status-label-inline">Status:</span>';
       
@@ -266,6 +297,22 @@
         span.textContent = '○ Morrendo - Movimento zerado - Faça testes de salvamento';
         container.appendChild(span);
       }
+
+      if (isInsano) {
+        const span = document.createElement('span');
+        span.className = 'status-badge status-insano';
+        span.textContent = '🧠 Insano - Sanidade abaixo de 50%';
+        container.appendChild(span);
+      }
+      
+      activeConditions.forEach(id => {
+        const item = document.querySelector(`[data-condition-id="${id}"]`);
+        const name = item?.querySelector('label')?.textContent?.split('\n')[0] || id;
+        const span = document.createElement('span');
+        span.className = 'status-badge status-condition';
+        span.textContent = name;
+        container.appendChild(span);
+      });
     } else {
       container.style.display = 'none';
     }
@@ -290,6 +337,69 @@
   }
   
   // Escutar mudanças
+  // Condições popup - define dados e popula lista ao carregar
+  const CONDITIONS_DATA = [
+    { id: 'machucado', name: 'Machucado', desc: 'Aplicado automaticamente quando vida < 50%. Movimento reduzido pela metade.', auto: true },
+    { id: 'morrendo', name: 'Morrendo', desc: 'Aplicado automaticamente quando vida = 0. Movimento zerado. Testes de salvamento.', auto: true },
+    { id: 'atordoado', name: 'Atordoado', desc: 'Incapacitado, não pode se mover ou agir.', auto: false },
+    { id: 'cego', name: 'Cego', desc: 'Não enxerga. Desvantagem em testes que dependem da visão.', auto: false },
+    { id: 'surdo', name: 'Surdo', desc: 'Não ouve. Desvantagem em testes que dependem da audição.', auto: false },
+    { id: 'enfeiticado', name: 'Enfeitiçado', desc: 'Não pode atacar o enfeitiçador ou usar ações nocivas contra ele.', auto: false },
+    { id: 'assustado', name: 'Assustado', desc: 'Desvantagem em testes enquanto a fonte do medo estiver visível.', auto: false },
+    { id: 'paralisado', name: 'Paralisado', desc: 'Incapacitado. Não pode se mover ou falar.', auto: false },
+    { id: 'inconsciente', name: 'Inconsciente', desc: 'Desmaiado. Incapacitado e vulnerável.', auto: false },
+    { id: 'agarrado', name: 'Agarrado', desc: 'Movimento zerado. Depende da ação para se libertar.', auto: false },
+    { id: 'restrito', name: 'Restrito', desc: 'Movimento zerado. Desvantagem em ataques e testes.', auto: false },
+    { id: 'incapacitado', name: 'Incapacitado', desc: 'Não pode realizar ações.', auto: false },
+    { id: 'escondido', name: 'Escondido', desc: 'Difícil de ser detectado. Vantagem em ataques surpresa.', auto: false },
+    { id: 'invisivel', name: 'Invisível', desc: 'Não pode ser visto. Vantagem em ataques.', auto: false },
+    { id: 'sobrecarregado', name: 'Sobrecarregado', desc: 'Peso > máximo. Movimento reduzido pela metade.', auto: true },
+  ];
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('conditions-popup');
+    const list = document.getElementById('conditions-list');
+    const openBtn = document.getElementById('conditions-btn');
+    const closeBtn = document.getElementById('conditions-close');
+    const overlay = popup?.querySelector('.conditions-overlay');
+    
+    if (list) {
+      list.innerHTML = CONDITIONS_DATA.filter(c => !c.auto).map(c => `
+        <div class="condition-check-item" data-condition-id="${c.id}">
+          <input type="checkbox" class="condition-check" id="cond-${c.id}" value="${c.id}" aria-label="${c.name}" />
+          <label for="cond-${c.id}">
+            <strong>${c.name}</strong>
+            <span class="cond-desc">${c.desc}</span>
+          </label>
+        </div>
+      `).join('');
+    }
+    
+    function openConditions() {
+      if (popup) { popup.style.display = 'flex'; popup.dataset.open = 'true'; document.body.style.overflow = 'hidden'; }
+    }
+    function closeConditions() {
+      if (popup) { popup.style.display = 'none'; popup.dataset.open = ''; document.body.style.overflow = ''; }
+    }
+    
+    openBtn?.addEventListener('click', openConditions);
+    closeBtn?.addEventListener('click', closeConditions);
+    overlay?.addEventListener('click', closeConditions);
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && popup?.dataset.open === 'true') closeConditions();
+    });
+    
+    window.getConditionsData = () => Array.from(document.querySelectorAll('#conditions-list input.condition-check:checked')).map(cb => cb.value);
+    window.loadConditionsData = (ids) => {
+      document.querySelectorAll('#conditions-list input.condition-check').forEach(cb => { cb.checked = ids?.includes(cb.value) || false; });
+    };
+  });
+
+  document.addEventListener('change', (e) => {
+    if (e.target?.classList?.contains('condition-check')) updateInlineStatus();
+  });
+
   ['vida-current', 'vida-max', 'mana-current', 'mana-max', 'sanidade-current', 'sanidade-max'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -302,6 +412,23 @@
   document.getElementById('sanity-popup-btn')?.addEventListener('click', () => {
     if (typeof window.openSanityPopup === 'function') {
       window.openSanityPopup();
+    }
+  });
+
+  // Botão Teste de Sanidade - (mod Sobrenatural + mod Mente) / 2
+  document.getElementById('sanity-test-btn')?.addEventListener('click', () => {
+    const sobrenatural = parseInt(document.getElementById('sobrenatural')?.value || '0', 10) || 0;
+    const mente = parseInt(document.getElementById('mente')?.value || '0', 10) || 0;
+    const modSobrenatural = Math.floor((sobrenatural - 10) / 2);
+    const modMente = Math.floor((mente - 10) / 2);
+    const bonus = Math.floor((modSobrenatural + modMente) / 2);
+    const d20 = Math.floor(Math.random() * 20) + 1;
+    const total = d20 + bonus;
+    const label = `Teste de Sanidade (1d20${bonus >= 0 ? '+' : ''}${bonus})`;
+    if (typeof window.showDiceRollPopup === 'function') {
+      window.showDiceRollPopup({ result: d20, modifier: bonus, total, critical: d20 === 20, fumble: d20 === 1 }, label, 'd20');
+    } else {
+      alert(`${label}: ${d20} + ${bonus} = ${total}`);
     }
   });
   
@@ -1172,6 +1299,24 @@
     gap: 0.35rem;
   }
 
+  .sanity-test-btn {
+    padding: 0.25rem 0.5rem;
+    background: rgba(139, 76, 141, 0.2);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 4px;
+    color: var(--color-text-accent);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .sanity-test-btn:hover {
+    background: rgba(139, 76, 141, 0.35);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.4);
+  }
+
   .sanity-popup-btn {
     width: 50px;
     height: 26px;
@@ -1193,6 +1338,30 @@
   .sanity-popup-btn:hover {
     background: rgba(139, 76, 141, 0.35);
     box-shadow: 0 0 10px rgba(139, 76, 141, 0.4);
+  }
+
+  .damage-heal-calc-item {
+    grid-column: 1 / -1;
+    min-width: 100%;
+  }
+
+  .damage-heal-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .damage-heal-block {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .damage-heal-sep {
+    width: 1px;
+    min-height: 60px;
+    background: var(--color-border);
+    opacity: 0.6;
   }
 
   .damage-calc-item {
@@ -1353,10 +1522,158 @@
     letter-spacing: 0.1em;
   }
 
+  .rest-conditions-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
   .rest-buttons-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  .conditions-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .conditions-btn:hover {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.15);
+    color: var(--color-text-accent);
+  }
+
+  .conditions-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10002;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .conditions-popup[data-open="true"] {
+    display: flex;
+  }
+
+  .conditions-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  .conditions-content {
+    position: relative;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: 16px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(139, 76, 141, 0.3);
+  }
+
+  .conditions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    border-radius: 14px 14px 0 0;
+  }
+
+  .conditions-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--color-text-accent);
+    margin: 0;
+  }
+
+  .conditions-header button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .conditions-header button:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+  }
+
+  .conditions-body {
+    padding: 1rem 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .conditions-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .conditions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .condition-check-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+
+  .condition-check-item input {
+    flex-shrink: 0;
+  }
+
+  .condition-check-item label {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .condition-check-item .cond-desc {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.2rem;
   }
 
   .rest-btn {
@@ -1509,6 +1826,12 @@
     background: linear-gradient(135deg, rgba(139, 76, 141, 0.25), rgba(139, 76, 141, 0.15));
     border: 2px solid rgba(139, 76, 141, 0.5);
     color: #e6b3e6;
+  }
+
+  .status-badge.status-condition {
+    background: linear-gradient(135deg, rgba(139, 76, 141, 0.2), rgba(139, 76, 141, 0.1));
+    border: 2px solid rgba(139, 76, 141, 0.4);
+    color: var(--color-text-accent);
   }
 
   .death-saves-container {

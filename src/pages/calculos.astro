@@ -94,6 +94,11 @@ import Logo from '../components/Logo.astro';
               <p>Representa a saúde mental do personagem, afetada por encontros com o sobrenatural e eventos traumáticos. Você pode adicionar pontos temporários de sanidade usando o campo pequeno ao lado do título "Sanidade" - estes valores <strong>somam</strong> aos máximos calculados.</p>
               <p><strong>Importante:</strong> Quando você preencher o campo "Caminho" pela primeira vez, sua sanidade máxima será reduzida em 10% (arredondado para cima). Esta redução acontece apenas uma vez.</p>
               <p><strong>Exemplo:</strong> Se Mente = 13 e Bônus Temporário = 2, então Sanidade Máxima = 13 × 2 + 2 = 26 + 2 = 28. Se depois você escolher um Caminho, a sanidade será reduzida em 10%: 28 × 0.1 = 2.8 → arredondado para cima = 3. Nova Sanidade Máxima = 28 - 3 = 25</p>
+              <h4>Teste de Sanidade</h4>
+              <div class="formula-box">
+                <strong>Bônus do Teste = (Modificador Sobrenatural + Modificador Mente) ÷ 2</strong> (arredondado para baixo)
+              </div>
+              <p>O botão <strong>🎲 Sanidade</strong> ao lado do campo de Sanidade rola 1d20 + este bônus automaticamente.</p>
 
               <h4>Resistência a Dano Físico</h4>
               <div class="formula-box">
@@ -192,26 +197,29 @@ import Logo from '../components/Logo.astro';
           </button>
           <div class="accordion-content">
             <div class="guide-text">
-              <p>Os status são ativados automaticamente conforme as condições do personagem. Eles aparecem discretamente no Header quando ativos e não podem ser marcados manualmente.</p>
+              <p>Alguns status são ativados automaticamente conforme as condições do personagem. Outras condições podem ser marcadas manualmente pelo botão <strong>⚡ Condições</strong>, ao lado dos botões de Descanso. Todas aparecem na área de Status do Header quando ativas.</p>
               
-              <h4>Machucado</h4>
+              <h4>Machucado (automático)</h4>
               <div class="formula-box">
                 <strong>Condição: Vida Atual < (Vida Máxima ÷ 2) E Vida Atual > 0</strong>
               </div>
               <p><strong>Efeito:</strong> O movimento do personagem é reduzido pela metade.</p>
 
-              <h4>Morrendo</h4>
+              <h4>Morrendo (automático)</h4>
               <div class="formula-box">
                 <strong>Condição: Vida Atual = 0</strong>
               </div>
               <p><strong>Efeito:</strong> O movimento do personagem é zerado e aparecem os "Testes de Salvamento". O personagem precisa fazer testes de salvamento (3 sucessos para estabilizar, 3 falhas para morrer).</p>
               <p>Os testes de salvamento aparecem automaticamente quando o status está ativo, com 3 checkboxes para sucessos (verde) e 3 para fracassos (vermelho).</p>
 
-              <h4>Insano</h4>
+              <h4>Insano (automático)</h4>
               <div class="formula-box">
                 <strong>Condição: Sanidade Atual < (Sanidade Máxima ÷ 2)</strong>
               </div>
               <p><strong>Efeito:</strong> Indica que o personagem está com a sanidade mental comprometida.</p>
+
+              <h4>Condições manuais</h4>
+              <p>Use o botão <strong>⚡ Condições</strong> ao lado dos botões de Descanso para marcar condições adicionais (Atordoado, Cego, Surdo, Enfeitiçado, Assustado, Paralisado, Inconsciente, Agarrado, Restrito, Incapacitado, Escondido, Invisível). Machucado, Morrendo e Sobrecarregado são aplicados automaticamente.</p>
             </div>
           </div>
         </div>

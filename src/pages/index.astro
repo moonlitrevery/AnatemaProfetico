@@ -184,6 +184,7 @@ import Toast from '../components/Toast.astro';
     margin-bottom: -2px;
     padding-bottom: calc(0.75rem + 2px);
     box-shadow: 0 -2px 10px rgba(139, 76, 141, 0.2);
+    border-bottom: 2px solid var(--color-bg-secondary);
   }
 
   .sheet-tab-panels {
@@ -193,11 +194,14 @@ import Toast from '../components/Toast.astro';
 
   .sheet-tab-panel {
     display: none;
-    animation: tabFadeIn 0.3s ease;
+    opacity: 0;
+    transition: opacity 0.25s ease;
   }
 
   .sheet-tab-panel.active {
     display: block;
+    opacity: 1;
+    animation: tabFadeIn 0.25s ease;
   }
 
   @keyframes tabFadeIn {

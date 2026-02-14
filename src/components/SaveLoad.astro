@@ -166,6 +166,7 @@
         successes: Array.from(document.querySelectorAll('.death-save-checkbox[data-type="success"]')).map(cb => cb.checked),
         failures: Array.from(document.querySelectorAll('.death-save-checkbox[data-type="failure"]')).map(cb => cb.checked),
       },
+      conditions: typeof window.getConditionsData === 'function' ? window.getConditionsData() : [],
     };
 
     return {
@@ -462,6 +463,9 @@
 
     setTimeout(() => {
       if (window.updateHeaderValues) window.updateHeaderValues();
+      if (data.status?.conditions && typeof window.loadConditionsData === 'function') {
+        window.loadConditionsData(data.status.conditions);
+      }
       if (window.updateInlineStatus) window.updateInlineStatus();
       
       // Inicializar lastLevel para nivelamento progressivo após carregar dados
@@ -685,7 +689,7 @@
             console.error('Erro no auto-save:', error);
           }
         }
-      }, 2000);
+      }, 30000);
     }
 
     document.addEventListener('input', triggerAutoSave, { passive: true });
