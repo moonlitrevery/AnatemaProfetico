@@ -38,118 +38,93 @@
           </div>
         </div>
 
-        <!-- Ações de Combate -->
-        <div class="reference-card">
+        <!-- Ações de Combate (colapsáveis) -->
+        <div class="reference-card accordion-card">
           <h3 class="reference-title">⚔️ Ações de Combate</h3>
           <div class="reference-content">
-            <div class="action-item">
-              <strong>Ataque:</strong> Rode 1d20 + modificador de perícia. Se igual ou maior que a DT do alvo, acerta.
-            </div>
-            <div class="action-item">
-              <strong>Esquiva:</strong> Rode 1d20 + Esquiva. Se igual ou maior que o ataque, evita o dano.
-            </div>
-            <div class="action-item">
-              <strong>Defender:</strong> Use sua Resistência a Dano Físico para reduzir dano recebido.
-            </div>
-            <div class="action-item">
-              <strong>Movimento:</strong> Você pode se mover até seu valor de Movimento em metros por turno.
-            </div>
-            <div class="action-item">
-              <strong>Ação Bônus:</strong> Algumas habilidades permitem ações bônus. Consulte sua ficha.
-            </div>
+            <details class="ref-accordion-item">
+              <summary class="ref-accordion-summary"><strong>Ataque</strong></summary>
+              <p class="ref-accordion-detail">Rode 1d20 + modificador de perícia. Se igual ou maior que a DT do alvo, acerta.</p>
+            </details>
+            <details class="ref-accordion-item">
+              <summary class="ref-accordion-summary"><strong>Esquiva</strong></summary>
+              <p class="ref-accordion-detail">Rode 1d20 + Esquiva. Se igual ou maior que o ataque, evita o dano.</p>
+            </details>
+            <details class="ref-accordion-item">
+              <summary class="ref-accordion-summary"><strong>Defender</strong></summary>
+              <p class="ref-accordion-detail">Use sua Resistência a Dano Físico para reduzir dano recebido.</p>
+            </details>
+            <details class="ref-accordion-item">
+              <summary class="ref-accordion-summary"><strong>Movimento</strong></summary>
+              <p class="ref-accordion-detail">Você pode se mover até seu valor de Movimento em metros por turno.</p>
+            </details>
+            <details class="ref-accordion-item">
+              <summary class="ref-accordion-summary"><strong>Ação Bônus</strong></summary>
+              <p class="ref-accordion-detail">Algumas habilidades permitem ações bônus. Consulte sua ficha.</p>
+            </details>
           </div>
         </div>
 
-        <!-- Condições -->
-        <div class="reference-card">
+        <!-- Condições (colapsáveis) -->
+        <div class="reference-card accordion-card">
           <h3 class="reference-title">⚡ Condições</h3>
           <div class="reference-content">
-            <div class="condition-item"><strong>Machucado:</strong> Vida &lt; 50%. Movimento reduzido pela metade.</div>
-            <div class="condition-item"><strong>Morrendo:</strong> Vida = 0. Movimento zerado. Testes de salvamento.</div>
-            <div class="condition-item"><strong>Insano:</strong> Sanidade &lt; 50%. Afeta testes sociais e mentais.</div>
-            <div class="condition-item"><strong>Sobrecarregado:</strong> Peso &gt; máximo. Movimento reduzido pela metade.</div>
-            <div class="condition-item"><strong>Atordoado:</strong> Incapacitado, não pode se mover ou agir.</div>
-            <div class="condition-item"><strong>Cego/Surdo:</strong> Desvantagem em testes que dependem do sentido.</div>
-            <div class="condition-item"><strong>Enfeitiçado:</strong> Não pode atacar o enfeitiçador.</div>
-            <div class="condition-item"><strong>Assustado:</strong> Desvantagem enquanto a fonte do medo estiver visível.</div>
-            <div class="condition-item"><strong>Paralisado/Inconsciente:</strong> Incapacitado. Não pode agir.</div>
-            <div class="condition-item"><strong>Agarrado/Restrito:</strong> Movimento zerado.</div>
-            <div class="condition-item"><strong>Invisível/Escondido:</strong> Vantagem em ataques surpresa.</div>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Machucado</strong></summary><p class="ref-accordion-detail">Vida &lt; 50%. Movimento reduzido pela metade.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Morrendo</strong></summary><p class="ref-accordion-detail">Vida = 0. Movimento zerado. Testes de salvamento.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Insano</strong></summary><p class="ref-accordion-detail">Sanidade &lt; 50%. Afeta testes sociais e mentais.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Sobrecarregado</strong></summary><p class="ref-accordion-detail">Peso &gt; máximo. Movimento reduzido pela metade.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Atordoado</strong></summary><p class="ref-accordion-detail">Incapacitado, não pode se mover ou agir.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Cego/Surdo</strong></summary><p class="ref-accordion-detail">Desvantagem em testes que dependem do sentido.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Enfeitiçado</strong></summary><p class="ref-accordion-detail">Não pode atacar o enfeitiçador.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Envenenado</strong></summary><p class="ref-accordion-detail">Dano periódico. Desvantagem até ser curado.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Queimado</strong></summary><p class="ref-accordion-detail">Dano contínuo. Desvantagem até extinguir.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Assustado</strong></summary><p class="ref-accordion-detail">Desvantagem enquanto a fonte do medo estiver visível.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Paralisado/Inconsciente</strong></summary><p class="ref-accordion-detail">Incapacitado. Não pode agir.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Agarrado/Restrito</strong></summary><p class="ref-accordion-detail">Movimento zerado.</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Invisível/Escondido</strong></summary><p class="ref-accordion-detail">Vantagem em ataques surpresa.</p></details>
           </div>
         </div>
 
-        <!-- Cálculos Rápidos -->
-        <div class="reference-card">
+        <!-- Cálculos Rápidos (colapsáveis) -->
+        <div class="reference-card accordion-card">
           <h3 class="reference-title">🧮 Cálculos Rápidos</h3>
           <div class="reference-content">
-            <div class="calc-item">
-              <strong>Modificador de Atributo:</strong> (Valor - 10) ÷ 2 (arredondado para baixo)
-            </div>
-            <div class="calc-item">
-              <strong>Vida Máxima:</strong> 20 + (Compleição ou Brutalidade, o maior) + bônus de nível
-            </div>
-            <div class="calc-item">
-              <strong>Mana Máxima:</strong> 10 + Sobrenatural + bônus de nível
-            </div>
-            <div class="calc-item">
-              <strong>Sanidade Máxima:</strong> 20 + Mente + bônus de nível
-            </div>
-            <div class="calc-item">
-              <strong>Resistência:</strong> (Compleição + Brutalidade) ÷ 2 (arredondado para baixo)
-            </div>
-            <div class="calc-item">
-              <strong>Movimento:</strong> 6 + Destreza (em metros)
-            </div>
-            <div class="calc-item">
-              <strong>DT Projéteis:</strong> 10 + Destreza
-            </div>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Modificador de Atributo</strong></summary><p class="ref-accordion-detail">(Valor - 10) ÷ 2 (arredondado para baixo)</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Vida Máxima</strong></summary><p class="ref-accordion-detail">Brutalidade + Compleição + bônus de nível + extra</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Mana Máxima</strong></summary><p class="ref-accordion-detail">Sobrenatural × 2 + bônus de nível + extra</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Sanidade Máxima</strong></summary><p class="ref-accordion-detail">Mente × 2 + bônus de nível + extra</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Resistência</strong></summary><p class="ref-accordion-detail">MOD Compleição + MOD Brutalidade ÷ 2</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Movimento</strong></summary><p class="ref-accordion-detail">Destreza ÷ 2 (em metros) + extra</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>DT Projéteis</strong></summary><p class="ref-accordion-detail">8 + MOD Destreza</p></details>
           </div>
         </div>
 
-        <!-- Sequências -->
-        <div class="reference-card">
+        <!-- Sequências (colapsáveis) -->
+        <div class="reference-card accordion-card">
           <h3 class="reference-title">🔮 Sequências</h3>
           <div class="reference-content">
-            <div class="sequence-item">
-              <strong>9ª Sequência:</strong> Níveis 1-2
-            </div>
-            <div class="sequence-item">
-              <strong>8ª Sequência:</strong> Níveis 3-4
-            </div>
-            <div class="sequence-item">
-              <strong>7ª Sequência:</strong> Níveis 5-6
-            </div>
-            <div class="sequence-item">
-              <strong>6ª Sequência:</strong> Níveis 7-8
-            </div>
-            <div class="sequence-item">
-              <strong>5ª Sequência:</strong> Níveis 9-10
-            </div>
-            <div class="sequence-item">
-              <strong>4ª Sequência:</strong> Níveis 11-12
-            </div>
-            <div class="sequence-item">
-              <strong>3ª Sequência:</strong> Níveis 13-14
-            </div>
-            <div class="sequence-item">
-              <strong>2ª Sequência:</strong> Níveis 15-16
-            </div>
-            <div class="sequence-item">
-              <strong>1ª Sequência:</strong> Níveis 17-20
-            </div>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>9ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 1-2</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>8ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 3-4</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>7ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 5-6</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>6ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 7-8</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>5ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 9-10</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>4ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 11-12</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>3ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 13-14</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>2ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 15-16</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>1ª Sequência</strong></summary><p class="ref-accordion-detail">Níveis 17-20</p></details>
           </div>
         </div>
 
-        <!-- Treinamentos (alinhado às perícias) -->
-        <div class="reference-card">
+        <!-- Treinamentos (colapsáveis) -->
+        <div class="reference-card accordion-card">
           <h3 class="reference-title">📖 Bônus de Treinamento</h3>
           <div class="reference-content">
-            <div class="training-item"><strong>Nenhum:</strong> +0</div>
-            <div class="training-item"><strong>Básico:</strong> +2</div>
-            <div class="training-item"><strong>Médio:</strong> +4</div>
-            <div class="training-item"><strong>Avançado:</strong> +6</div>
-            <div class="training-item"><strong>Expert:</strong> +8</div>
-            <div class="training-item"><strong>Aterrorizante:</strong> +10</div>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Nenhum</strong></summary><p class="ref-accordion-detail">+0</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Básico</strong></summary><p class="ref-accordion-detail">+2</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Médio</strong></summary><p class="ref-accordion-detail">+4</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Avançado</strong></summary><p class="ref-accordion-detail">+6</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Expert</strong></summary><p class="ref-accordion-detail">+8</p></details>
+            <details class="ref-accordion-item"><summary class="ref-accordion-summary"><strong>Aterrorizante</strong></summary><p class="ref-accordion-detail">+10</p></details>
           </div>
         </div>
       </div>
@@ -342,26 +317,54 @@
     background: rgba(139, 76, 141, 0.05);
   }
 
-  .action-item,
-  .condition-item,
-  .calc-item,
-  .sequence-item,
-  .training-item {
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-    background: var(--color-bg-primary);
+  .ref-accordion-item {
+    margin-bottom: 0.4rem;
     border-radius: 6px;
-    border-left: 3px solid var(--color-accent-primary);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    overflow: hidden;
   }
 
-  .action-item strong,
-  .condition-item strong,
-  .calc-item strong,
-  .sequence-item strong,
-  .training-item strong {
+  .ref-accordion-summary {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-body);
+    color: var(--color-text-primary);
+  }
+
+  .ref-accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ref-accordion-summary::before {
+    content: '▶';
+    font-size: 0.7rem;
+    margin-right: 0.5rem;
+    transition: transform 0.2s ease;
+    color: var(--color-accent-primary);
+  }
+
+  .ref-accordion-item[open] .ref-accordion-summary::before {
+    transform: rotate(90deg);
+  }
+
+  .ref-accordion-summary strong {
     color: var(--color-text-accent);
-    display: block;
-    margin-bottom: 0.25rem;
+  }
+
+  .ref-accordion-item:hover {
+    border-color: var(--color-accent-primary);
+  }
+
+  .ref-accordion-detail {
+    margin: 0;
+    padding: 0.5rem 0.75rem 0.75rem 2rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
   }
 
   @media (max-width: 768px) {

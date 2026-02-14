@@ -670,7 +670,7 @@
             console.error('Erro no auto-save:', error);
           }
         }
-      }, 30000);
+      }, 1000);
     }
 
     setupAutoSave();
@@ -689,7 +689,7 @@
             console.error('Erro no auto-save:', error);
           }
         }
-      }, 30000);
+      }, 1000);
     }
 
     document.addEventListener('input', triggerAutoSave, { passive: true });
