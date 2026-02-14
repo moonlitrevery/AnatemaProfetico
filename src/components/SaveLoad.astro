@@ -44,11 +44,13 @@
     };
 
     const prestigioSelect = document.getElementById('prestigio');
+    const coberturaActive = document.querySelector('.cobertura-btn.active');
     const header = {
       caminho: document.getElementById('caminho')?.value || '',
       sequencia: document.getElementById('nivel-caminho')?.value || '',
       nivel: document.getElementById('nivel')?.value || '',
       prestigio: prestigioSelect?.value || 'muito-baixo',
+      dtCobertura: coberturaActive?.dataset.cobertura || '',
       vidaCurrent: document.getElementById('vida-current')?.value || '',
       vidaTemp: document.getElementById('vida-temp')?.value || '',
       vidaExtra: document.getElementById('vida-extra')?.value || '',
@@ -262,6 +264,11 @@
       if (sanidadeTempInput) sanidadeTempInput.value = data.header.sanidadeTemp || '';
       if (sanidadeExtraInput) sanidadeExtraInput.value = data.header.sanidadeExtra || '';
       if (movimentoExtraInput) movimentoExtraInput.value = data.header.movimentoExtra || '';
+      if (data.header.dtCobertura) {
+        document.querySelectorAll('.cobertura-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.cobertura === data.header.dtCobertura);
+        });
+      }
     }
 
     Object.entries(data.attributes || {}).forEach(([id, value]) => {
@@ -606,6 +613,8 @@
             nivelSelect.dataset.lastLevel = '0';
           }
 
+          document.querySelectorAll('.cobertura-btn').forEach(b => b.classList.remove('active'));
+
           const weaponsList = document.getElementById('weapons-list');
           const itemsList = document.getElementById('items-list');
           if (weaponsList) weaponsList.innerHTML = '';
@@ -627,7 +636,7 @@
     }
 
     updateSaveIndicator();
-    setInterval(updateSaveIndicator, 30000);
+    setInterval(updateSaveIndicator, 2000);
 
     function loadSavedData() {
       try {
@@ -666,6 +675,8 @@
           try {
             const data = getAllCharacterData();
             localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
+            localStorage.setItem('anatema-save-timestamp', String(Date.now()));
+            if (typeof updateSaveIndicator === 'function') updateSaveIndicator();
           } catch (error) {
             console.error('Erro no auto-save:', error);
           }
@@ -682,9 +693,9 @@
         if (document.querySelector('[data-page="personagem"]')) {
           try {
             const data = getAllCharacterData();
-            
-            // Salvar localmente
             localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
+            localStorage.setItem('anatema-save-timestamp', String(Date.now()));
+            if (typeof updateSaveIndicator === 'function') updateSaveIndicator();
           } catch (error) {
             console.error('Erro no auto-save:', error);
           }

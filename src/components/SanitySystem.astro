@@ -12,23 +12,25 @@
       <div class="sanity-section">
         <h3 class="sanity-section-title">Insanidades</h3>
         <p class="sanity-section-desc">Registre efeitos de insanidade temporária ou definitiva.</p>
-        <div class="sanity-insanidades-header">
+        <div class="sanity-list-header">
           <span class="sanity-col-label">Tipo</span>
           <span class="sanity-col-label">Descrição</span>
-          <span></span>
         </div>
         <div id="sanity-insanidades-container" class="sanity-list-container">
           <!-- Insanidades serão adicionadas aqui -->
         </div>
-        <button type="button" id="add-insanidade-btn" class="sanity-add-btn">+ Adicionar Insanidade</button>
+        <button type="button" id="add-insanidade-btn" class="btn-add">+ Adicionar Insanidade</button>
       </div>
       <div class="sanity-section">
         <h3 class="sanity-section-title">Traumas</h3>
         <p class="sanity-section-desc">Registre traumas adquiridos por perda de sanidade.</p>
+        <div class="sanity-list-header trauma-header">
+          <span class="sanity-col-label">Descrição</span>
+        </div>
         <div id="sanity-traumas-container" class="sanity-list-container">
           <!-- Traumas serão adicionados aqui -->
         </div>
-        <button type="button" id="add-trauma-btn" class="sanity-add-btn">+ Adicionar Trauma</button>
+        <button type="button" id="add-trauma-btn" class="btn-add">+ Adicionar Trauma</button>
       </div>
     </div>
   </div>
@@ -47,30 +49,36 @@
   function createInsanidadeRow(data = { type: 'temporaria', description: '' }) {
     const id = `insanidade-${insanidadeIdCounter++}`;
     const row = document.createElement('div');
-    row.className = 'sanity-row sanity-insanidade-row';
+    row.className = 'equipment-row sanity-insanidade-row';
     row.setAttribute('data-sanity-id', id);
     row.innerHTML = `
-      <select class="sanity-type-select">
-        <option value="temporaria" ${data.type === 'temporaria' ? 'selected' : ''}>Temporária</option>
-        <option value="definitiva" ${data.type === 'definitiva' ? 'selected' : ''}>Definitiva</option>
-      </select>
-      <textarea class="sanity-desc-field" rows="2" placeholder="Descrição da insanidade...">${escapeHtml(data.description)}</textarea>
-      <button type="button" class="sanity-remove-btn" title="Remover">✕</button>
+      <div class="equipment-type-select sanity-type-wrap">
+        <select class="equipment-type sanity-type-select">
+          <option value="temporaria" ${data.type === 'temporaria' ? 'selected' : ''}>Temporária</option>
+          <option value="definitiva" ${data.type === 'definitiva' ? 'selected' : ''}>Definitiva</option>
+        </select>
+      </div>
+      <div class="equipment-description-input">
+        <textarea class="equipment-description-field sanity-desc-field" rows="2" placeholder="Descrição da insanidade...">${escapeHtml(data.description)}</textarea>
+      </div>
+      <button type="button" class="btn-remove" title="Remover">✕</button>
     `;
-    row.querySelector('.sanity-remove-btn')?.addEventListener('click', () => row.remove());
+    row.querySelector('.btn-remove')?.addEventListener('click', () => row.remove());
     return row;
   }
 
   function createTraumaRow(data = { description: '' }) {
     const id = `trauma-${traumaIdCounter++}`;
     const row = document.createElement('div');
-    row.className = 'sanity-row sanity-trauma-row';
+    row.className = 'equipment-row sanity-trauma-row';
     row.setAttribute('data-trauma-id', id);
     row.innerHTML = `
-      <textarea class="sanity-desc-field trauma-desc" rows="2" placeholder="Descrição do trauma...">${escapeHtml(data.description)}</textarea>
-      <button type="button" class="sanity-remove-btn" title="Remover">✕</button>
+      <div class="equipment-description-input sanity-trauma-desc-wrap">
+        <textarea class="equipment-description-field sanity-desc-field" rows="2" placeholder="Descrição do trauma...">${escapeHtml(data.description)}</textarea>
+      </div>
+      <button type="button" class="btn-remove" title="Remover">✕</button>
     `;
-    row.querySelector('.sanity-remove-btn')?.addEventListener('click', () => row.remove());
+    row.querySelector('.btn-remove')?.addEventListener('click', () => row.remove());
     return row;
   }
 
@@ -249,16 +257,20 @@
     line-height: 1.5;
   }
 
-  .sanity-insanidades-header {
+  .sanity-list-header {
     display: grid;
     grid-template-columns: 140px 1fr 40px;
     gap: 0.75rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem;
     margin-bottom: 0.5rem;
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border);
     border-radius: 6px;
     align-items: center;
+  }
+
+  .sanity-list-header.trauma-header {
+    grid-template-columns: 1fr 40px;
   }
 
   .sanity-col-label {
@@ -296,109 +308,26 @@
     border-radius: 3px;
   }
 
-  .sanity-row {
+  .sanity-insanidade-row {
     display: grid;
     grid-template-columns: 140px 1fr 40px;
     gap: 0.75rem;
     align-items: start;
-    padding: 0.5rem 0.75rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    transition: all 0.3s ease;
-  }
-
-  .sanity-row:hover {
-    border-color: var(--color-border-glow);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 76, 141, 0.2);
   }
 
   .sanity-trauma-row {
     grid-template-columns: 1fr 40px;
   }
 
-  .sanity-type-select {
+  .sanity-type-wrap {
+    min-width: 0;
+  }
+
+  .sanity-trauma-desc-wrap {
+    grid-column: 1;
+  }
+
+  .sanity-type-wrap select {
     width: 100%;
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 0.4rem 0.5rem;
-    color: var(--color-text-primary);
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .sanity-type-select:focus {
-    outline: none;
-    border-color: var(--color-accent-primary);
-    box-shadow: 0 0 5px rgba(139, 76, 141, 0.3);
-  }
-
-  .sanity-desc-field {
-    width: 100%;
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 0.4rem 0.5rem;
-    color: var(--color-text-primary);
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    resize: vertical;
-    min-height: 40px;
-    transition: all 0.3s ease;
-  }
-
-  .sanity-desc-field:focus {
-    outline: none;
-    border-color: var(--color-accent-primary);
-    box-shadow: 0 0 5px rgba(139, 76, 141, 0.3);
-  }
-
-  .sanity-remove-btn {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-secondary);
-    color: var(--color-text-secondary);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  .sanity-remove-btn:hover {
-    background: #8b1a1a;
-    border-color: #cc2a2a;
-    color: var(--color-text-primary);
-    transform: scale(1.1);
-  }
-
-  .sanity-add-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--color-bg-tertiary);
-    border: 2px dashed var(--color-border);
-    border-radius: 6px;
-    color: var(--color-text-secondary);
-    font-family: var(--font-accent);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .sanity-add-btn:hover {
-    border-color: var(--color-accent-primary);
-    color: var(--color-text-accent);
-    background: rgba(139, 76, 141, 0.1);
-    box-shadow: 0 0 10px rgba(139, 76, 141, 0.2);
   }
 </style>

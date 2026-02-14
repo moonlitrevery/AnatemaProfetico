@@ -137,29 +137,34 @@
         <input type="number" id="movimento-extra" name="movimento-extra" class="movement-extra" placeholder="+0" min="0" title="Movimentação extra" />
       </div>
     </div>
-    <div class="header-item dt-damage-heal-row">
-      <div class="dt-block">
-        <label for="dt-projeteis">DT para projéteis (Receber)</label>
-        <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" aria-label="DT para projéteis receber" />
-      </div>
-      <div class="damage-heal-inline">
-        <div class="damage-heal-block">
-          <label class="damage-calc-label">Aplicar Dano</label>
-          <div class="damage-calc-inline-grid">
-            <input type="number" id="dano-vida" class="damage-input-inline" placeholder="V" min="0" aria-label="Dano Vida" title="Dano em Vida" />
-            <input type="number" id="dano-mana" class="damage-input-inline" placeholder="M" min="0" aria-label="Dano Mana" title="Dano em Mana" />
-            <input type="number" id="dano-sanidade" class="damage-input-inline" placeholder="S" min="0" aria-label="Dano San" title="Dano em Sanidade" />
-            <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn-inline" aria-label="Aplicar dano">Aplicar</button>
+    <div class="header-item nd-damage-heal-row">
+      <div class="nd-projeteis-block">
+        <div class="nd-projeteis-header">
+          <label for="dt-projeteis">ND projéteis</label>
+          <div class="cobertura-btns" role="group" aria-label="Cobertura">
+            <button type="button" class="cobertura-btn" data-cobertura="b" title="Baixa (+2)">B</button>
+            <button type="button" class="cobertura-btn" data-cobertura="m" title="Média (+4)">M</button>
+            <button type="button" class="cobertura-btn" data-cobertura="a" title="Alta (+8)">A</button>
           </div>
         </div>
-        <div class="damage-heal-block">
-          <label class="damage-calc-label">Aplicar Cura</label>
-          <div class="damage-calc-inline-grid">
-            <input type="number" id="cura-vida" class="heal-input-inline" placeholder="V" min="0" aria-label="Cura Vida" title="Cura em Vida" />
-            <input type="number" id="cura-mana" class="heal-input-inline" placeholder="M" min="0" aria-label="Cura Mana" title="Cura em Mana" />
-            <input type="number" id="cura-sanidade" class="heal-input-inline" placeholder="S" min="0" aria-label="Cura San" title="Cura em Sanidade" />
-            <button type="button" id="aplicar-cura-btn" class="aplicar-cura-btn-inline" aria-label="Aplicar cura">Aplicar</button>
-          </div>
+        <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" aria-label="ND projéteis receber" />
+      </div>
+      <div class="damage-heal-block">
+        <label class="damage-calc-label">Aplicar Dano</label>
+        <div class="damage-calc-inline-grid">
+          <input type="number" id="dano-vida" class="damage-input-inline" placeholder="V" min="0" aria-label="Dano Vida" title="Dano em Vida" />
+          <input type="number" id="dano-mana" class="damage-input-inline" placeholder="M" min="0" aria-label="Dano Mana" title="Dano em Mana" />
+          <input type="number" id="dano-sanidade" class="damage-input-inline" placeholder="S" min="0" aria-label="Dano San" title="Dano em Sanidade" />
+          <button type="button" id="aplicar-dano-btn" class="aplicar-dano-btn-inline" aria-label="Aplicar dano">Aplicar</button>
+        </div>
+      </div>
+      <div class="damage-heal-block">
+        <label class="damage-calc-label">Aplicar Cura</label>
+        <div class="damage-calc-inline-grid">
+          <input type="number" id="cura-vida" class="heal-input-inline" placeholder="V" min="0" aria-label="Cura Vida" title="Cura em Vida" />
+          <input type="number" id="cura-mana" class="heal-input-inline" placeholder="M" min="0" aria-label="Cura Mana" title="Cura em Mana" />
+          <input type="number" id="cura-sanidade" class="heal-input-inline" placeholder="S" min="0" aria-label="Cura San" title="Cura em Sanidade" />
+          <button type="button" id="aplicar-cura-btn" class="aplicar-cura-btn-inline" aria-label="Aplicar cura">Aplicar</button>
         </div>
       </div>
     </div>
@@ -693,11 +698,13 @@
         movimentoInput.value = `${movimento}m`;
       }
 
-      // DT para projéteis (Receber): 8 + MODesq
+      // ND projéteis: 8 + MODesq + cobertura (B+2, M+4, A+8)
       const dtProjeteisInput = document.getElementById('dt-projeteis');
       if (dtProjeteisInput) {
-        const dtProjeteis = 8 + modEsq;
-        dtProjeteisInput.value = String(dtProjeteis);
+        const coberturaActive = document.querySelector('.cobertura-btn.active');
+        const coberturaBonus = coberturaActive ? ({ b: 2, m: 4, a: 8 }[coberturaActive.dataset.cobertura] || 0) : 0;
+        const ndProjeteis = 8 + modEsq + coberturaBonus;
+        dtProjeteisInput.value = String(ndProjeteis);
       }
 
       // Sequência baseada no nível
@@ -809,6 +816,18 @@
         updateHeaderValues();
       }
     }, { passive: true, capture: true });
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target?.closest('.cobertura-btn');
+      if (!btn) return;
+      if (btn.classList.contains('active')) {
+        btn.classList.remove('active');
+      } else {
+        document.querySelectorAll('.cobertura-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      updateHeaderValues(true);
+    });
 
     // Escutar eventos de input também para atualização em tempo real
     document.addEventListener('input', (e) => {
@@ -1344,7 +1363,7 @@
     box-shadow: 0 0 10px rgba(139, 76, 141, 0.4);
   }
 
-  .dt-damage-heal-row {
+  .nd-damage-heal-row {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
@@ -1352,7 +1371,7 @@
     min-width: 0;
   }
 
-  .dt-block {
+  .nd-projeteis-block {
     flex: 0 0 auto;
     min-width: 140px;
     display: flex;
@@ -1360,13 +1379,43 @@
     gap: 0.25rem;
   }
 
-  .damage-heal-inline {
+  .nd-projeteis-header {
     display: flex;
+    align-items: center;
+    gap: 0.5rem;
     flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 1rem;
-    flex: 1;
-    min-width: 280px;
+  }
+
+  .cobertura-btns {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .cobertura-btn {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cobertura-btn:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+  }
+
+  .cobertura-btn.active {
+    background: rgba(139, 76, 141, 0.3);
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
   }
 
   .damage-heal-block {

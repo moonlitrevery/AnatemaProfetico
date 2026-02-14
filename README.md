@@ -35,7 +35,7 @@ Oferecer uma experiência de ficha online rápida (alvo de 1–1,5 s de navega
 
 ### ✨ Destaques
 
-- 🔁 **Salvamento Local Seguro**: tudo fica em `localStorage`, com import/export em JSON e auto-save a cada 2 segundos.
+- 🔁 **Salvamento Local Seguro**: tudo fica em `localStorage`, com import/export em JSON e auto-save a cada 1 segundo.
 - 📊 **Sistema de Nivelamento Dinâmico**: avisos contextuais nos setores relevantes quando você sobe de nível, com popups informativos.
 - 🎲 **Dice Roller Avançado**: seleção de dados, modificadores customizáveis, rolagem em lote e notificações empilhadas.
 - ⚠️ **Alertas Inteligentes**: aviso automático para atributos base e status responsivos ao nível (Machucado, Morrendo).
@@ -120,7 +120,7 @@ Acesse `http://localhost:4321`.
 
 ## 💾 Salvamento Local
 
-- **Auto-save**: a ficha é salva automaticamente a cada 2 segundos em `localStorage` (`anatema-profetico-character`).
+- **Auto-save**: a ficha é salva automaticamente a cada 1 segundo em `localStorage` (`anatema-profetico-character`).
 - Botão **Salvar localmente** → salva manualmente a ficha completa.
 - **Exportar JSON** → baixa um arquivo com o estado atual (recomendado para backup no Discord).
 - **Importar JSON** → reconstrói a ficha a partir de um arquivo válido.
@@ -203,10 +203,6 @@ O site estará disponível em:
 - [x] Atalhos de teclado (Enter, Esc).
 - [x] Indicador "Salvo há X min".
 - [x] Deploy automatizado via GitHub Actions.
-- [ ] Tabela automática de nivelamento (atributos + treinamentos por nível 1–20).
-- [ ] Histórico de rolagens persistente.
-- [ ] Temas alternativos (alto contraste / visão noturna).
-- [ ] Internacionalização (pt-BR → en-US).
 
 Sugestões? Abra uma issue!
 
