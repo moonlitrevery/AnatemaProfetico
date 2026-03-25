@@ -61,6 +61,7 @@
       sanidadeTemp: document.getElementById('sanidade-temp')?.value || '',
       sanidadeExtra: document.getElementById('sanidade-extra')?.value || '',
       movimentoExtra: document.getElementById('movimento-extra')?.value || '',
+      resistenciaExtra: document.getElementById('resistencia-extra')?.value || '',
     };
 
     const sanitySystem = typeof window.getSanityData === 'function' ? window.getSanityData() : { insanidades: [], traumas: [] };
@@ -101,6 +102,7 @@
     const equipment = {
       weapons: [],
       items: [],
+      dinheiroReais: 0,
     };
 
     document.querySelectorAll('#weapons-list .equipment-row').forEach((row) => {
@@ -131,6 +133,12 @@
         });
       }
     });
+
+    const dinheiroEl = document.getElementById('equipment-dinheiro');
+    if (dinheiroEl) {
+      const d = parseInt(dinheiroEl.value, 10);
+      equipment.dinheiroReais = Number.isNaN(d) ? 0 : Math.max(0, d);
+    }
 
     const abilities = [];
     document.querySelectorAll('.ability-row').forEach((row) => {
@@ -264,6 +272,8 @@
       if (sanidadeTempInput) sanidadeTempInput.value = data.header.sanidadeTemp || '';
       if (sanidadeExtraInput) sanidadeExtraInput.value = data.header.sanidadeExtra || '';
       if (movimentoExtraInput) movimentoExtraInput.value = data.header.movimentoExtra || '';
+      const resistenciaExtraInput = document.getElementById('resistencia-extra');
+      if (resistenciaExtraInput) resistenciaExtraInput.value = data.header.resistenciaExtra ?? '';
       if (data.header.dtCobertura) {
         document.querySelectorAll('.cobertura-btn').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.cobertura === data.header.dtCobertura);
@@ -388,6 +398,16 @@
       setTimeout(() => {
         if (window.updateWeightDisplay) window.updateWeightDisplay();
       }, 200);
+    }
+
+    const equipmentDinheiroInput = document.getElementById('equipment-dinheiro');
+    if (equipmentDinheiroInput && data.equipment) {
+      const raw = data.equipment.dinheiroReais;
+      const d =
+        raw === undefined || raw === null || raw === ''
+          ? 0
+          : parseInt(String(raw), 10);
+      equipmentDinheiroInput.value = String(Number.isNaN(d) || d < 0 ? 0 : d);
     }
 
     if (data.abilities && data.abilities.length > 0) {
@@ -619,6 +639,23 @@
           const itemsList = document.getElementById('items-list');
           if (weaponsList) weaponsList.innerHTML = '';
           if (itemsList) itemsList.innerHTML = '';
+
+          if (typeof window.resetSkillsToDefault === 'function') {
+            window.resetSkillsToDefault();
+          }
+
+          const abilitiesContainer = document.getElementById('abilities-container');
+          if (abilitiesContainer) abilitiesContainer.innerHTML = '';
+
+          const equipmentDinheiroClear = document.getElementById('equipment-dinheiro');
+          if (equipmentDinheiroClear) equipmentDinheiroClear.value = '0';
+
+          const resistenciaExtraClear = document.getElementById('resistencia-extra');
+          if (resistenciaExtraClear) resistenciaExtraClear.value = '';
+
+          if (typeof window.loadSanityData === 'function') {
+            window.loadSanityData({ insanidades: [], traumas: [] });
+          }
 
           // Limpar localStorage
           localStorage.removeItem('anatema-profetico-character');
