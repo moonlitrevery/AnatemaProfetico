@@ -75,7 +75,10 @@
       const passive = passiveCheckbox?.checked;
       const cell = row.querySelector('.ability-cast-cell');
       if (cell) {
-        cell.style.display = passive ? 'none' : 'flex';
+        // Não usar display:none para não quebrar a grade/grid alignment
+        cell.style.visibility = passive ? 'hidden' : 'visible';
+        cell.style.opacity = passive ? '0' : '1';
+        cell.style.pointerEvents = passive ? 'none' : 'auto';
       }
       if (castBtn) castBtn.disabled = !!passive;
     }
