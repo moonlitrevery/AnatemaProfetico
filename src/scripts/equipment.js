@@ -1,4 +1,4 @@
-import { updateCharacter } from '../utils/characterState.js';
+import { updateCharacter } from '../utils/characterState';
 
 let equipmentIdCounter = 0;
 

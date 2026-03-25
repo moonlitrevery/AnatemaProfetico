@@ -1,4 +1,4 @@
-import { initCharacterStateLayer, syncCharacterStateFromDOM } from '../utils/characterState.js';
+import { initCharacterStateLayer, syncCharacterStateFromDOM } from '../utils/characterState';
 
 window.getAllCharacterData = function getAllCharacterData() {
   const safeStr = (v) => (v == null || v === undefined ? '' : String(v));
