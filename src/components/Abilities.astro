@@ -21,6 +21,8 @@
 </section>
 
 <script type="module">
+  import { updateCharacter } from '../utils/characterState';
+
   let abilityIdCounter = 0;
 
   function getSequenciaOptions() {
@@ -111,6 +113,7 @@
           return;
         }
         manaCurEl.value = String(cur - cost);
+        updateCharacter({ mana: cur - cost });
         manaCurEl.dispatchEvent(new Event('input', { bubbles: true }));
         manaCurEl.dispatchEvent(new Event('change', { bubbles: true }));
         if (typeof window.showToast === 'function') window.showToast(`Mana −${cost}`, 'success');
