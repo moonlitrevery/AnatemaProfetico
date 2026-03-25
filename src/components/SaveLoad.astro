@@ -33,8 +33,6 @@
 </section>
 
 <script type="module">
-  import { initCharacterStateLayer, syncCharacterStateFromDOM } from '../utils/characterState';
-
   window.getAllCharacterData = function getAllCharacterData() {
     const basicInfo = {
       playerName: document.getElementById('player-name')?.value || '',
@@ -503,15 +501,12 @@
         const currentLevel = parseInt(nivelSelect.value) || 0;
         nivelSelect.dataset.lastLevel = String(currentLevel);
       }
-      syncCharacterStateFromDOM();
     }, 300);
   };
   
   function loadCharacterData(data) {
     return window.loadCharacterData(data);
   }
-
-  initCharacterStateLayer();
 
   function updateSaveIndicator() {
     const el = document.getElementById('save-indicator');
@@ -672,7 +667,6 @@
           setTimeout(() => {
             if (window.updateHeaderValues) window.updateHeaderValues();
             if (window.updateInlineStatus) window.updateInlineStatus();
-            syncCharacterStateFromDOM();
           }, 300);
         }
       });
@@ -697,12 +691,6 @@
 
     // carregar agora
     loadSavedData();
-
-    requestAnimationFrame(() => {
-      if (document.querySelector('[data-page="personagem"]')) {
-        setTimeout(() => syncCharacterStateFromDOM(), 450);
-      }
-    });
 
     window.addEventListener('focus', () => {
       if (document.querySelector('[data-page="personagem"]')) {

@@ -468,8 +468,6 @@
 </script>
 
 <script type="module">
-  import { updateCharacter } from '../utils/characterState';
-
   // Função para calcular modificador de atributo (JS puro)
   function getAttributeModifier(attributeValue) {
     return Math.floor((attributeValue - 10) / 2);
@@ -596,8 +594,6 @@
           const currentValue = Number.isNaN(vc) ? 0 : vc;
           if (currentValue > maxMana && maxMana > 0) {
             manaCurrentInput.value = String(maxMana);
-            const nm = parseInt(manaCurrentInput.value, 10) || 0;
-            updateCharacter({ mana: nm });
           }
           manaCurrentInput.max = String(maxMana);
         }
@@ -902,18 +898,8 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'mana-current') {
-          updateHeaderValues();
-          const el = document.getElementById('mana-current');
-          const v = parseInt(el?.value ?? '0', 10);
-          updateCharacter({ mana: Number.isNaN(v) ? 0 : v });
         } else if (id === 'movimento-extra' || id === 'resistencia-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
-          if (id === 'resistencia-extra') {
-            const el = document.getElementById('resistencia-extra');
-            const v = parseInt(el?.value ?? '0', 10);
-            updateCharacter({ resistenciaExtra: Number.isNaN(v) ? 0 : v });
-          }
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
         }
@@ -926,18 +912,8 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'mana-current') {
-          updateHeaderValues();
-          const el = document.getElementById('mana-current');
-          const v = parseInt(el?.value ?? '0', 10);
-          updateCharacter({ mana: Number.isNaN(v) ? 0 : v });
         } else if (id === 'movimento-extra' || id === 'resistencia-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
-          if (id === 'resistencia-extra') {
-            const el = document.getElementById('resistencia-extra');
-            const v = parseInt(el?.value ?? '0', 10);
-            updateCharacter({ resistenciaExtra: Number.isNaN(v) ? 0 : v });
-          }
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
         }
@@ -970,8 +946,6 @@
       if (manaCur) {
         const m = parseInt(manaCur.value, 10) || 0;
         manaCur.value = String(Math.min(manaMax, Math.floor(m + manaMax * ratios.mana)));
-        const nm = parseInt(manaCur.value, 10) || 0;
-        updateCharacter({ mana: nm });
       }
       if (sanidadeCur) {
         const s = parseInt(sanidadeCur.value, 10) || 0;
@@ -997,7 +971,6 @@
       if (manaCur && danoMana > 0) {
         const m = parseInt(manaCur.value, 10) || 0;
         manaCur.value = String(Math.max(0, m - danoMana));
-        updateCharacter({ mana: parseInt(manaCur.value, 10) || 0 });
       }
       if (sanidadeCur && danoSanidade > 0) {
         const s = parseInt(sanidadeCur.value, 10) || 0;
@@ -1031,7 +1004,6 @@
       if (manaCur && curaMana > 0) {
         const m = parseInt(manaCur.value, 10) || 0;
         manaCur.value = String(Math.min(manaMax, m + curaMana));
-        updateCharacter({ mana: parseInt(manaCur.value, 10) || 0 });
       }
       if (sanidadeCur && curaSanidade > 0) {
         const s = parseInt(sanidadeCur.value, 10) || 0;
