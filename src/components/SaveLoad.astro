@@ -552,6 +552,34 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    window.updateAllCalculatedValues = function updateAllCalculatedValues() {
+      if (typeof window.updateHeaderValues === 'function') window.updateHeaderValues();
+      if (typeof window.updateInlineStatus === 'function') window.updateInlineStatus();
+      if (typeof window.updateProgressBars === 'function') window.updateProgressBars();
+      if (typeof window.updateWeightDisplay === 'function') window.updateWeightDisplay();
+    };
+
+    window.saveCharacter = function saveCharacter() {
+      if (!document.querySelector('[data-page="personagem"]')) return;
+      try {
+        const data = getAllCharacterData();
+        localStorage.setItem('anatema-profetico-character', JSON.stringify(data));
+        localStorage.setItem('anatema-save-timestamp', String(Date.now()));
+        if (typeof updateSaveIndicator === 'function') updateSaveIndicator();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    window.addEventListener('characterStateUpdated', () => {
+      if (typeof window.updateAllCalculatedValues === 'function') {
+        window.updateAllCalculatedValues();
+      }
+      if (typeof window.saveCharacter === 'function') {
+        window.saveCharacter();
+      }
+    });
+
     const saveBtn = document.getElementById('save-btn');
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
