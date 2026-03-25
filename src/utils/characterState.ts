@@ -78,9 +78,6 @@ export function updateCharacter(patch: Partial<typeof characterState>): void {
   if (patch.resistenciaExtra !== undefined)
     characterState.resistenciaExtra = normalizeResistenciaExtra(patch.resistenciaExtra);
   if (patch.skills !== undefined) characterState.skills = patch.skills as unknown[];
-  if (typeof window !== 'undefined') {
-    window.dispatchEvent(new Event('characterStateUpdated'));
-  }
 }
 
 /** Boot: só lê "anatema-profetico-character" (antes do DOM estar disponível). */
@@ -94,8 +91,6 @@ declare global {
     updateCharacter?: typeof updateCharacter;
     syncCharacterStateFromDOM?: typeof syncCharacterStateFromDOM;
     initCharacterStateLayer?: typeof initCharacterStateLayer;
-    updateAllCalculatedValues?: () => void;
-    saveCharacter?: () => void;
   }
 }
 
