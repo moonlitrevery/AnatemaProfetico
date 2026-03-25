@@ -6,6 +6,10 @@
     <span class="section-title-text">Equipamentos</span>
     <span class="section-title-decoration"></span>
   </h2>
+  <div class="equipment-money-bar">
+    <label for="character-money" class="equipment-money-label">Dinheiro / recursos</label>
+    <input type="text" id="character-money" class="equipment-money-input" placeholder="Ex.: 120 ouro, 50 pratas…" autocomplete="off" />
+  </div>
   <div class="equipment-grid">
     <div class="equipment-column">
       <div class="equipment-subsection-title">
@@ -16,6 +20,7 @@
         <span class="equipment-header-label" title="Tipo">Tipo</span>
         <span class="equipment-header-label" title="Dano">Dano</span>
         <span class="equipment-header-label" title="Descrição">Descrição</span>
+        <span class="equipment-header-label equipment-header-equip" title="Arma na mão">Na mão</span>
       </div>
       <div id="weapons-list" class="equipment-list">
         <!-- Armamentos serão adicionados dinamicamente -->
@@ -55,8 +60,37 @@
     { value: 'magica', label: 'Arma mágica' },
   ];
 
-  // Opções de peso (1-9)
-  const weightOptions = Array.from({ length: 9 }, (_, i) => i + 1);
+  const ITEM_WEIGHT_MAX = 9999;
+
+  /**
+   * @param {string} raw
+   * @returns {{ ok: boolean, n: number, message?: string }}
+   */
+  function parseItemWeightInput(raw) {
+    if (raw == null) return { ok: true, n: 0 };
+    const s = String(raw).trim();
+    if (s === '') return { ok: true, n: 0 };
+    const normalized = s.replace(/\s/g, '').replace(',', '.');
+    if (normalized === '' || normalized === '.' || normalized === '-')
+      return { ok: false, n: 0, message: 'Digite um número válido para o peso (ex.: 1, 0,5, 1.25).' };
+    const n = parseFloat(normalized);
+    if (Number.isNaN(n))
+      return { ok: false, n: 0, message: 'Peso inválido. Use apenas números (vírgula ou ponto para decimais).' };
+    if (n < 0)
+      return { ok: false, n: 0, message: 'O peso não pode ser negativo.' };
+    if (!Number.isFinite(n))
+      return { ok: false, n: 0, message: 'Valor de peso inválido.' };
+    if (n > ITEM_WEIGHT_MAX)
+      return { ok: false, n: 0, message: `O peso não pode ser maior que ${ITEM_WEIGHT_MAX}.` };
+    return { ok: true, n };
+  }
+
+  function formatWeightNumber(n) {
+    if (!Number.isFinite(n)) return '0';
+    const rounded = Math.round(n * 1000) / 1000;
+    if (Number.isInteger(rounded)) return String(rounded);
+    return String(rounded);
+  }
 
   // Função para obter valor de atributo
   function getAttributeValue(attributeId) {
@@ -73,13 +107,51 @@
 
   // Função para calcular peso atual dos itens
   function getCurrentWeight() {
-    const items = document.querySelectorAll('.item-weight');
+    const items = document.querySelectorAll('#items-list .item-weight');
     let total = 0;
     items.forEach((item) => {
-      const weight = parseInt(item.value) || 0;
-      total += weight;
+      const parsed = parseItemWeightInput(item.value);
+      total += parsed.ok ? parsed.n : 0;
     });
     return total;
+  }
+
+  function attachItemWeightValidation(weightInput) {
+    if (!weightInput) return;
+    weightInput.dataset.lastValidWeight = weightInput.value.trim() === '' ? '0' : weightInput.value;
+
+    function applyValidDisplay(n) {
+      const str = formatWeightNumber(n);
+      weightInput.value = str;
+      weightInput.classList.remove('item-weight-invalid');
+      weightInput.dataset.lastValidWeight = str;
+    }
+
+    weightInput.addEventListener('blur', () => {
+      const parsed = parseItemWeightInput(weightInput.value);
+      if (!parsed.ok) {
+        if (typeof window.showToast === 'function') window.showToast(parsed.message, 'warning');
+        const last = weightInput.dataset.lastValidWeight || '0';
+        const lastParsed = parseItemWeightInput(last);
+        applyValidDisplay(lastParsed.ok ? lastParsed.n : 0);
+        updateWeightDisplay();
+        return;
+      }
+      applyValidDisplay(parsed.n);
+      updateWeightDisplay();
+    });
+
+    weightInput.addEventListener('input', () => {
+      const parsed = parseItemWeightInput(weightInput.value);
+      if (parsed.ok) {
+        weightInput.classList.remove('item-weight-invalid');
+      } else if (weightInput.value.trim() !== '') {
+        weightInput.classList.add('item-weight-invalid');
+      } else {
+        weightInput.classList.remove('item-weight-invalid');
+      }
+      updateWeightDisplay();
+    });
   }
 
   // Função para atualizar display de peso
@@ -91,7 +163,11 @@
     const maxEl = document.getElementById('weight-max');
     
     if (currentEl) {
-      currentEl.textContent = currentWeight.toString();
+      const display =
+        Math.abs(currentWeight - Math.round(currentWeight)) < 1e-9
+          ? String(Math.round(currentWeight))
+          : formatWeightNumber(currentWeight);
+      currentEl.textContent = display;
       // Mudar cor se sobrecarregado
       if (currentWeight > maxWeight && maxWeight > 0) {
         currentEl.style.color = '#cc7d7d'; // Vermelho claro
@@ -109,26 +185,57 @@
     }));
   }
 
-  function createWeapon() {
+  function initWeaponRow(weaponDiv) {
+    const removeBtn = weaponDiv.querySelector('.btn-remove');
+    const equipBtn = weaponDiv.querySelector('.weapon-equip-btn');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        weaponDiv.remove();
+      });
+    }
+    if (equipBtn) {
+      equipBtn.addEventListener('click', () => {
+        const wasEquipped = weaponDiv.classList.contains('weapon-row-equipped');
+        document.querySelectorAll('#weapons-list .weapon-equip-btn').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+        document.querySelectorAll('#weapons-list .equipment-row').forEach((r) => r.classList.remove('weapon-row-equipped'));
+        if (!wasEquipped) {
+          weaponDiv.classList.add('weapon-row-equipped');
+          equipBtn.setAttribute('aria-pressed', 'true');
+        }
+      });
+    }
+  }
+
+  /** @param {object} [saved] — { id, name, type, damage, description, equipped } */
+  function createWeapon(saved) {
     const container = document.getElementById('weapons-list');
     if (!container) return;
 
-    const id = `weapon-${equipmentIdCounter++}`;
+    const wid = saved?.id || `weapon-${equipmentIdCounter++}`;
     const weaponDiv = document.createElement('div');
     weaponDiv.className = 'equipment-row';
-    weaponDiv.id = id;
-    
+    weaponDiv.setAttribute('data-weapon-id', wid);
+    if (saved?.equipped) {
+      weaponDiv.classList.add('weapon-row-equipped');
+    }
+
+    const name = saved?.name ?? '';
+    const dmg = saved?.damage ?? '';
+    const desc = saved?.description ?? '';
+    const typeVal = saved?.type && weaponTypes.some((t) => t.value === saved.type) ? saved.type : 'branca';
+
     weaponDiv.innerHTML = `
       <div class="equipment-name-input">
         <input 
           type="text" 
           placeholder="Nome da arma" 
           class="equipment-name-input-field"
+          value=""
         />
       </div>
       <div class="equipment-type-select">
         <select class="equipment-type">
-          ${weaponTypes.map(type => 
+          ${weaponTypes.map((type) =>
             `<option value="${type.value}">${type.label}</option>`
           ).join('')}
         </select>
@@ -138,6 +245,7 @@
           type="text" 
           placeholder="Dano" 
           class="equipment-damage-input-field"
+          value=""
         />
       </div>
       <div class="equipment-description-input">
@@ -147,20 +255,27 @@
           class="equipment-description-field"
         ></textarea>
       </div>
+      <div class="weapon-equip-cell">
+        <button type="button" class="weapon-equip-btn" title="Marcar como arma empunhada (visual)" aria-pressed="${saved?.equipped ? 'true' : 'false'}">⚔</button>
+      </div>
       <button class="btn-remove" type="button" title="Remover arma">✕</button>
     `;
 
-    const removeBtn = weaponDiv.querySelector('.btn-remove');
-    if (removeBtn) {
-      removeBtn.addEventListener('click', () => {
-        weaponDiv.remove();
-      });
-    }
+    const nameInput = weaponDiv.querySelector('.equipment-name-input-field');
+    const typeSelect = weaponDiv.querySelector('.equipment-type');
+    const damageInput = weaponDiv.querySelector('.equipment-damage-input-field');
+    const descInput = weaponDiv.querySelector('.equipment-description-field');
+    if (nameInput) nameInput.value = name;
+    if (typeSelect) typeSelect.value = typeVal;
+    if (damageInput) damageInput.value = dmg;
+    if (descInput) descInput.value = desc;
 
+    initWeaponRow(weaponDiv);
     container.appendChild(weaponDiv);
   }
 
-  function createItem() {
+  /** @param {{ name?: string, description?: string, weight?: string|number }} [saved] */
+  function createItem(saved) {
     const container = document.getElementById('items-list');
     if (!container) return;
 
@@ -185,18 +300,28 @@
         ></textarea>
       </div>
       <div class="equipment-weight-select">
-        <select class="item-weight">
-          ${weightOptions.map(weight => 
-            `<option value="${weight}">${weight}</option>`
-          ).join('')}
-        </select>
+        <input
+          type="text"
+          class="item-weight equipment-item-weight-input"
+          inputmode="decimal"
+          placeholder="Ex.: 1 ou 0,5"
+          autocomplete="off"
+          aria-label="Peso do item"
+        />
       </div>
       <button class="btn-remove" type="button" title="Remover item">✕</button>
     `;
 
     const removeBtn = itemDiv.querySelector('.btn-remove');
-    const weightSelect = itemDiv.querySelector('.item-weight');
-    
+    const weightInput = itemDiv.querySelector('.item-weight');
+    const nameInput = itemDiv.querySelector('.equipment-name-input-field');
+    const descInput = itemDiv.querySelector('.equipment-description-field');
+
+    if (saved) {
+      if (nameInput) nameInput.value = saved.name || '';
+      if (descInput) descInput.value = saved.description || '';
+    }
+
     if (removeBtn) {
       removeBtn.addEventListener('click', () => {
         itemDiv.remove();
@@ -204,10 +329,14 @@
       });
     }
 
-    if (weightSelect) {
-      weightSelect.addEventListener('change', () => {
-        updateWeightDisplay();
-      });
+    if (weightInput) {
+      let initial = '1';
+      if (saved != null && saved.weight != null && saved.weight !== '') {
+        const p = parseItemWeightInput(String(saved.weight));
+        initial = p.ok ? formatWeightNumber(p.n) : '1';
+      }
+      weightInput.value = initial;
+      attachItemWeightValidation(weightInput);
     }
 
     container.appendChild(itemDiv);
@@ -256,11 +385,54 @@
 
   // Tornar funções disponíveis globalmente (para compatibilidade com SaveLoad)
   window.createWeapon = createWeapon;
+  window.initWeaponRow = initWeaponRow;
   window.createItem = createItem;
+  window.parseItemWeightInput = parseItemWeightInput;
   window.updateWeightDisplay = updateWeightDisplay;
 </script>
 
 <style is:global>
+  .equipment-money-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .equipment-money-label {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-accent);
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .equipment-money-input {
+    flex: 1;
+    min-width: 200px;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+  }
+
+  .equipment-money-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 8px rgba(139, 76, 141, 0.25);
+  }
+
   .equipment-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -329,12 +501,16 @@
     align-items: center;
   }
 
+  .equipment-header-equip {
+    text-align: center;
+  }
+
   .weapons-header {
-    grid-template-columns: 1fr 140px 100px 1fr 40px;
+    grid-template-columns: 1fr 140px 100px 1fr 48px 40px;
   }
 
   .items-header {
-    grid-template-columns: 1fr 1fr 80px 40px;
+    grid-template-columns: 1fr 1fr 96px 40px;
   }
 
   .equipment-header-label {
@@ -347,6 +523,13 @@
     cursor: help;
     opacity: 0.8;
     text-align: left;
+  }
+
+  .weapons-header .equipment-header-label:nth-child(2),
+  .weapons-header .equipment-header-label:nth-child(3),
+  .weapons-header .equipment-header-label:nth-child(4),
+  .weapons-header .equipment-header-label:nth-child(5) {
+    text-align: center;
   }
 
   .equipment-header-label:nth-child(2),
@@ -405,11 +588,47 @@
   }
 
   #weapons-list .equipment-row {
-    grid-template-columns: 1fr 140px 100px 1fr 40px;
+    grid-template-columns: 1fr 140px 100px 1fr 48px 40px;
+  }
+
+  .weapon-equip-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .weapon-equip-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-primary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: all 0.2s ease;
+  }
+
+  .weapon-equip-btn:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-accent);
+  }
+
+  .weapon-equip-btn[aria-pressed='true'] {
+    border-color: var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.25);
+    color: var(--color-text-accent);
+    box-shadow: 0 0 10px rgba(139, 76, 141, 0.35);
+  }
+
+  #weapons-list .equipment-row.weapon-row-equipped {
+    border-color: var(--color-accent-primary);
+    box-shadow: inset 0 0 0 1px rgba(139, 76, 141, 0.35);
   }
 
   #items-list .equipment-row {
-    grid-template-columns: 1fr 1fr 80px 40px;
+    grid-template-columns: 1fr 1fr 96px 40px;
   }
 
   .equipment-name-input {
@@ -441,8 +660,7 @@
     align-items: center;
   }
 
-  .equipment-type,
-  .item-weight {
+  .equipment-type {
     width: 100%;
     background: var(--color-bg-primary);
     border: 1px solid var(--color-border);
@@ -455,8 +673,28 @@
     transition: all 0.3s ease;
   }
 
+  .item-weight.equipment-item-weight-input {
+    width: 100%;
+    min-width: 0;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: text;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .item-weight-invalid {
+    border-color: #cc7d7d !important;
+    box-shadow: 0 0 0 2px rgba(204, 125, 125, 0.2);
+  }
+
   .equipment-type:focus,
-  .item-weight:focus {
+  .item-weight.equipment-item-weight-input:focus {
     outline: none;
     border-color: var(--color-accent-primary);
     box-shadow: 

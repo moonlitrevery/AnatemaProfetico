@@ -11,6 +11,7 @@
     <span class="abilities-header-label" title="Nome da habilidade">Nome da habilidade</span>
     <span class="abilities-header-label" title="Sequência">Sequência</span>
     <span class="abilities-header-label" title="Custo de mana">Custo de mana</span>
+    <span class="abilities-header-label" title="Conjurar">Conjurar</span>
     <span class="abilities-header-label" title="Descrição">Descrição</span>
   </div>
   <div class="abilities-container" id="abilities-container">
@@ -56,6 +57,9 @@
       <div class="ability-mana-input">
         <input type="number" placeholder="0" min="0" class="ability-mana-field" value="0" />
       </div>
+      <div class="ability-cast-cell">
+        <button type="button" class="ability-cast-btn" title="Gasta o custo de mana da mana atual">Conjurar</button>
+      </div>
       <div class="ability-description-input">
         <textarea placeholder="Descrição da habilidade" rows="2" class="ability-description-field"></textarea>
       </div>
@@ -65,6 +69,16 @@
     const passiveCheckbox = row.querySelector('.ability-is-passive');
     const manaInput = row.querySelector('.ability-mana-field');
     const removeBtn = row.querySelector('.btn-remove');
+    const castBtn = row.querySelector('.ability-cast-btn');
+
+    function updateCastButtonState() {
+      const passive = passiveCheckbox?.checked;
+      const cell = row.querySelector('.ability-cast-cell');
+      if (cell) {
+        cell.style.display = passive ? 'none' : 'flex';
+      }
+      if (castBtn) castBtn.disabled = !!passive;
+    }
 
     if (passiveCheckbox && manaInput) {
       function updateManaField() {
@@ -77,10 +91,35 @@
           manaInput.disabled = false;
           manaInput.readOnly = false;
         }
+        updateCastButtonState();
       }
 
       passiveCheckbox.addEventListener('change', updateManaField);
       updateManaField();
+    }
+
+    if (castBtn && passiveCheckbox && manaInput) {
+      castBtn.addEventListener('click', () => {
+        if (passiveCheckbox.checked) return;
+        const cost = parseInt(manaInput.value, 10);
+        if (Number.isNaN(cost) || cost < 0) {
+          if (typeof window.showToast === 'function') window.showToast('Custo de mana inválido.', 'warning');
+          return;
+        }
+        const manaCur = document.getElementById('mana-current');
+        if (!manaCur) return;
+        const cur = parseInt(manaCur.value, 10) || 0;
+        if (cost > cur) {
+          if (typeof window.showToast === 'function') window.showToast('Mana insuficiente.', 'warning');
+          return;
+        }
+        manaCur.value = String(cur - cost);
+        manaCur.dispatchEvent(new Event('input', { bubbles: true }));
+        manaCur.dispatchEvent(new Event('change', { bubbles: true }));
+        if (typeof window.showToast === 'function') {
+          window.showToast(`Conjurado (−${cost} mana)`, 'success');
+        }
+      });
     }
 
     if (removeBtn) {
@@ -110,7 +149,7 @@
 <style is:global>
   .abilities-header {
     display: grid;
-    grid-template-columns: 100px 1fr 140px 120px 2fr auto;
+    grid-template-columns: 100px 1fr 140px 120px 88px 2fr auto;
     gap: 0.75rem;
     padding: 0.75rem;
     background: var(--color-bg-tertiary);
@@ -131,7 +170,8 @@
     text-align: left;
   }
 
-  .abilities-header-label:nth-child(4) {
+  .abilities-header-label:nth-child(4),
+  .abilities-header-label:nth-child(5) {
     text-align: center;
   }
 
@@ -144,7 +184,7 @@
 
   .ability-row {
     display: grid;
-    grid-template-columns: 100px 1fr 140px 120px 2fr auto;
+    grid-template-columns: 100px 1fr 140px 120px 88px 2fr auto;
     gap: 0.75rem;
     align-items: center;
     padding: 0.5rem 0.75rem;
@@ -212,6 +252,40 @@
     background: var(--color-bg-tertiary);
     color: var(--color-text-secondary);
     cursor: not-allowed;
+  }
+
+  .ability-cast-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ability-cast-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 4px;
+    border: 1px solid var(--color-accent-primary);
+    background: rgba(139, 76, 141, 0.15);
+    color: var(--color-text-accent);
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .ability-cast-btn:hover:not(:disabled) {
+    background: rgba(139, 76, 141, 0.35);
+    box-shadow: 0 0 8px rgba(139, 76, 141, 0.35);
+  }
+
+  .ability-cast-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
   }
 
   .ability-sequencia-select {
@@ -314,14 +388,14 @@
   @media (max-width: 1024px) {
     .abilities-header,
     .ability-row {
-      grid-template-columns: 80px 1fr 120px 100px 1.5fr auto;
+      grid-template-columns: 80px 1fr 120px 100px 76px 1.5fr auto;
     }
   }
 
   @media (max-width: 768px) {
     .abilities-header,
     .ability-row {
-      grid-template-columns: 80px 1fr 100px 80px 1fr auto;
+      grid-template-columns: 80px 1fr 100px 64px 72px minmax(0, 1fr) auto;
     }
   }
 </style>

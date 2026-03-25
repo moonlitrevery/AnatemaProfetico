@@ -61,6 +61,7 @@
       sanidadeTemp: document.getElementById('sanidade-temp')?.value || '',
       sanidadeExtra: document.getElementById('sanidade-extra')?.value || '',
       movimentoExtra: document.getElementById('movimento-extra')?.value || '',
+      resistenciaExtra: document.getElementById('resistencia-extra')?.value || '',
     };
 
     const sanitySystem = typeof window.getSanityData === 'function' ? window.getSanityData() : { insanidades: [], traumas: [] };
@@ -101,6 +102,7 @@
     const equipment = {
       weapons: [],
       items: [],
+      money: document.getElementById('character-money')?.value || '',
     };
 
     document.querySelectorAll('#weapons-list .equipment-row').forEach((row) => {
@@ -110,10 +112,12 @@
       const descInput = row.querySelector('.equipment-description-field');
       if (nameInput && typeSelect && damageInput && descInput) {
         equipment.weapons.push({
+          id: row.getAttribute('data-weapon-id') || '',
           name: nameInput.value || '',
           type: typeSelect.value || 'branca',
           damage: damageInput.value || '',
           description: descInput.value || '',
+          equipped: row.classList.contains('weapon-row-equipped'),
         });
       }
     });
@@ -121,13 +125,16 @@
     document.querySelectorAll('#items-list .equipment-row').forEach((row) => {
       const nameInput = row.querySelector('.equipment-name-input-field');
       const descInput = row.querySelector('.equipment-description-field');
-      const weightSelect = row.querySelector('.item-weight');
-      if (nameInput && descInput && weightSelect) {
-        const w = parseInt(weightSelect.value, 10);
+      const weightInput = row.querySelector('.item-weight');
+      if (nameInput && descInput && weightInput) {
+        const parsed =
+          typeof window.parseItemWeightInput === 'function'
+            ? window.parseItemWeightInput(weightInput.value)
+            : { ok: true, n: parseFloat(String(weightInput.value).replace(',', '.')) || 0 };
         equipment.items.push({
           name: nameInput.value || '',
           description: descInput.value || '',
-          weight: Number.isNaN(w) ? 1 : w,
+          weight: parsed.ok ? parsed.n : 0,
         });
       }
     });
@@ -264,6 +271,8 @@
       if (sanidadeTempInput) sanidadeTempInput.value = data.header.sanidadeTemp || '';
       if (sanidadeExtraInput) sanidadeExtraInput.value = data.header.sanidadeExtra || '';
       if (movimentoExtraInput) movimentoExtraInput.value = data.header.movimentoExtra || '';
+      const resistenciaExtraInput = document.getElementById('resistencia-extra');
+      if (resistenciaExtraInput) resistenciaExtraInput.value = data.header.resistenciaExtra || '';
       if (data.header.dtCobertura) {
         document.querySelectorAll('.cobertura-btn').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.cobertura === data.header.dtCobertura);
@@ -315,75 +324,40 @@
       return div.innerHTML;
     }
 
+    const moneyInput = document.getElementById('character-money');
+    if (moneyInput && data.equipment && 'money' in data.equipment) {
+      moneyInput.value = data.equipment.money || '';
+    }
+
     if (weaponsList && data.equipment?.weapons) {
       weaponsList.innerHTML = '';
+      let assignEquip = true;
       data.equipment.weapons.forEach((weapon) => {
-        const weaponDiv = document.createElement('div');
-        weaponDiv.className = 'equipment-row';
-        const weaponTypesList = [
-          { value: 'branca', label: 'Arma branca' },
-          { value: 'fogo', label: 'Arma de Fogo' },
-          { value: 'magica', label: 'Arma mágica' },
-        ];
-        weaponDiv.innerHTML = `
-          <div class="equipment-name-input">
-            <input type="text" placeholder="Nome da arma" class="equipment-name-input-field" value="${escapeHtml(weapon.name || '')}" />
-          </div>
-          <div class="equipment-type-select">
-            <select class="equipment-type">
-              ${weaponTypesList.map(type => `<option value="${type.value}" ${weapon.type === type.value ? 'selected' : ''}>${escapeHtml(type.label)}</option>`).join('')}
-            </select>
-          </div>
-          <div class="equipment-damage-input">
-            <input type="text" placeholder="Dano" class="equipment-damage-input-field" value="${escapeHtml(weapon.damage || '')}" />
-          </div>
-          <div class="equipment-description-input">
-            <textarea placeholder="Descrição" rows="2" class="equipment-description-field">${escapeHtml(weapon.description || '')}</textarea>
-          </div>
-          <button class="btn-remove" type="button" title="Remover arma">✕</button>
-        `;
-        const removeBtn = weaponDiv.querySelector('.btn-remove');
-        if (removeBtn) {
-          removeBtn.addEventListener('click', () => weaponDiv.remove());
+        const equipped = !!(weapon.equipped && assignEquip);
+        if (equipped) assignEquip = false;
+        if (typeof window.createWeapon === 'function') {
+          window.createWeapon({
+            id: weapon.id,
+            name: weapon.name,
+            type: weapon.type,
+            damage: weapon.damage,
+            description: weapon.description,
+            equipped,
+          });
         }
-        weaponsList.appendChild(weaponDiv);
       });
     }
 
     if (itemsList && data.equipment?.items) {
       itemsList.innerHTML = '';
       data.equipment.items.forEach((item) => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'equipment-row';
-        const weightOptions = Array.from({ length: 9 }, (_, i) => i + 1);
-        itemDiv.innerHTML = `
-          <div class="equipment-name-input">
-            <input type="text" placeholder="Nome do item" class="equipment-name-input-field" value="${escapeHtml(item.name || '')}" />
-          </div>
-          <div class="equipment-description-input">
-            <textarea placeholder="Descrição" rows="2" class="equipment-description-field">${escapeHtml(item.description || '')}</textarea>
-          </div>
-          <div class="equipment-weight-select">
-            <select class="item-weight">
-              ${weightOptions.map(weight => `<option value="${weight}" ${item.weight === weight ? 'selected' : ''}>${weight}</option>`).join('')}
-            </select>
-          </div>
-          <button class="btn-remove" type="button" title="Remover item">✕</button>
-        `;
-        const removeBtn = itemDiv.querySelector('.btn-remove');
-        const weightSelect = itemDiv.querySelector('.item-weight');
-        if (removeBtn) {
-          removeBtn.addEventListener('click', () => {
-            itemDiv.remove();
-            if (window.updateWeightDisplay) window.updateWeightDisplay();
+        if (typeof window.createItem === 'function') {
+          window.createItem({
+            name: item.name,
+            description: item.description,
+            weight: item.weight,
           });
         }
-        if (weightSelect) {
-          weightSelect.addEventListener('change', () => {
-            if (window.updateWeightDisplay) window.updateWeightDisplay();
-          });
-        }
-        itemsList.appendChild(itemDiv);
       });
       setTimeout(() => {
         if (window.updateWeightDisplay) window.updateWeightDisplay();
@@ -595,18 +569,35 @@
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
         if (confirm('Tem certeza que deseja limpar toda a ficha? Esta ação não pode ser desfeita.')) {
-          // Limpar todos os campos
           document.querySelectorAll('input, textarea').forEach((input) => {
             if (input) {
               if (input.type === 'checkbox' || input.type === 'radio') {
                 input.checked = false;
-              } else if (input.type !== 'file') {
+              } else if (input.type !== 'file' && input.type !== 'button') {
                 input.value = '';
               }
             }
           });
 
-          // Resetar nível
+          document.querySelectorAll('select').forEach((sel) => {
+            if (sel.closest('#skills-container')) return;
+            if (sel.id === 'nivel') {
+              sel.value = '0';
+            } else if (sel.id === 'prestigio') {
+              sel.value = 'muito-baixo';
+            } else if (sel.id === 'caminho') {
+              sel.value = '';
+            } else if (sel.classList.contains('ability-sequencia')) {
+              sel.value = '';
+            } else if (sel.classList.contains('equipment-type')) {
+              sel.value = 'branca';
+            }
+          });
+
+          if (typeof window.resetSkillsToDefault === 'function') {
+            window.resetSkillsToDefault();
+          }
+
           const nivelSelect = document.getElementById('nivel');
           if (nivelSelect) {
             nivelSelect.value = '0';
@@ -617,10 +608,18 @@
 
           const weaponsList = document.getElementById('weapons-list');
           const itemsList = document.getElementById('items-list');
+          const abilitiesContainer = document.getElementById('abilities-container');
           if (weaponsList) weaponsList.innerHTML = '';
           if (itemsList) itemsList.innerHTML = '';
+          if (abilitiesContainer) abilitiesContainer.innerHTML = '';
 
-          // Limpar localStorage
+          if (typeof window.loadSanityData === 'function') {
+            window.loadSanityData({ insanidades: [], traumas: [] });
+          }
+          if (typeof window.loadConditionsData === 'function') {
+            window.loadConditionsData([]);
+          }
+
           localStorage.removeItem('anatema-profetico-character');
           localStorage.removeItem('anatema-save-timestamp');
           
@@ -630,6 +629,8 @@
           setTimeout(() => {
             if (window.updateHeaderValues) window.updateHeaderValues();
             if (window.updateInlineStatus) window.updateInlineStatus();
+            if (window.updateWeightDisplay) window.updateWeightDisplay();
+            if (window.updateStatus) window.updateStatus();
           }, 300);
         }
       });

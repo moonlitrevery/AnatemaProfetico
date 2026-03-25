@@ -128,7 +128,10 @@
     </div>
     <div class="header-item">
       <label for="resistencia">Resistência a dano físico</label>
-      <input type="number" id="resistencia" name="resistencia" readonly class="header-value" />
+      <div class="movement-container">
+        <input type="number" id="resistencia" name="resistencia" readonly class="header-value movement-base resistencia-total" title="Total (base + extra)" />
+        <input type="number" id="resistencia-extra" name="resistencia-extra" class="movement-extra" placeholder="+0" title="Bônus extra à resistência (itens, efeitos)" />
+      </div>
     </div>
     <div class="header-item">
       <label for="movimento">Movimento</label>
@@ -620,11 +623,14 @@
         }
       }
 
-      // Resistências a dano: MODcon + MODfor/2
+      // Resistências a dano: MODcon + MODfor/2 + extra
       const resistenciaInput = document.getElementById('resistencia');
+      const resistenciaExtraInput = document.getElementById('resistencia-extra');
       if (resistenciaInput) {
-        const resistencia = modCon + Math.floor(modFor / 2);
-        resistenciaInput.value = String(resistencia);
+        const resistenciaBase = modCon + Math.floor(modFor / 2);
+        const re = resistenciaExtraInput ? parseInt(resistenciaExtraInput.value, 10) : 0;
+        const resistenciaExtra = Number.isNaN(re) ? 0 : re;
+        resistenciaInput.value = String(resistenciaBase + resistenciaExtra);
       }
 
       // Movimento: MODdex * 2"m" (ou metade se sobrecarregado ou machucado) + movimento extra
@@ -640,7 +646,7 @@
         const weightMaxEl = document.getElementById('weight-max');
         
         if (weightCurrentEl && weightMaxEl) {
-          const wc = parseInt(weightCurrentEl.textContent, 10);
+          const wc = parseFloat(String(weightCurrentEl.textContent).replace(',', '.'));
           const wm = parseInt(weightMaxEl.textContent, 10);
           currentWeight = Number.isNaN(wc) ? 0 : wc;
           maxWeight = Number.isNaN(wm) ? 0 : wm;
@@ -889,7 +895,7 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
+        } else if (id === 'movimento-extra' || id === 'resistencia-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
@@ -903,7 +909,7 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
+        } else if (id === 'movimento-extra' || id === 'resistencia-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
