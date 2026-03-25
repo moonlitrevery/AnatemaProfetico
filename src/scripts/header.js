@@ -1,4 +1,4 @@
-import { updateCharacter } from '../utils/characterState';
+import { updateCharacter } from '../utils/characterState.js';
 
 // Integrar Status inline no Header
 function renderInlineStatus() {
