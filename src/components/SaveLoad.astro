@@ -244,7 +244,12 @@
       },
     };
 
-    console.log('CHARACTER DATA:', structuredClone(result));
+    try {
+      console.log('CHARACTER DATA:', structuredClone(result));
+    } catch (e) {
+      console.warn('structuredClone failed, logging raw result instead');
+      console.log('CHARACTER DATA (raw):', result);
+    }
 
     return result;
   };
