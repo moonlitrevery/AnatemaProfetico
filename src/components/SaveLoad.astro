@@ -36,45 +36,77 @@
   import { initCharacterStateLayer, syncCharacterStateFromDOM } from '../utils/characterState';
 
   window.getAllCharacterData = function getAllCharacterData() {
+    const safeStr = (v) => (v == null || v === undefined ? '' : String(v));
+    const safeNumber = (v) => {
+      const n = typeof v === 'number' ? v : Number(v);
+      return Number.isNaN(n) ? 0 : n;
+    };
+    const safeInt = (v, fallback = 0) => {
+      const n = parseInt(String(v), 10);
+      return Number.isNaN(n) ? fallback : n;
+    };
+    const safeArray = (v) => (Array.isArray(v) ? v : []);
+    const safeBool = (v) => !!v;
+
     const basicInfo = {
-      playerName: document.getElementById('player-name')?.value || '',
-      characterName: document.getElementById('character-name')?.value || '',
-      age: document.getElementById('character-age')?.value || '',
-      profession: document.getElementById('character-profession')?.value || '',
-      pronouns: Array.from(document.querySelectorAll('.pronoun-checkbox:checked')).map(cb => cb.value),
-      imageUrl: document.getElementById('character-image-url')?.value || '',
+      playerName: safeStr(document.getElementById('player-name')?.value),
+      characterName: safeStr(document.getElementById('character-name')?.value),
+      age: safeStr(document.getElementById('character-age')?.value),
+      profession: safeStr(document.getElementById('character-profession')?.value),
+      pronouns: safeArray(
+        Array.from(document.querySelectorAll('.pronoun-checkbox:checked')).map((cb) => safeStr(cb.value))
+      ),
+      imageUrl: safeStr(document.getElementById('character-image-url')?.value),
     };
 
     const prestigioSelect = document.getElementById('prestigio');
     const coberturaActive = document.querySelector('.cobertura-btn.active');
+    const vidaMaxEl = document.getElementById('vida-max');
+    const manaMaxEl = document.getElementById('mana-max');
+    const sanidadeMaxEl = document.getElementById('sanidade-max');
+
     const header = {
-      caminho: document.getElementById('caminho')?.value || '',
-      sequencia: document.getElementById('nivel-caminho')?.value || '',
-      nivel: document.getElementById('nivel')?.value || '',
-      prestigio: prestigioSelect?.value || 'muito-baixo',
-      dtCobertura: coberturaActive?.dataset.cobertura || '',
-      vidaCurrent: document.getElementById('vida-current')?.value || '',
-      vidaTemp: document.getElementById('vida-temp')?.value || '',
-      vidaExtra: document.getElementById('vida-extra')?.value || '',
-      manaCurrent: document.getElementById('mana-current')?.value || '',
-      manaTemp: document.getElementById('mana-temp')?.value || '',
-      manaExtra: document.getElementById('mana-extra')?.value || '',
-      sanidadeCurrent: document.getElementById('sanidade-current')?.value || '',
-      sanidadeTemp: document.getElementById('sanidade-temp')?.value || '',
-      sanidadeExtra: document.getElementById('sanidade-extra')?.value || '',
-      movimentoExtra: document.getElementById('movimento-extra')?.value || '',
-      resistenciaExtra: document.getElementById('resistencia-extra')?.value || '',
+      caminho: safeStr(document.getElementById('caminho')?.value),
+      sequencia: safeStr(document.getElementById('nivel-caminho')?.value),
+      nivel: safeStr(document.getElementById('nivel')?.value),
+      prestigio: safeStr(prestigioSelect?.value) || 'muito-baixo',
+      dtCobertura: safeStr(coberturaActive?.dataset.cobertura),
+      vidaCurrent: safeStr(document.getElementById('vida-current')?.value),
+      vidaTemp: safeStr(document.getElementById('vida-temp')?.value),
+      vidaExtra: safeStr(document.getElementById('vida-extra')?.value),
+      manaCurrent: safeStr(document.getElementById('mana-current')?.value),
+      manaTemp: safeStr(document.getElementById('mana-temp')?.value),
+      manaExtra: safeStr(document.getElementById('mana-extra')?.value),
+      sanidadeCurrent: safeStr(document.getElementById('sanidade-current')?.value),
+      sanidadeTemp: safeStr(document.getElementById('sanidade-temp')?.value),
+      sanidadeExtra: safeStr(document.getElementById('sanidade-extra')?.value),
+      movimentoExtra: safeStr(document.getElementById('movimento-extra')?.value),
+      resistenciaExtra: safeStr(document.getElementById('resistencia-extra')?.value),
+      hpMax: safeNumber(vidaMaxEl?.value),
+      manaMax: safeNumber(manaMaxEl?.value),
+      sanidadeMax: safeNumber(sanidadeMaxEl?.value),
     };
 
-    const sanitySystem = typeof window.getSanityData === 'function' ? window.getSanityData() : { insanidades: [], traumas: [] };
+    const sanityRaw =
+      typeof window.getSanityData === 'function' ? window.getSanityData() : { insanidades: [], traumas: [] };
+    const sanitySystem = {
+      insanidades: safeArray(sanityRaw?.insanidades),
+      traumas: safeArray(sanityRaw?.traumas),
+    };
 
-    const attributes = {};
     const attributeIds = ['brutalidade', 'destreza', 'compleicao', 'mente', 'sobrenatural'];
-    attributeIds.forEach(id => {
+    const attributes = {
+      brutalidade: 0,
+      destreza: 0,
+      compleicao: 0,
+      mente: 0,
+      sobrenatural: 0,
+    };
+    attributeIds.forEach((id) => {
       const input = document.getElementById(id);
       if (input) {
-        const v = parseInt(input.value, 10);
-        attributes[id] = Number.isNaN(v) ? 0 : v;
+        const v = safeInt(input.value, 0);
+        attributes[id] = safeNumber(v);
       }
     });
 
@@ -87,16 +119,16 @@
       const trainingSelect = row.querySelector('.skill-training');
       const skillId = row.getAttribute('data-skill-id');
       if (valueInput && attrSelect && skillId) {
-        const name = nameInput?.value || nameStatic?.textContent || '';
+        const name = safeStr(nameInput?.value || nameStatic?.textContent || '');
         const isEditable = !!nameInput;
-        const vv = parseInt(valueInput.value, 10);
+        const vv = safeInt(valueInput.value, 0);
         skills.push({
-          name: name,
-          attribute: attrSelect.value,
-          value: Number.isNaN(vv) ? 0 : vv,
-          training: trainingSelect?.value || 'none',
+          name,
+          attribute: safeStr(attrSelect.value),
+          value: safeNumber(vv),
+          training: safeStr(trainingSelect?.value) || 'none',
           editable: isEditable,
-          id: skillId,
+          id: safeStr(skillId),
         });
       }
     });
@@ -114,10 +146,10 @@
       const descInput = row.querySelector('.equipment-description-field');
       if (nameInput && typeSelect && damageInput && descInput) {
         equipment.weapons.push({
-          name: nameInput.value || '',
-          type: typeSelect.value || 'branca',
-          damage: damageInput.value || '',
-          description: descInput.value || '',
+          name: safeStr(nameInput.value),
+          type: safeStr(typeSelect.value) || 'branca',
+          damage: safeStr(damageInput.value),
+          description: safeStr(descInput.value),
         });
       }
     });
@@ -127,19 +159,19 @@
       const descInput = row.querySelector('.equipment-description-field');
       const weightSelect = row.querySelector('.item-weight');
       if (nameInput && descInput && weightSelect) {
-        const w = parseInt(weightSelect.value, 10);
+        const w = safeInt(weightSelect.value, 1);
         equipment.items.push({
-          name: nameInput.value || '',
-          description: descInput.value || '',
-          weight: Number.isNaN(w) ? 1 : w,
+          name: safeStr(nameInput.value),
+          description: safeStr(descInput.value),
+          weight: safeNumber(w) || 1,
         });
       }
     });
 
     const dinheiroEl = document.getElementById('equipment-dinheiro');
     if (dinheiroEl) {
-      const d = parseInt(dinheiroEl.value, 10);
-      equipment.dinheiroReais = Number.isNaN(d) ? 0 : Math.max(0, d);
+      const d = safeInt(dinheiroEl.value, 0);
+      equipment.dinheiroReais = Math.max(0, safeNumber(d));
     }
 
     const abilities = [];
@@ -151,37 +183,48 @@
       const passiveCheckbox = row.querySelector('.ability-is-passive');
       const abilityId = row.getAttribute('data-ability-id');
       if (nameInput && manaInput && descInput && abilityId) {
+        const passive = passiveCheckbox ? safeBool(passiveCheckbox.checked) : false;
+        const rawMana = safeStr(manaInput.value);
         abilities.push({
-          name: nameInput.value || '',
-          isPassive: passiveCheckbox ? passiveCheckbox.checked : false,
-          manaCost: passiveCheckbox && passiveCheckbox.checked ? '-' : (manaInput.value || '0'),
-          sequencia: sequenciaSelect ? sequenciaSelect.value || '' : '',
-          description: descInput.value || '',
-          id: abilityId,
+          name: safeStr(nameInput.value),
+          isPassive: passive,
+          manaCost: passive ? '-' : (rawMana || '0'),
+          sequencia: sequenciaSelect ? safeStr(sequenciaSelect.value) : '',
+          description: safeStr(descInput.value),
+          id: safeStr(abilityId),
         });
       }
     });
 
     const notes = {
-      sobre: document.getElementById('notes-sobre')?.value || '',
-      sessoes: document.getElementById('notes-sessoes')?.value || '',
-      aliados: document.getElementById('notes-aliados')?.value || '',
-      inimigos: document.getElementById('notes-inimigos')?.value || '',
-      extras: document.getElementById('notes-extras')?.value || '',
+      sobre: safeStr(document.getElementById('notes-sobre')?.value),
+      sessoes: safeStr(document.getElementById('notes-sessoes')?.value),
+      aliados: safeStr(document.getElementById('notes-aliados')?.value),
+      inimigos: safeStr(document.getElementById('notes-inimigos')?.value),
+      extras: safeStr(document.getElementById('notes-extras')?.value),
     };
+
+    const successBoxes = Array.from(
+      document.querySelectorAll('.death-save-checkbox[data-type="success"]')
+    );
+    const failureBoxes = Array.from(
+      document.querySelectorAll('.death-save-checkbox[data-type="failure"]')
+    );
+    const conditionsRaw =
+      typeof window.getConditionsData === 'function' ? window.getConditionsData() : [];
 
     const status = {
-      machucado: document.getElementById('status-machucado-check')?.checked || false,
-      morrendo: document.getElementById('status-morrendo-check')?.checked || false,
-      insano: document.getElementById('status-insano-check')?.checked || false,
+      machucado: safeBool(document.getElementById('status-machucado-check')?.checked),
+      morrendo: safeBool(document.getElementById('status-morrendo-check')?.checked),
+      insano: safeBool(document.getElementById('status-insano-check')?.checked),
       deathSaves: {
-        successes: Array.from(document.querySelectorAll('.death-save-checkbox[data-type="success"]')).map(cb => cb.checked),
-        failures: Array.from(document.querySelectorAll('.death-save-checkbox[data-type="failure"]')).map(cb => cb.checked),
+        successes: successBoxes.map((cb) => safeBool(cb.checked)),
+        failures: failureBoxes.map((cb) => safeBool(cb.checked)),
       },
-      conditions: typeof window.getConditionsData === 'function' ? window.getConditionsData() : [],
+      conditions: safeArray(conditionsRaw),
     };
 
-    return {
+    const result = {
       basicInfo,
       header,
       attributes,
@@ -191,7 +234,19 @@
       notes,
       status,
       sanitySystem,
+      habilidades: abilities.slice(),
+      pericias: skills.slice(),
+      atributos: { ...attributes },
+      inventario: {
+        weapons: equipment.weapons.slice(),
+        items: equipment.items.slice(),
+        dinheiroReais: safeNumber(equipment.dinheiroReais),
+      },
     };
+
+    console.log('CHARACTER DATA:', structuredClone(result));
+
+    return result;
   };
   
   function getAllCharacterData() {
