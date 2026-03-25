@@ -1,6 +1,5 @@
 /**
- * Espelho passivo em memória — a ficha real continua no DOM + localStorage "anatema-profetico-character".
- * syncCharacterStateFromDOM é a única ponte DOM → characterState.
+ * Camada opcional de estado central (espelho) — convive com anatema-profetico-character e não o substitui.
  */
 
 export const characterState = {
@@ -10,7 +9,19 @@ export const characterState = {
   skills: [] as unknown[],
 };
 
-const SHEET_KEY = 'anatema-profetico-character';
+const CENTRAL_KEY = 'character';
+const LEGACY_SHEET_KEY = 'anatema-profetico-character';
+
+/** Enquanto true: syncCharacterStateFromDOM não roda (evita DOM velho sobrescrever estado recém-atualizado). */
+let applyingStateToDom = false;
+
+function persistCentralMirror() {
+  try {
+    localStorage.setItem(CENTRAL_KEY, JSON.stringify(characterState));
+  } catch {
+    /* ignore */
+  }
+}
 
 function normalizeMana(v: unknown): number {
   const n = Number(v);
@@ -30,10 +41,9 @@ function normalizeResistenciaExtra(v: unknown): number {
   return Math.max(0, n);
 }
 
-/** Hidrata o espelho a partir do JSON da ficha salva (mesma fonte que o resto do app). */
-function readSheetJsonIntoState() {
+function readLegacySheetIntoState() {
   try {
-    const raw = localStorage.getItem(SHEET_KEY);
+    const raw = localStorage.getItem(LEGACY_SHEET_KEY);
     if (!raw) return;
     const data = JSON.parse(raw) as {
       header?: { manaCurrent?: string; resistenciaExtra?: string };
@@ -52,8 +62,29 @@ function readSheetJsonIntoState() {
   }
 }
 
-/** Única ponte DOM → characterState (read-only em relação ao armazenamento). */
+/** @returns true se a chave `character` existia e o JSON era um objeto */
+function readCentralKeyIntoState(): boolean {
+  try {
+    const raw = localStorage.getItem(CENTRAL_KEY);
+    if (raw === null) return false;
+    const p = JSON.parse(raw) as Record<string, unknown>;
+    if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
+    if (typeof p.mana === 'number' && !Number.isNaN(p.mana)) characterState.mana = Math.max(0, p.mana);
+    if (typeof p.dinheiro === 'number' && !Number.isNaN(p.dinheiro))
+      characterState.dinheiro = Math.max(0, p.dinheiro);
+    if (typeof p.resistenciaExtra === 'number' && !Number.isNaN(p.resistenciaExtra))
+      characterState.resistenciaExtra = Math.max(0, p.resistenciaExtra);
+    if (Array.isArray(p.skills)) characterState.skills = p.skills;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Atualiza o espelho a partir do DOM (usa getAllCharacterData). */
 export function syncCharacterStateFromDOM(): void {
+  if (applyingStateToDom) return;
+
   const g = typeof window !== 'undefined' ? window.getAllCharacterData : undefined;
   if (typeof g !== 'function') return;
   const data = g() as {
@@ -66,23 +97,129 @@ export function syncCharacterStateFromDOM(): void {
   const r = normalizeResistenciaExtra(h.resistenciaExtra ?? '');
   const d = normalizeDinheiro(eq.dinheiroReais ?? 0);
 
-  if (m !== characterState.mana) characterState.mana = m;
-  if (r !== characterState.resistenciaExtra) characterState.resistenciaExtra = r;
-  if (d !== characterState.dinheiro) characterState.dinheiro = d;
+  let changed = false;
+  if (m !== characterState.mana) {
+    characterState.mana = m;
+    changed = true;
+  }
+  if (r !== characterState.resistenciaExtra) {
+    characterState.resistenciaExtra = r;
+    changed = true;
+  }
+  if (d !== characterState.dinheiro) {
+    characterState.dinheiro = d;
+    changed = true;
+  }
+  if (changed) persistCentralMirror();
 }
 
-/** Apenas atualiza o objeto em memória (sem localStorage, sem DOM, sem side effects). */
 export function updateCharacter(patch: Partial<typeof characterState>): void {
-  if (patch.mana !== undefined) characterState.mana = normalizeMana(patch.mana);
-  if (patch.dinheiro !== undefined) characterState.dinheiro = normalizeDinheiro(patch.dinheiro);
-  if (patch.resistenciaExtra !== undefined)
-    characterState.resistenciaExtra = normalizeResistenciaExtra(patch.resistenciaExtra);
-  if (patch.skills !== undefined) characterState.skills = patch.skills as unknown[];
+  let stateChanged = false;
+  let manaChanged = false;
+  let pushMana = false;
+  let pushDinheiro = false;
+  let pushResistencia = false;
+
+  if (patch.mana !== undefined) {
+    const nm = normalizeMana(patch.mana);
+    if (nm !== characterState.mana) {
+      characterState.mana = nm;
+      stateChanged = true;
+      manaChanged = true;
+      pushMana = true;
+    }
+  }
+
+  if (patch.dinheiro !== undefined) {
+    const nd = normalizeDinheiro(patch.dinheiro);
+    if (nd !== characterState.dinheiro) {
+      characterState.dinheiro = nd;
+      stateChanged = true;
+      pushDinheiro = true;
+    }
+  }
+
+  if (patch.resistenciaExtra !== undefined) {
+    const nr = normalizeResistenciaExtra(patch.resistenciaExtra);
+    if (nr !== characterState.resistenciaExtra) {
+      characterState.resistenciaExtra = nr;
+      stateChanged = true;
+      pushResistencia = true;
+    }
+  }
+
+  if (patch.skills !== undefined) {
+    const prev = JSON.stringify(characterState.skills);
+    const next = JSON.stringify(patch.skills);
+    if (prev !== next) {
+      characterState.skills = patch.skills as unknown[];
+      stateChanged = true;
+    }
+  }
+
+  if (!stateChanged) return;
+
+  persistCentralMirror();
+
+  if (pushMana || pushDinheiro || pushResistencia) {
+    applyingStateToDom = true;
+    try {
+      if (typeof document !== 'undefined') {
+        if (pushMana) {
+          const el = document.getElementById('mana-current') as HTMLInputElement | null;
+          if (el) {
+            const cur = parseInt(el.value, 10);
+            const t = characterState.mana;
+            if (Number.isNaN(cur) || cur !== t) {
+              el.value = String(t);
+            }
+          }
+        }
+        if (pushDinheiro) {
+          const el = document.getElementById('equipment-dinheiro') as HTMLInputElement | null;
+          if (el) {
+            const cur = parseInt(el.value, 10);
+            const t = characterState.dinheiro;
+            if (Number.isNaN(cur) || cur !== t) {
+              el.value = String(t);
+            }
+          }
+        }
+        if (pushResistencia) {
+          const el = document.getElementById('resistencia-extra') as HTMLInputElement | null;
+          if (el) {
+            const cur = parseInt(el.value, 10);
+            const t = characterState.resistenciaExtra;
+            if (Number.isNaN(cur) || cur !== t) {
+              el.value = String(t);
+            }
+          }
+          if (typeof window !== 'undefined' && typeof window.updateHeaderValues === 'function') {
+            window.updateHeaderValues(true);
+          }
+        }
+      }
+    } finally {
+      applyingStateToDom = false;
+    }
+  }
+
+  if (
+    manaChanged &&
+    typeof window !== 'undefined' &&
+    typeof window.updateProgressBars === 'function'
+  ) {
+    window.updateProgressBars();
+  }
 }
 
-/** Boot: só lê "anatema-profetico-character" (antes do DOM estar disponível). */
+/** Chamar uma vez no boot; não depende do DOM. */
 export function initCharacterStateLayer(): void {
-  readSheetJsonIntoState();
+  const hadCentral = readCentralKeyIntoState();
+  if (!hadCentral) {
+    readLegacySheetIntoState();
+  }
+  persistCentralMirror();
 }
 
 declare global {
