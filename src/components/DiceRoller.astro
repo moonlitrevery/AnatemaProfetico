@@ -197,12 +197,7 @@
   document.querySelectorAll('.dice-option-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const diceType = btn.dataset.dice;
-      const idx = selectedDice.lastIndexOf(diceType);
-      if (idx !== -1) {
-        selectedDice.splice(idx, 1);
-      } else {
-        selectedDice.push(diceType);
-      }
+      selectedDice.push(diceType);
       updateSelectedDiceDisplay();
     });
   });

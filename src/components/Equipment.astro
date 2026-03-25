@@ -6,23 +6,6 @@
     <span class="section-title-text">Equipamentos</span>
     <span class="section-title-decoration"></span>
   </h2>
-  <div class="equipment-money-row">
-    <label class="equipment-money-label" for="equipment-dinheiro">Dinheiro (R$)</label>
-    <div class="equipment-money-input-wrap">
-      <span class="equipment-money-prefix" aria-hidden="true">R$</span>
-      <input
-        type="number"
-        id="equipment-dinheiro"
-        name="equipment-dinheiro"
-        class="equipment-dinheiro-input"
-        min="0"
-        step="1"
-        value="0"
-        inputmode="numeric"
-        aria-label="Dinheiro em reais"
-      />
-    </div>
-  </div>
   <div class="equipment-grid">
     <div class="equipment-column">
       <div class="equipment-subsection-title">
@@ -269,16 +252,6 @@
       updateWeightDisplay();
       initializeWeightListener();
     });
-
-    const moneyInput = document.getElementById('equipment-dinheiro');
-    if (moneyInput) {
-      moneyInput.addEventListener('input', () => {
-        const v = parseInt(moneyInput.value, 10);
-        if (moneyInput.value !== '' && (Number.isNaN(v) || v < 0)) {
-          moneyInput.value = '0';
-        }
-      });
-    }
   });
 
   // Tornar funções disponíveis globalmente (para compatibilidade com SaveLoad)
@@ -288,53 +261,6 @@
 </script>
 
 <style is:global>
-  .equipment-money-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem 1.25rem;
-    margin-bottom: 1.25rem;
-    padding: 0.75rem 1rem;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-  }
-
-  .equipment-money-label {
-    font-family: var(--font-accent);
-    color: var(--color-text-accent);
-    font-size: 0.85rem;
-    font-weight: 600;
-  }
-
-  .equipment-money-input-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-  }
-
-  .equipment-money-prefix {
-    font-family: var(--font-body);
-    color: var(--color-text-secondary);
-    font-size: 0.95rem;
-  }
-
-  .equipment-dinheiro-input {
-    width: 8rem;
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 0.45rem 0.5rem;
-    color: var(--color-text-primary);
-    font-family: var(--font-body);
-    font-size: 0.95rem;
-  }
-
-  .equipment-dinheiro-input:focus {
-    outline: none;
-    border-color: var(--color-accent-primary);
-  }
-
   .equipment-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

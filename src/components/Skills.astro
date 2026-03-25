@@ -50,7 +50,7 @@
     { name: 'Profissão', attribute: 'none', value: 0, training: 'none', editable: false },
     { name: 'Psicoanalisar', attribute: 'mente', value: 0, training: 'none', editable: false },
     { name: 'Refletir', attribute: 'mente', value: 0, training: 'none', editable: false },
-    { name: 'Longo Alcance', attribute: 'destreza', value: 0, training: 'none', editable: false },
+    { name: 'Tiro', attribute: 'destreza', value: 0, training: 'none', editable: false },
     { name: 'Ext.1', attribute: 'none', value: 0, training: 'none', editable: true },
     { name: 'Ext.2', attribute: 'none', value: 0, training: 'none', editable: true },
     { name: 'Ext.3', attribute: 'none', value: 0, training: 'none', editable: true },
@@ -310,22 +310,6 @@
     // Usar event delegation no document (apenas uma vez)
     document.addEventListener('change', handleAttributeChangeForSkills, { passive: true, capture: true });
   }
-
-  function resetSkillsToDefault() {
-    const container = document.getElementById('skills-container');
-    if (!container) return;
-    skillIdCounter = 0;
-    container.innerHTML = '';
-    defaultSkills.forEach((skill) => {
-      container.appendChild(createSkillRow(skill));
-    });
-    container.querySelectorAll('.skill-row').forEach((row) => {
-      const fn = row.updateModifierFn;
-      if (typeof fn === 'function') fn();
-    });
-  }
-
-  window.resetSkillsToDefault = resetSkillsToDefault;
 
   document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('skills-container');

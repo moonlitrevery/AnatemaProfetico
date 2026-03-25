@@ -128,10 +128,7 @@
     </div>
     <div class="header-item">
       <label for="resistencia">Resistência a dano físico</label>
-      <div class="movement-container">
-        <input type="text" id="resistencia" name="resistencia" readonly class="header-value movement-base" aria-label="Resistência total" />
-        <input type="number" id="resistencia-extra" name="resistencia-extra" class="movement-extra" placeholder="Extra" min="0" title="Bônus extra à resistência a dano físico" />
-      </div>
+      <input type="number" id="resistencia" name="resistencia" readonly class="header-value" />
     </div>
     <div class="header-item">
       <label for="movimento">Movimento</label>
@@ -623,16 +620,10 @@
         }
       }
 
-      // Resistências a dano: MODcon + MODfor/2 + extra (igual padrão do movimento-extra)
+      // Resistências a dano: MODcon + MODfor/2
       const resistenciaInput = document.getElementById('resistencia');
-      const resistenciaExtraInput = document.getElementById('resistencia-extra');
       if (resistenciaInput) {
-        let resistenciaExtra = 0;
-        if (resistenciaExtraInput) {
-          const re = parseInt(resistenciaExtraInput.value, 10);
-          resistenciaExtra = Number.isNaN(re) ? 0 : re;
-        }
-        const resistencia = modCon + Math.floor(modFor / 2) + resistenciaExtra;
+        const resistencia = modCon + Math.floor(modFor / 2);
         resistenciaInput.value = String(resistencia);
       }
 
@@ -898,7 +889,7 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'movimento-extra' || id === 'resistencia-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
+        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
@@ -912,7 +903,7 @@
         const id = target.id;
         if (id === 'vida-current' || id === 'sanidade-current') {
           updateHeaderValues();
-        } else if (id === 'movimento-extra' || id === 'resistencia-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
+        } else if (id === 'movimento-extra' || id === 'vida-temp' || id === 'mana-temp' || id === 'sanidade-temp' || id === 'vida-extra' || id === 'mana-extra' || id === 'sanidade-extra') {
           updateHeaderValues(true);
         } else if (id === 'nivel' || id === 'caminho') {
           updateHeaderValues();
