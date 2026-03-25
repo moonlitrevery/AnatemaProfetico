@@ -57,6 +57,7 @@
       <div class="stat-progress-bar" role="progressbar" aria-label="Progresso de Sanidade" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="stat-progress-fill stat-progress-sanidade" id="sanidade-progress-fill"></div>
       </div>
+      <input type="hidden" id="sanidade-caminho-reduction" value="0" aria-hidden="true" />
       <div class="sanity-buttons-row">
         <button type="button" id="sanity-popup-btn" class="sanity-popup-btn" aria-label="Insanidades e traumas" title="Insanidades e traumas">🧠</button>
         <button type="button" id="sanity-test-btn" class="sanity-test-btn" title="Teste de Sanidade: (mod Sobrenatural + mod Mente) ÷ 2" aria-label="Rolar teste de sanidade">🎲</button>
@@ -599,16 +600,34 @@
         }
       }
 
-      // Sanidade: Mente * 2 + bônus nível + bônus extra
+      // Sanidade: Mente * 2 + bônus nível + bônus extra − penalidade do Caminho (persistida)
       const sanidadeMaxInput = document.getElementById('sanidade-max');
       const sanidadeTempInput = document.getElementById('sanidade-temp');
       const sanidadeExtraInput = document.getElementById('sanidade-extra');
+      const sanidadeCaminhoReductionEl = document.getElementById('sanidade-caminho-reduction');
+      const nivelForSanidadeEl = document.getElementById('nivel');
+      const caminhoForSanidadeEl = document.getElementById('caminho');
       if (sanidadeMaxInput) {
         const sanidadeTempV = sanidadeTempInput ? parseInt(sanidadeTempInput.value, 10) : 0;
         const sanidadeExtraV = sanidadeExtraInput ? parseInt(sanidadeExtraInput.value, 10) : 0;
         const sanidadeTempValue = Number.isNaN(sanidadeTempV) ? 0 : sanidadeTempV;
         const sanidadeExtraValue = Number.isNaN(sanidadeExtraV) ? 0 : sanidadeExtraV;
-        const maxSanidade = menValue * 2 + sanidadeTempValue + sanidadeExtraValue;
+        const baseMaxSanidade = menValue * 2 + sanidadeTempValue + sanidadeExtraValue;
+
+        const nv = nivelForSanidadeEl ? parseInt(nivelForSanidadeEl.value, 10) : 0;
+        const nivelOk = !Number.isNaN(nv) && nv >= 1;
+        const caminhoOk = nivelOk && caminhoForSanidadeEl && String(caminhoForSanidadeEl.value || '').trim() !== '';
+
+        let caminhoReduction = 0;
+        if (!caminhoOk) {
+          if (sanidadeCaminhoReductionEl) sanidadeCaminhoReductionEl.value = '0';
+          if (caminhoForSanidadeEl) delete caminhoForSanidadeEl.dataset.sanidadeReduced;
+        } else if (sanidadeCaminhoReductionEl) {
+          const rr = parseInt(sanidadeCaminhoReductionEl.value, 10);
+          caminhoReduction = Number.isNaN(rr) ? 0 : Math.max(0, rr);
+        }
+
+        const maxSanidade = Math.max(0, baseMaxSanidade - caminhoReduction);
         sanidadeMaxInput.value = String(maxSanidade);
         
         // Garantir que sanidade atual não exceda máximo
@@ -763,49 +782,34 @@
       if (typeof window.updateProgressBars === 'function') window.updateProgressBars();
   }
 
-  // Função para reduzir sanidade quando Caminho for preenchido
+  // Penalidade de Caminho: 10% da sanidade máxima base (persistida em #sanidade-caminho-reduction)
   function handleCaminhoChange() {
     const caminhoSelect = document.getElementById('caminho');
-    const sanidadeMaxInput = document.getElementById('sanidade-max');
-    const sanidadeCurrentInput = document.getElementById('sanidade-current');
-    
-    if (!caminhoSelect || !sanidadeMaxInput) return;
-    
-    // Verificar se Caminho foi preenchido pela primeira vez
+    if (!caminhoSelect) return;
+
     const caminhoValue = caminhoSelect.value.trim();
     const wasEmpty = caminhoSelect.dataset.wasEmpty === 'true';
-    
+
     if (caminhoValue && wasEmpty && caminhoSelect.dataset.sanidadeReduced !== 'true') {
-      // Reduzir 10% da sanidade máxima, arredondando para cima
-      const ms = parseInt(sanidadeMaxInput.value, 10);
-      const maxSanidade = Number.isNaN(ms) ? 0 : ms;
-      if (maxSanidade > 0) {
-        const reducao = Math.ceil(maxSanidade * 0.1);
-        const novaMaxSanidade = maxSanidade - reducao;
-        sanidadeMaxInput.value = String(novaMaxSanidade);
-        
-        // Ajustar sanidade atual se necessário
-        if (sanidadeCurrentInput) {
-          const cs = parseInt(sanidadeCurrentInput.value, 10);
-          const currentSanidade = Number.isNaN(cs) ? 0 : cs;
-          if (currentSanidade > novaMaxSanidade) {
-            sanidadeCurrentInput.value = String(novaMaxSanidade);
-          }
-          sanidadeCurrentInput.max = String(novaMaxSanidade);
-        }
-        
-        // Marcar que já foi reduzido
+      const menteInput = document.getElementById('mente');
+      const sanidadeTempInput = document.getElementById('sanidade-temp');
+      const sanidadeExtraInput = document.getElementById('sanidade-extra');
+      const menV = parseInt(menteInput?.value, 10) || 0;
+      const st = parseInt(sanidadeTempInput?.value, 10) || 0;
+      const se = parseInt(sanidadeExtraInput?.value, 10) || 0;
+      const baseMax = menV * 2 + (Number.isNaN(st) ? 0 : st) + (Number.isNaN(se) ? 0 : se);
+      if (baseMax > 0) {
+        const reducao = Math.ceil(baseMax * 0.1);
+        const reductionEl = document.getElementById('sanidade-caminho-reduction');
+        if (reductionEl) reductionEl.value = String(reducao);
         caminhoSelect.dataset.sanidadeReduced = 'true';
-        
-        // Atualizar status
-        if (window.updateStatus) {
-          window.updateStatus();
-        }
       }
     }
-    
-    // Atualizar flag
+
     caminhoSelect.dataset.wasEmpty = caminhoValue ? 'false' : 'true';
+
+    updateHeaderValues(true);
+    if (window.updateStatus) window.updateStatus();
   }
 
   // Escutar mudanças nos atributos usando event delegation única e global

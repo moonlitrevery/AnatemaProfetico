@@ -62,6 +62,7 @@
       sanidadeExtra: document.getElementById('sanidade-extra')?.value || '',
       movimentoExtra: document.getElementById('movimento-extra')?.value || '',
       resistenciaExtra: document.getElementById('resistencia-extra')?.value || '',
+      sanidadeCaminhoReduction: document.getElementById('sanidade-caminho-reduction')?.value || '0',
     };
 
     const sanitySystem = typeof window.getSanityData === 'function' ? window.getSanityData() : { insanidades: [], traumas: [] };
@@ -273,6 +274,22 @@
       if (movimentoExtraInput) movimentoExtraInput.value = data.header.movimentoExtra || '';
       const resistenciaExtraInput = document.getElementById('resistencia-extra');
       if (resistenciaExtraInput) resistenciaExtraInput.value = data.header.resistenciaExtra || '';
+      const sanidadeCaminhoRedInput = document.getElementById('sanidade-caminho-reduction');
+      const caminhoElForReduction = document.getElementById('caminho');
+      if (sanidadeCaminhoRedInput) {
+        if (data.header && Object.prototype.hasOwnProperty.call(data.header, 'sanidadeCaminhoReduction')) {
+          const r = Math.max(0, parseInt(data.header.sanidadeCaminhoReduction, 10) || 0);
+          sanidadeCaminhoRedInput.value = String(r);
+          if (caminhoElForReduction?.value?.trim() && r > 0) {
+            caminhoElForReduction.dataset.sanidadeReduced = 'true';
+          }
+        } else if (data.header?.caminho?.trim()) {
+          sanidadeCaminhoRedInput.value = '0';
+          if (caminhoElForReduction) caminhoElForReduction.dataset.pendingSanidadeCaminhoMigration = 'true';
+        } else {
+          sanidadeCaminhoRedInput.value = '0';
+        }
+      }
       if (data.header.dtCobertura) {
         document.querySelectorAll('.cobertura-btn').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.cobertura === data.header.dtCobertura);
@@ -443,6 +460,19 @@
     document.dispatchEvent(new Event('characterDataChanged', { bubbles: true }));
 
     setTimeout(() => {
+      const caminhoM = document.getElementById('caminho');
+      const redInp = document.getElementById('sanidade-caminho-reduction');
+      if (caminhoM?.dataset.pendingSanidadeCaminhoMigration === 'true' && redInp) {
+        delete caminhoM.dataset.pendingSanidadeCaminhoMigration;
+        const mente = parseInt(document.getElementById('mente')?.value, 10) || 0;
+        const st = parseInt(document.getElementById('sanidade-temp')?.value, 10) || 0;
+        const se = parseInt(document.getElementById('sanidade-extra')?.value, 10) || 0;
+        const base = mente * 2 + st + se;
+        if (base > 0) {
+          redInp.value = String(Math.ceil(base * 0.1));
+          caminhoM.dataset.sanidadeReduced = 'true';
+        }
+      }
       if (window.updateHeaderValues) window.updateHeaderValues();
       if (data.status?.conditions && typeof window.loadConditionsData === 'function') {
         window.loadConditionsData(data.status.conditions);
@@ -578,6 +608,15 @@
               }
             }
           });
+
+          const sanidadeRedClear = document.getElementById('sanidade-caminho-reduction');
+          if (sanidadeRedClear) sanidadeRedClear.value = '0';
+          const caminhoClear = document.getElementById('caminho');
+          if (caminhoClear) {
+            delete caminhoClear.dataset.sanidadeReduced;
+            delete caminhoClear.dataset.pendingSanidadeCaminhoMigration;
+            caminhoClear.dataset.wasEmpty = 'true';
+          }
 
           document.querySelectorAll('select').forEach((sel) => {
             if (sel.closest('#skills-container')) return;

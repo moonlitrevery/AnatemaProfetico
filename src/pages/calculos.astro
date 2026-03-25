@@ -75,25 +75,26 @@ import Logo from '../components/Logo.astro';
             <div class="guide-text">
               <h4>Vida Máxima</h4>
               <div class="formula-box">
-                <strong>Vida Máxima = Brutalidade + Compleição + Bônus Temporário</strong>
+                <strong>Vida Máxima = Brutalidade + Compleição + Bônus de nível + Bônus extra</strong>
               </div>
-              <p>Representa os pontos de vida totais do personagem. O valor atual pode ser ajustado manualmente, mas não pode exceder o máximo. Você pode adicionar pontos temporários de vida usando o campo pequeno ao lado do título "Vida" - estes valores <strong>somam</strong> aos máximos calculados.</p>
-              <p><strong>Exemplo:</strong> Se Brutalidade = 12, Compleição = 14 e Bônus Temporário = 5, então Vida Máxima = 12 + 14 + 5 = 31</p>
+              <p>Representa os pontos de vida totais do personagem. O valor atual pode ser ajustado manualmente, mas não pode exceder o máximo. Ao lado de "Vida" há dois campos pequenos: o de <strong>Nível</strong> (somado automaticamente pelo sistema de nivelamento) e o de <strong>Extra</strong> (buffs, itens, efeitos que você anota manualmente). Ambos <strong>somam</strong> ao máximo.</p>
+              <p><strong>Exemplo:</strong> Se Brutalidade = 12, Compleição = 14, bônus de nível = 5 e extra = 0, então Vida Máxima = 12 + 14 + 5 = 31</p>
 
               <h4>Mana Máxima</h4>
               <div class="formula-box">
-                <strong>Mana Máxima = Sobrenatural × 2 + Bônus Temporário</strong>
+                <strong>Mana Máxima = Sobrenatural × 2 + Bônus de nível + Bônus extra</strong>
               </div>
-              <p>Representa os pontos de mana totais, usados para lançar feitiços e usar habilidades mágicas. Você pode adicionar pontos temporários de mana usando o campo pequeno ao lado do título "Mana" - estes valores <strong>somam</strong> aos máximos calculados.</p>
-              <p><strong>Exemplo:</strong> Se Sobrenatural = 15 e Bônus Temporário = 3, então Mana Máxima = 15 × 2 + 3 = 30 + 3 = 33</p>
+              <p>Representa os pontos de mana totais. Os campos pequenos ao lado de "Mana" funcionam como em Vida: <strong>Nível</strong> (automático) e <strong>Extra</strong> (manual).</p>
+              <p><strong>Exemplo:</strong> Se Sobrenatural = 15, bônus de nível = 3 e extra = 0, então Mana Máxima = 15 × 2 + 3 = 33</p>
 
               <h4>Sanidade Máxima</h4>
               <div class="formula-box">
-                <strong>Sanidade Máxima = Mente × 2 + Bônus Temporário</strong>
+                <strong>Sanidade base = Mente × 2 + Bônus de nível + Bônus extra</strong><br />
+                <strong>Sanidade Máxima = Sanidade base − penalidade do Caminho (se aplicável)</strong>
               </div>
-              <p>Representa a saúde mental do personagem, afetada por encontros com o sobrenatural e eventos traumáticos. Você pode adicionar pontos temporários de sanidade usando o campo pequeno ao lado do título "Sanidade" - estes valores <strong>somam</strong> aos máximos calculados.</p>
-              <p><strong>Importante:</strong> Quando você preencher o campo "Caminho" pela primeira vez, sua sanidade máxima será reduzida em 10% (arredondado para cima). Esta redução acontece apenas uma vez.</p>
-              <p><strong>Exemplo:</strong> Se Mente = 13 e Bônus Temporário = 2, então Sanidade Máxima = 13 × 2 + 2 = 26 + 2 = 28. Se depois você escolher um Caminho, a sanidade será reduzida em 10%: 28 × 0.1 = 2.8 → arredondado para cima = 3. Nova Sanidade Máxima = 28 - 3 = 25</p>
+              <p>Os campos pequenos ao lado de "Sanidade" seguem a mesma lógica (nível + extra).</p>
+              <p><strong>Caminho:</strong> na <strong>primeira vez</strong> que você escolhe um Caminho (nível ≥ 1), a ficha aplica uma penalidade fixa igual a <strong>10% da sanidade base naquele momento</strong>, arredondada para cima. Esse valor fica guardado na ficha e no salvamento: ao recalcular o máximo (atributos, bônus de nível, etc.), a penalidade continua sendo descontada — assim o total não “volta” ao valor cheio por engano.</p>
+              <p><strong>Exemplo:</strong> Mente 13, bônus de nível 2, extra 0 → base = 28. Penalidade = ⌈28 × 0,1⌉ = 3 → Sanidade máxima = 25. Se depois o bônus de nível subir, a base recalcula e a <strong>mesma</strong> penalidade (3) continua descontada até você zerar o nível/caminho na ficha.</p>
               <h4>Teste de Sanidade</h4>
               <div class="formula-box">
                 <strong>Bônus do Teste = (Modificador Sobrenatural + Modificador Mente) ÷ 2</strong> (arredondado para baixo)
@@ -102,10 +103,10 @@ import Logo from '../components/Logo.astro';
 
               <h4>Resistência a Dano Físico</h4>
               <div class="formula-box">
-                <strong>Resistência = Modificador de Compleição + (Modificador de Brutalidade ÷ 2)</strong>
+                <strong>Total exibido = Modificador de Compleição + (Modificador de Brutalidade ÷ 2) + Extra</strong>
               </div>
-              <p>Reduz o dano físico recebido. O segundo termo é arredondado para baixo.</p>
-              <p><strong>Exemplo:</strong> Se Compleição = 14 (mod +2) e Brutalidade = 12 (mod +1), então Resistência = 2 + (1 ÷ 2) = 2 + 0 = 2</p>
+              <p>O segundo termo é arredondado para baixo. O campo <strong>Extra</strong> ao lado (como no Movimento) soma bônus manuais de resistência.</p>
+              <p><strong>Exemplo:</strong> Se Compleição = 14 (mod +2), Brutalidade = 12 (mod +1) e Extra = 0, então Resistência = 2 + 0 + 0 = 2</p>
 
               <h4>Movimento</h4>
               <div class="formula-box">
@@ -123,10 +124,10 @@ import Logo from '../components/Logo.astro';
 
               <h4>DT para Projéteis (Receber)</h4>
               <div class="formula-box">
-                <strong>DT = 8 + Modificador de Destreza</strong>
+                <strong>DT = 8 + Modificador de Destreza + Bônus de cobertura</strong>
               </div>
-              <p>Dificuldade de Teste para evitar ser atingido por projéteis. Quanto maior, mais difícil de ser acertado.</p>
-              <p><strong>Exemplo:</strong> Se Destreza = 14 (mod +2), então DT = 8 + 2 = 10</p>
+              <p>Use os botões <strong>B / M / A</strong> (Baixa +2, Média +4, Alta +8) ao lado do rótulo para somar cobertura, quando fizer sentido na cena.</p>
+              <p><strong>Exemplo:</strong> Destreza = 14 (mod +2), sem cobertura → DT = 8 + 2 = 10. Com cobertura média → DT = 8 + 2 + 4 = 16</p>
 
               <h4>Nível e Sequência</h4>
               <p>O <strong>Nível</strong> do personagem começa em 0 e pode ser aumentado conforme o personagem ganha experiência. Quando o nível for maior ou igual a 1, o campo "Caminho" fica disponível para edição.</p>
@@ -153,6 +154,14 @@ import Logo from '../components/Logo.astro';
                 <li>◇◇◇◇ <strong>Alto</strong></li>
                 <li>◇◇◇◇◇ <strong>Muito alto</strong></li>
                 <li>◆ <strong>Supremo</strong></li>
+              </ul>
+
+              <h4>Equipamentos e habilidades (ficha online)</h4>
+              <ul>
+                <li><strong>Dinheiro:</strong> campo de texto livre para quantia (ex.: R$500, $1200, €500 ou anotações da mesa).</li>
+                <li><strong>Peso dos itens:</strong> valor numérico livre (ex.: 0,5 ou 1.5), com vírgula ou ponto; a soma do peso aceita decimais e dispara sobrecarga no movimento como antes.</li>
+                <li><strong>Na mão:</strong> botão ⚔ em cada arma — só para lembrar visualmente qual está empunhada; um por vez.</li>
+                <li><strong>Conjurar:</strong> em habilidades não passivas, o botão desconta o custo de mana da <strong>Mana atual</strong> (com mensagem se a mana não bastar).</li>
               </ul>
             </div>
           </div>
@@ -232,6 +241,7 @@ import Logo from '../components/Logo.astro';
           <div class="accordion-content">
             <div class="guide-text">
               <p>O sistema de nivelamento calcula automaticamente os bônus baseados nos valores atuais dos atributos. Todos os valores são <strong>arredondados para cima</strong>.</p>
+              <p>Os bônus de vida, mana e sanidade por nível são aplicados nos campos <strong>Nível</strong> do header; a ficha também <strong>salva no navegador</strong> (localStorage) cerca de <strong>1 segundo</strong> após mudanças, além de exportação/importação em JSON.</p>
               
               <h4>Fórmulas de Bônus por Nível</h4>
               

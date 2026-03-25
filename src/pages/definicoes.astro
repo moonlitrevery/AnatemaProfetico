@@ -74,15 +74,15 @@ import Logo from '../components/Logo.astro';
               <p>A ficha de personagem do Anátema Profético foi desenvolvida para facilitar a criação e gerenciamento de seus personagens. Siga os passos abaixo:</p>
               <ol class="guide-list">
                 <li><strong>Informações Gerais:</strong> Preencha o nome do jogador, nome do personagem, idade, profissão e pronomes (seleção múltipla: Ele/Dele, Ela/Dela, Elu/Delu ou Todos). Você pode adicionar uma foto do personagem usando uma URL de imagem (ex: Imgur).</li>
-                <li><strong>Informações do Personagem:</strong> Os valores de Vida, Mana, Sanidade e outras estatísticas são calculados automaticamente baseados nos atributos. Você pode adicionar valores temporários a Vida, Mana e Sanidade usando os campos pequenos ao lado dos títulos - estes valores somam aos máximos. O movimento extra também pode ser adicionado.</li>
+                <li><strong>Informações do Personagem:</strong> Vida, Mana e Sanidade têm campos pequenos <strong>Nível</strong> (preenchidos pelo sistema de nivelamento) e <strong>Extra</strong> (buffs e anotações suas); ambos somam ao máximo. Há ainda resistência a dano com <strong>Extra</strong> e movimentação extra. A penalidade de sanidade ao escolher o <strong>Caminho</strong> fica gravada na ficha e no save.</li>
                 <li><strong>Atributos:</strong> Defina os valores dos 5 atributos principais (Brutalidade, Destreza, Compleição, Mente e Sobrenatural). Os valores padrão começam em 10.</li>
                 <li><strong>Nível e Caminho:</strong> O nível começa em 0. Quando o nível for maior ou igual a 1, você pode preencher o Caminho e o Prestígio em Sociedades Secretas. A Sequência é calculada automaticamente baseada no nível e exibida como "9ª sequência", "8ª sequência", etc.</li>
                 <li><strong>Perícias:</strong> Selecione o atributo base de cada perícia e escolha o nível de treinamento (Básico, Médio, Avançado, Expert ou Aterrorizante). O modificador é calculado automaticamente: (Modificador do Atributo ÷ 2) + Bônus de Treinamento + Valor Extra.</li>
-                <li><strong>Equipamentos:</strong> Adicione armas (com tipo: Arma branca, Arma de Fogo ou Arma mágica) e itens (com peso de 1-9). O peso total afeta o movimento quando excede o máximo (Brutalidade ÷ 2).</li>
-                <li><strong>Habilidades:</strong> Adicione habilidades do personagem, indicando se são passivas ou ativas, o nome, a sequência (1ª a 9ª), o custo de mana (se ativa) e a descrição.</li>
+                <li><strong>Equipamentos:</strong> Campo <strong>Dinheiro</strong> (texto livre), armas (tipo, dano, descrição; botão <strong>Na mão</strong> só para lembrar qual está empunhada) e itens com <strong>peso numérico livre</strong> (decimais, com validação). Peso total e limite (Brutalidade ÷ 2) afetam sobrecarga e movimento.</li>
+                <li><strong>Habilidades:</strong> Passiva ou ativa, sequência, custo de mana; habilidades ativas têm <strong>Conjurar</strong> para descontar mana atual.</li>
                 <li><strong>Anotações:</strong> Use as seções (Sobre, Sessões, Aliados, Inimigos, Extras) para anotar informações importantes sobre o personagem e a campanha.</li>
                 <li><strong>Status:</strong> Os status (Machucado, Morrendo, Insano) são ativados automaticamente conforme as condições da ficha. Quando Morrendo, aparecem os testes de salvamento (3 sucessos ou 3 fracassos).</li>
-                <li><strong>Salvar:</strong> A ficha salva automaticamente a cada 30 segundos e após 2 segundos sem mudanças. Você também pode usar os botões para salvar, exportar ou importar manualmente.</li>
+                <li><strong>Salvar:</strong> Auto-save no <strong>localStorage</strong> cerca de <strong>1 segundo</strong> após alterações (e intervalo semelhante), mais botões Salvar, Exportar JSON, Importar e Limpar ficha.</li>
               </ol>
             </div>
           </div>
@@ -119,28 +119,28 @@ import Logo from '../components/Logo.astro';
             <div class="guide-text">
               <h4>Vida Máxima</h4>
               <div class="formula-box">
-                <strong>Vida Máxima = Brutalidade + Compleição</strong>
+                <strong>Vida Máxima = Brutalidade + Compleição + Bônus de nível + Bônus extra</strong>
               </div>
-              <p>Representa os pontos de vida totais do personagem. O valor atual pode ser ajustado manualmente, mas não pode exceder o máximo. Você pode adicionar pontos temporários de vida usando o campo pequeno ao lado do título "Vida" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+              <p>Os dois campos pequenos ao lado de "Vida" são <strong>Nível</strong> (nivelamento automático) e <strong>Extra</strong> (manual).</p>
 
               <h4>Mana Máxima</h4>
               <div class="formula-box">
-                <strong>Mana Máxima = Sobrenatural × 2</strong>
+                <strong>Mana Máxima = Sobrenatural × 2 + Bônus de nível + Bônus extra</strong>
               </div>
-              <p>Representa os pontos de mana totais, usados para lançar feitiços e usar habilidades mágicas. Você pode adicionar pontos temporários de mana usando o campo pequeno ao lado do título "Mana" - estes valores <strong>somam</strong> aos máximos calculados.</p>
+              <p>Mesma ideia: campos <strong>Nível</strong> e <strong>Extra</strong> ao lado de "Mana".</p>
 
               <h4>Sanidade Máxima</h4>
               <div class="formula-box">
-                <strong>Sanidade Máxima = Mente × 2</strong>
+                <strong>Base = Mente × 2 + Bônus de nível + Bônus extra</strong><br />
+                <strong>Máximo = Base − penalidade fixa do Caminho (se já escolhido)</strong>
               </div>
-              <p>Representa a saúde mental do personagem, afetada por encontros com o sobrenatural e eventos traumáticos. Você pode adicionar pontos temporários de sanidade usando o campo pequeno ao lado do título "Sanidade" - estes valores <strong>somam</strong> aos máximos calculados.</p>
-              <p><strong>Importante:</strong> Quando você preencher o campo "Caminho" pela primeira vez, sua sanidade máxima será reduzida em 10% (arredondado para cima). Esta redução acontece apenas uma vez.</p>
+              <p>Ao escolher o <strong>Caminho</strong> pela primeira vez, aplica-se <strong>10% da base na hora</strong> (arredondado para cima) como penalidade <strong>permanente na ficha</strong> até nível 0 / sem caminho; o valor é salvo no JSON/localStorage para não ser sobrescrito ao recalcular.</p>
 
               <h4>Resistência a Dano Físico</h4>
               <div class="formula-box">
-                <strong>Resistência = Modificador de Compleição + (Modificador de Brutalidade ÷ 2)</strong>
+                <strong>Total = Modificador de Compleição + (Modificador de Brutalidade ÷ 2) + Extra</strong>
               </div>
-              <p>Reduz o dano físico recebido. O segundo termo é arredondado para baixo.</p>
+              <p>O segundo termo é arredondado para baixo. Há campo <strong>Extra</strong> ao lado, como no movimento.</p>
 
               <h4>Movimento</h4>
               <div class="formula-box">
@@ -157,9 +157,9 @@ import Logo from '../components/Logo.astro';
 
               <h4>DT para Projéteis (Receber)</h4>
               <div class="formula-box">
-                <strong>DT = 8 + Modificador de Destreza</strong>
+                <strong>DT = 8 + Modificador de Destreza + Cobertura (B +2 / M +4 / A +8)</strong>
               </div>
-              <p>Dificuldade de Teste para evitar ser atingido por projéteis. Quanto maior, mais difícil de ser acertado.</p>
+              <p>Use os botões B, M e A ao lado do rótulo quando houver cobertura.</p>
 
               <h4>Nível e Sequência</h4>
               <p>O <strong>Nível</strong> do personagem começa em 0 e pode ser aumentado conforme o personagem ganha experiência. Quando o nível for maior ou igual a 1, o campo "Caminho" fica disponível para edição.</p>
@@ -274,6 +274,9 @@ import Logo from '../components/Logo.astro';
           </button>
           <div class="accordion-content">
             <div class="guide-text">
+              <h4>Dinheiro</h4>
+              <p>Campo de texto livre no topo da seção (ex.: R$500, $1200, €500 ou anotações da campanha).</p>
+
               <h4>Armas</h4>
               <p>As armas possuem os seguintes campos:</p>
               <ul>
@@ -281,6 +284,7 @@ import Logo from '../components/Logo.astro';
                 <li><strong>Tipo:</strong> Arma branca, Arma de Fogo ou Arma mágica.</li>
                 <li><strong>Dano:</strong> Dano causado pela arma (ex: "1d6+2", "2d4").</li>
                 <li><strong>Descrição:</strong> Propriedades especiais, modificadores ou notas sobre a arma.</li>
+                <li><strong>Na mão (⚔):</strong> marcação visual de qual arma está empunhada; apenas uma por vez.</li>
               </ul>
 
               <h4>Itens</h4>
@@ -288,7 +292,7 @@ import Logo from '../components/Logo.astro';
               <ul>
                 <li><strong>Nome do item:</strong> Nome do item.</li>
                 <li><strong>Descrição:</strong> Descrição e propriedades do item.</li>
-                <li><strong>Peso:</strong> Peso do item (1 a 9).</li>
+                <li><strong>Peso:</strong> valor numérico livre (aceita decimais com vírgula ou ponto); validação impede valores inválidos ou negativos.</li>
               </ul>
 
               <h4>Sistema de Peso</h4>
@@ -322,6 +326,7 @@ import Logo from '../components/Logo.astro';
                     <li>Se a habilidade for <strong>Ativa</strong>, você pode definir o custo de mana (número inteiro).</li>
                   </ul>
                 </li>
+                <li><strong>Conjurar:</strong> em habilidades ativas, o botão desconta esse custo da <strong>Mana atual</strong> (com aviso se não houver mana suficiente).</li>
                 <li><strong>Descrição:</strong> Descrição detalhada da habilidade, seus efeitos e como utilizá-la.</li>
               </ul>
               <p>Você pode adicionar quantas habilidades quiser usando o botão "+ Adicionar Habilidade" e remover habilidades clicando no botão "✕" ao lado de cada uma.</p>
@@ -364,13 +369,13 @@ import Logo from '../components/Logo.astro';
             <div class="guide-text">
               <p>A ficha oferece várias opções para salvar seus dados:</p>
               <ul>
-                <li><strong>Auto-Save:</strong> A ficha salva automaticamente a cada 30 segundos e também após 2 segundos sem mudanças. Os dados são salvos no navegador (localStorage) e são mantidos mesmo após fechar o navegador.</li>
+                <li><strong>Auto-Save:</strong> A ficha grava no <strong>localStorage</strong> do navegador cerca de <strong>1 segundo</strong> após mudanças (com debounce semelhante), mantendo os dados entre visitas no mesmo aparelho/navegador.</li>
                 <li><strong>Salvar Localmente:</strong> Salva manualmente os dados no navegador. Os dados são mantidos no mesmo dispositivo e navegador.</li>
                 <li><strong>Exportar JSON:</strong> Baixa um arquivo JSON com todos os dados da ficha. Você pode salvar este arquivo em qualquer lugar e importá-lo depois em outro dispositivo.</li>
                 <li><strong>Importar JSON:</strong> Carrega dados de um arquivo JSON exportado anteriormente. Útil para transferir ficha entre dispositivos ou fazer backup.</li>
                 <li><strong>Limpar Ficha:</strong> Remove todos os dados da ficha atual, incluindo o salvamento local (use com cuidado!).</li>
               </ul>
-              <p><strong>Nota:</strong> A funcionalidade de salvamento está disponível apenas na página "Ficha de personagem". Todos os dados da ficha são salvos, incluindo foto, valores temporários, status, testes de salvamento, habilidades (com sequência), pronomes (seleção múltipla) e todas as seções de anotações.</p>
+              <p><strong>Nota:</strong> O salvamento completo vale para a página <strong>Ficha de personagem</strong>. O JSON inclui, entre outros: atributos, header (incluindo penalidade de sanidade do Caminho, extras de resistência/movimento), perícias, equipamentos (armas com “na mão”, itens com peso decimal, dinheiro), habilidades, anotações, insanidades/traumas, condições manuais e aba ativa das seções.</p>
             </div>
           </div>
         </div>
