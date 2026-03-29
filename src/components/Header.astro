@@ -40,6 +40,19 @@
       <div class="stat-progress-bar" role="progressbar" aria-label="Progresso de Mana" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="stat-progress-fill stat-progress-mana" id="mana-progress-fill"></div>
       </div>
+      <input type="hidden" id="pressao-pontos" name="pressao-pontos" value="0" />
+      <div class="pressao-pips" id="pressao-pips" role="radiogroup" aria-label="Pontos de pressão">
+        {Array.from({ length: 9 }, (_, i) => (
+          <button
+            type="button"
+            class:list={['pressao-pip', i === 0 && 'active']}
+            data-pressao={String(i)}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {i}
+          </button>
+        ))}
+      </div>
     </div>
     <div class="header-item sanity-item">
       <div class="header-item-label-row">
@@ -142,16 +155,9 @@
       </div>
     </div>
     <div class="header-item nd-damage-heal-row">
-      <div class="nd-projeteis-block">
-        <div class="nd-projeteis-header">
-          <label for="dt-projeteis">ND projéteis</label>
-          <div class="cobertura-btns" role="group" aria-label="Cobertura">
-            <button type="button" class="cobertura-btn" data-cobertura="b" title="Baixa (+2)">B</button>
-            <button type="button" class="cobertura-btn" data-cobertura="m" title="Média (+4)">M</button>
-            <button type="button" class="cobertura-btn" data-cobertura="a" title="Alta (+8)">A</button>
-          </div>
-        </div>
-        <input type="number" id="dt-projeteis" name="dt-projeteis" readonly class="header-value" aria-label="ND projéteis receber" />
+      <div class="defesa-passiva-block">
+        <label for="defesa-passiva">Defesa passiva</label>
+        <input type="number" id="defesa-passiva" name="defesa-passiva" readonly class="header-value" aria-label="Defesa passiva" title="8 + modificador de Destreza + modificador de Compleição" />
       </div>
       <div class="damage-heal-block">
         <label class="damage-calc-label">Aplicar Dano</label>
@@ -438,7 +444,44 @@
       alert(`${label}: ${d20} + ${bonus} = ${total}`);
     }
   });
-  
+
+  /** Pontos de pressão (0–8). opts.silent evita disparar auto-save ao carregar ficha. */
+  window.syncPressaoUI = function syncPressaoUI(n, opts) {
+    const silent = !!(opts && opts.silent);
+    const hidden = document.getElementById('pressao-pontos');
+    const wrap = document.getElementById('pressao-pips');
+    if (!wrap) return;
+    const v = Math.max(0, Math.min(8, Number(n) || 0));
+    if (hidden) {
+      hidden.value = String(v);
+      if (!silent) hidden.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    wrap.querySelectorAll('.pressao-pip').forEach((btn) => {
+      const on = String(btn.dataset.pressao) === String(v);
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  };
+
+  function initPressaoPips() {
+    const wrap = document.getElementById('pressao-pips');
+    if (!wrap) return;
+    const raw = document.getElementById('pressao-pontos')?.value;
+    const initial = Math.max(0, Math.min(8, parseInt(raw, 10) || 0));
+    window.syncPressaoUI(initial, { silent: true });
+    wrap.querySelectorAll('.pressao-pip').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        window.syncPressaoUI(parseInt(btn.dataset.pressao, 10) || 0);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPressaoPips, { once: true });
+  } else {
+    initPressaoPips();
+  }
+
   // Atualizar inicial
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
@@ -723,13 +766,10 @@
         movimentoInput.value = `${movimento}m`;
       }
 
-      // ND projéteis: 8 + MODesq + cobertura (B+2, M+4, A+8)
-      const dtProjeteisInput = document.getElementById('dt-projeteis');
-      if (dtProjeteisInput) {
-        const coberturaActive = document.querySelector('.cobertura-btn.active');
-        const coberturaBonus = coberturaActive ? ({ b: 2, m: 4, a: 8 }[coberturaActive.dataset.cobertura] || 0) : 0;
-        const ndProjeteis = 8 + modEsq + coberturaBonus;
-        dtProjeteisInput.value = String(ndProjeteis);
+      // Defesa passiva: 8 + MOD Destreza + MOD Compleição (modCon)
+      const defesaPassivaInput = document.getElementById('defesa-passiva');
+      if (defesaPassivaInput) {
+        defesaPassivaInput.value = String(8 + modDex + modCon);
       }
 
       // Sequência baseada no nível
@@ -826,18 +866,6 @@
         updateHeaderValues();
       }
     }, { passive: true, capture: true });
-
-    document.addEventListener('click', (e) => {
-      const btn = e.target?.closest('.cobertura-btn');
-      if (!btn) return;
-      if (btn.classList.contains('active')) {
-        btn.classList.remove('active');
-      } else {
-        document.querySelectorAll('.cobertura-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-      updateHeaderValues(true);
-    });
 
     // Escutar eventos de input também para atualização em tempo real
     document.addEventListener('input', (e) => {
@@ -1389,7 +1417,7 @@
     }
   }
 
-  .nd-projeteis-block {
+  .defesa-passiva-block {
     flex: 0 0 auto;
     min-width: 140px;
     display: flex;
@@ -1397,40 +1425,36 @@
     gap: 0.25rem;
   }
 
-  .nd-projeteis-header {
+  .pressao-pips {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
     flex-wrap: wrap;
-  }
-
-  .cobertura-btns {
-    display: flex;
     gap: 0.25rem;
+    justify-content: center;
+    margin-top: 0.35rem;
   }
 
-  .cobertura-btn {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
+  .pressao-pip {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
     padding: 0;
     border: 1px solid var(--color-border);
     background: var(--color-bg-tertiary);
     color: var(--color-text-secondary);
     border-radius: 4px;
     font-family: var(--font-body);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
-  .cobertura-btn:hover {
+  .pressao-pip:hover {
     border-color: var(--color-accent-primary);
     color: var(--color-text-accent);
   }
 
-  .cobertura-btn.active {
+  .pressao-pip.active {
     background: rgba(139, 76, 141, 0.3);
     border-color: var(--color-accent-primary);
     color: var(--color-text-accent);

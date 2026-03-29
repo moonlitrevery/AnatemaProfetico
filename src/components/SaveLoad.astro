@@ -44,13 +44,12 @@
     };
 
     const prestigioSelect = document.getElementById('prestigio');
-    const coberturaActive = document.querySelector('.cobertura-btn.active');
     const header = {
       caminho: document.getElementById('caminho')?.value || '',
       sequencia: document.getElementById('nivel-caminho')?.value || '',
       nivel: document.getElementById('nivel')?.value || '',
       prestigio: prestigioSelect?.value || 'muito-baixo',
-      dtCobertura: coberturaActive?.dataset.cobertura || '',
+      pressao: document.getElementById('pressao-pontos')?.value ?? '0',
       vidaCurrent: document.getElementById('vida-current')?.value || '',
       vidaTemp: document.getElementById('vida-temp')?.value || '',
       vidaExtra: document.getElementById('vida-extra')?.value || '',
@@ -290,10 +289,14 @@
           sanidadeCaminhoRedInput.value = '0';
         }
       }
-      if (data.header.dtCobertura) {
-        document.querySelectorAll('.cobertura-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.cobertura === data.header.dtCobertura);
-        });
+      const pressaoHidden = document.getElementById('pressao-pontos');
+      if (pressaoHidden && data.header) {
+        const pp = Math.max(0, Math.min(8, parseInt(data.header.pressao, 10) || 0));
+        pressaoHidden.value = String(pp);
+      }
+      if (typeof window.syncPressaoUI === 'function') {
+        const pp = Math.max(0, Math.min(8, parseInt(data.header?.pressao, 10) || 0));
+        window.syncPressaoUI(pp, { silent: true });
       }
     }
 
@@ -643,7 +646,11 @@
             nivelSelect.dataset.lastLevel = '0';
           }
 
-          document.querySelectorAll('.cobertura-btn').forEach(b => b.classList.remove('active'));
+          const pressaoClear = document.getElementById('pressao-pontos');
+          if (pressaoClear) pressaoClear.value = '0';
+          if (typeof window.syncPressaoUI === 'function') {
+            window.syncPressaoUI(0, { silent: true });
+          }
 
           const weaponsList = document.getElementById('weapons-list');
           const itemsList = document.getElementById('items-list');
